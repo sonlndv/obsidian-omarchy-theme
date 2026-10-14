@@ -1,3 +1,5 @@
+![Omarchy theme](screenshot.png)
+
 # Omarchy theme for Obsidian
 
 An Obsidian theme built from an Omarchy colour palette (`src/colors.toml`),
@@ -21,6 +23,10 @@ then choose **Omarchy** under Settings → Appearance → Themes.
 
 ## iPhone
 
-YAOS does not sync the `.obsidian` folder, so copy the `Omarchy` theme folder
-into `<vault>/.obsidian/themes/` on the device via the Files app. The mobile
-rules (safe-area padding, 17px editor text) have not been tested on iOS.
+Once listed in the community directory, install from Settings > Appearance >
+Themes > Manage. The mobile rules (safe-area padding, 17px editor text) are
+untested on iOS until verified.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
