@@ -1,0 +1,62 @@
+/* Sharper geometry. Obsidian's defaults are quite rounded; this pulls the
+   radii down to a crisp 2px — square-ish but not brutally hard-edged.
+   Set --sharp-radius to 0 for fully square, 4 for a softer compromise. */
+
+body {
+  --sharp-radius: 2px;
+
+  --radius-s: var(--sharp-radius);
+  --radius-m: var(--sharp-radius);
+  --radius-l: var(--sharp-radius);
+  --radius-xl: var(--sharp-radius);
+
+  --input-radius: var(--sharp-radius);
+  --button-radius: var(--sharp-radius);
+  --tab-radius: var(--sharp-radius);
+  --tab-radius-active: var(--sharp-radius);
+  --modal-radius: var(--sharp-radius);
+  --checkbox-radius: var(--sharp-radius);
+  --toggle-radius: var(--sharp-radius);
+  --slider-thumb-radius: var(--sharp-radius);
+  --code-radius: var(--sharp-radius);
+  --callout-radius: var(--sharp-radius);
+  --embed-radius: var(--sharp-radius);
+  --swatch-radius: var(--sharp-radius);
+  --prompt-radius: var(--sharp-radius);
+  --dialog-radius: var(--sharp-radius);
+  --table-radius: var(--sharp-radius);
+  --tag-radius: var(--sharp-radius);
+  --pill-radius: var(--sharp-radius);
+  --popover-radius: var(--sharp-radius);
+  --tooltip-radius: var(--sharp-radius);
+  --icon-radius: var(--sharp-radius);
+  --thumbnail-radius: var(--sharp-radius);
+  --image-radius: var(--sharp-radius);
+  --blockquote-radius: 0;
+}
+
+/* Catch-all for elements that hardcode a radius rather than using a var. */
+.workspace-tab-header,
+.workspace-leaf-content,
+.modal,
+.prompt,
+.suggestion-container,
+.menu,
+.tooltip,
+.callout,
+.markdown-rendered table,
+.markdown-rendered img,
+.internal-embed,
+.tag,
+button,
+input,
+select,
+textarea {
+  border-radius: var(--sharp-radius) !important;
+}
+
+/* Crisper separators to match the squarer geometry. */
+.workspace-split.mod-root .workspace-leaf,
+.workspace-tabs .workspace-leaf {
+  border-radius: var(--sharp-radius) !important;
+}
