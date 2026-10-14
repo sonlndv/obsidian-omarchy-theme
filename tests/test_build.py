@@ -32,6 +32,11 @@ class BuildTest(unittest.TestCase):
         self.assertIn(".is-mobile", self.css)
         self.assertIn("safe-area-inset", self.css)
 
+    def test_last_text_font_preserves_embedded_fallback(self):
+        declarations = re.findall(r"--font-text-theme\s*:\s*([^;]+);", self.css)
+        self.assertTrue(declarations)
+        self.assertIn("IBM Plex Mono Embedded", declarations[-1])
+
     def test_dark_colour_block(self):
         m = re.search(r"\.theme-dark\s*\{([^}]*)\}", self.css)
         self.assertIsNotNone(m)

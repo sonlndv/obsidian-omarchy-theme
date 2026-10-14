@@ -1,14 +1,6 @@
 /* Long-form writing: typography, measure, and focus.
-   Pairs with omarchy-theme.css (colours) and sharp-edges.css (geometry).
-
-   Font is IBM Plex Mono — the same face Omawrite uses, installed from the
-   Omawrite fork's bundled copy into ~/.local/share/fonts/IBMPlexMono. */
-
-body {
-  --font-text-theme: "IBM Plex Mono", ui-monospace, monospace;
-  --font-interface-theme: "IBM Plex Mono", ui-monospace, monospace;
-  --font-monospace-theme: "IBM Plex Mono", ui-monospace, monospace;
-}
+   Colours come from colors.toml, geometry from geometry.css, and font
+   definitions and embedded fallbacks from font.css. */
 
 /* ---- Reading size ------------------------------------------------------ */
 /* Mono runs wider than proportional type, so 16px with a slightly tighter
