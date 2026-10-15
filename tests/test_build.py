@@ -14,7 +14,8 @@ spec.loader.exec_module(build)
 
 def contrast(first, second):
     def luminance(color):
-        channels = [int(color[i:i + 2], 16) / 255 for i in (1, 3, 5)]
+        channels = ([int(color[i:i + 2], 16) / 255 for i in (1, 3, 5)]
+                    if isinstance(color, str) else [c / 255 for c in color])
         linear = [c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
                   for c in channels]
         return sum(c * weight for c, weight in zip(linear, (0.2126, 0.7152, 0.0722)))
@@ -135,21 +136,24 @@ class BuildTest(unittest.TestCase):
             palette = build.read_colors(path)
             values = variables(self.css, scheme)
             with self.subTest(scheme=scheme):
-                opacity = 0.35 if scheme == "light" else 0.25
-                self.assertEqual(values["text-highlight-bg"],
-                                 f"rgba({build.rgb(palette['yellow'])}, {opacity})")
-                # Composite the translucent highlight over the page before
-                # measuring text contrast against the visible background.
-                highlight = build.mix_hex(palette["background"], palette["yellow"], opacity)
+                if scheme == "light":
+                    self.assertEqual(values["text-highlight-bg"], palette["selection"])
+                    highlight = palette["selection"]
+                else:
+                    self.assertEqual(values["text-highlight-bg"],
+                                     f"rgba({build.rgb(palette['yellow'])}, 0.25)")
+                    highlight = build.mix_hex(palette["background"], palette["yellow"], 0.25)
                 self.assertGreaterEqual(contrast(values["text-normal"], highlight), 4.5)
                 self.assertEqual(values["tag-background"],
-                                 f"rgba({build.rgb(palette['accent'])}, 0.1)")
+                                 f"rgba({build.rgb(palette['accent'])}, {0.12 if scheme == 'light' else 0.1})")
                 self.assertEqual(values["tag-border-color"],
-                                 f"rgba({build.rgb(palette['accent'])}, 0.35)")
+                                 f"rgba({build.rgb(palette['accent'])}, {0.4 if scheme == 'light' else 0.35})")
                 self.assertEqual(values["tag-border-width"], "1px")
                 self.assertNotEqual(values["tag-background"], values["text-highlight-bg"])
                 self.assertEqual(values["nav-item-background-active"],
-                                 build.mix_hex(palette["selection"], palette["muted"], 0.25))
+                                 (build.mix_hex(palette["dark_background"], palette["foreground"], 0.12)
+                                  if scheme == "light" else
+                                  build.mix_hex(palette["selection"], palette["muted"], 0.25)))
                 self.assertNotEqual(values["nav-item-background-active"],
                                     values["background-secondary"])
                 self.assertEqual(values["table-border-color"],
@@ -157,6 +161,32 @@ class BuildTest(unittest.TestCase):
                 self.assertEqual(values["code-background"], palette["lighter_background"])
                 self.assertNotEqual(values["code-background"], palette["background"])
                 self.assertEqual(values["code-normal"], palette["foreground"])
+
+    def test_light_tag_composite_contrast(self):
+        values = variables(self.css, "light")
+        palette = build.read_colors(build.LIGHT_COLORS)
+        self.assertEqual(values["tag-color"], palette["bright_yellow"])
+        fill = re.fullmatch(r"rgba\((\d+), (\d+), (\d+), ([\d.]+)\)",
+                            values["tag-background"])
+        self.assertIsNotNone(fill)
+        red, green, blue, alpha = map(float, fill.groups())
+        for surface in ("background-primary", "background-secondary"):
+            with self.subTest(surface=surface):
+                background = [int(values[surface][i:i + 2], 16) for i in (1, 3, 5)]
+                composite = [fg * alpha + bg * (1 - alpha)
+                             for fg, bg in zip((red, green, blue), background)]
+                self.assertGreaterEqual(contrast(values["tag-color"], composite), 4.5)
+
+    def test_light_active_row_and_warning(self):
+        values = variables(self.css, "light")
+        palette = build.read_colors(build.LIGHT_COLORS)
+        self.assertGreaterEqual(contrast(values["nav-item-color-active"],
+                                         values["nav-item-background-active"]), 4.5)
+        self.assertEqual(values["callout-warning"], palette["orange"])
+        for surface in ("background-primary", "background-secondary"):
+            self.assertGreaterEqual(contrast(values["callout-warning"], values[surface]), 4.5)
+        self.assertIn(".theme-light .tree-item-self.is-active {\n"
+                      "  box-shadow: inset 2px 0 0 var(--interactive-accent);\n}", self.css)
 
     def test_heading_sizes(self):
         rules = re.findall(r"([^{}]+)\{([^{}]*)\}",
@@ -223,7 +253,7 @@ class BuildTest(unittest.TestCase):
     def test_manifest(self):
         data = json.loads((self.out / "manifest.json").read_text())
         self.assertNotIn("description", data)
-        self.assertEqual(data["version"], "1.5.0")
+        self.assertEqual(data["version"], "1.5.1")
         for key in ("name", "version", "minAppVersion", "author"):
             self.assertTrue(data.get(key), key)
 
