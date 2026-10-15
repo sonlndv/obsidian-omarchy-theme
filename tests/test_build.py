@@ -104,10 +104,75 @@ class BuildTest(unittest.TestCase):
         for scheme in ("dark", "light"):
             values = variables(self.css, scheme)
             for name in ("text-normal", "text-muted", "text-accent", "link-color",
-                         "h3-color", "code-normal", "code-string", "code-keyword"):
+                         "h2-color", "h3-color", "h4-color", "h5-color", "code-normal", "code-string", "code-keyword"):
                 with self.subTest(scheme=scheme, variable=name):
                     self.assertGreaterEqual(contrast(values[name], values["background-primary"]), 4.5)
             self.assertGreaterEqual(contrast(values["text-faint"], values["background-primary"]), 3)
+
+    def test_base_colours_and_callouts(self):
+        for scheme, path in (("dark", build.COLORS), ("light", build.LIGHT_COLORS)):
+            palette = build.read_colors(path)
+            values = variables(self.css, scheme)
+            with self.subTest(scheme=scheme):
+                self.assertRegex(values["color-blue-rgb"], r"^\d{1,3}, \d{1,3}, \d{1,3}$")
+                self.assertNotIn("8, 109, 221", self.css)
+                for name, key in (("red", "red"), ("orange", "orange"),
+                                  ("yellow", "yellow"), ("green", "green"),
+                                  ("cyan", "cyan"), ("blue", "blue"),
+                                  ("purple", "magenta"), ("pink", "bright_magenta")):
+                    expected = ", ".join(str(int(palette[key][i:i + 2], 16))
+                                         for i in (1, 3, 5))
+                    self.assertEqual(values[f"color-{name}"], palette[key])
+                    self.assertEqual(values[f"color-{name}-rgb"], expected)
+                for name in ("default", "info", "note"):
+                    value = values[f"callout-{name}"]
+                    self.assertRegex(value, r"^#[0-9a-fA-F]{6}$")
+                    self.assertNotRegex(value, r"^\d+,\s*\d+,\s*\d+$")
+                    self.assertEqual(value, palette["blue"])
+
+    def test_surface_colours_and_highlight_contrast(self):
+        for scheme, path in (("dark", build.COLORS), ("light", build.LIGHT_COLORS)):
+            palette = build.read_colors(path)
+            values = variables(self.css, scheme)
+            with self.subTest(scheme=scheme):
+                opacity = 0.35 if scheme == "light" else 0.25
+                self.assertEqual(values["text-highlight-bg"],
+                                 f"rgba({build.rgb(palette['yellow'])}, {opacity})")
+                # Composite the translucent highlight over the page before
+                # measuring text contrast against the visible background.
+                highlight = build.mix_hex(palette["background"], palette["yellow"], opacity)
+                self.assertGreaterEqual(contrast(values["text-normal"], highlight), 4.5)
+                self.assertEqual(values["tag-background"],
+                                 f"rgba({build.rgb(palette['accent'])}, 0.1)")
+                self.assertEqual(values["tag-border-color"],
+                                 f"rgba({build.rgb(palette['accent'])}, 0.35)")
+                self.assertEqual(values["tag-border-width"], "1px")
+                self.assertNotEqual(values["tag-background"], values["text-highlight-bg"])
+                self.assertEqual(values["nav-item-background-active"],
+                                 build.mix_hex(palette["selection"], palette["muted"], 0.25))
+                self.assertNotEqual(values["nav-item-background-active"],
+                                    values["background-secondary"])
+                self.assertEqual(values["table-border-color"],
+                                 f"rgba({build.rgb(palette['muted'])}, 0.6)")
+                self.assertEqual(values["code-background"], palette["lighter_background"])
+                self.assertNotEqual(values["code-background"], palette["background"])
+                self.assertEqual(values["code-normal"], palette["foreground"])
+
+    def test_heading_sizes(self):
+        rules = re.findall(r"([^{}]+)\{([^{}]*)\}",
+                           (ROOT / "src/parts/typography.css").read_text())
+        for level, size in ((1, "2em"), (2, "1.45em")):
+            selectors = [f".markdown-preview-view h{level}",
+                         f".markdown-source-view .HyperMD-header-{level}",
+                         f".markdown-source-view .cm-header-{level}"]
+            if level == 1:
+                selectors.append(".inline-title")
+            for selector in selectors:
+                with self.subTest(selector=selector):
+                    self.assertTrue(any(
+                        selector in [part.strip() for part in group.split(",")]
+                        and re.search(r"font-size:\s*" + re.escape(size) + r"\s*;", body)
+                        for group, body in rules))
 
     def test_palette_keys_match(self):
         self.assertEqual(build.read_colors().keys(), build.read_colors(build.LIGHT_COLORS).keys())
@@ -158,7 +223,7 @@ class BuildTest(unittest.TestCase):
     def test_manifest(self):
         data = json.loads((self.out / "manifest.json").read_text())
         self.assertNotIn("description", data)
-        self.assertEqual(data["version"], "1.4.0")
+        self.assertEqual(data["version"], "1.5.0")
         for key in ("name", "version", "minAppVersion", "author"):
             self.assertTrue(data.get(key), key)
 
