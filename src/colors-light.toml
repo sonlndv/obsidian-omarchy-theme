@@ -1,14 +1,14 @@
-# Pale navy surfaces and navy ink, with deep gold accents.
+# White surfaces and navy ink, with deep gold accents.
 mode = "light"
 
 accent = "#986100"
 selection = "#f0dfb8"
-muted = "#6b7890"
+muted = "#66738a"
 
-background = "#f7f8fb"
-dark_background = "#eceff5"
-darker_background = "#e0e5ee"
-lighter_background = "#e6eaf2"
+background = "#ffffff"
+dark_background = "#f7f8fa"
+darker_background = "#eff1f5"
+lighter_background = "#f3f4f7"
 
 foreground = "#14213a"
 dark_foreground = "#4a5873"
