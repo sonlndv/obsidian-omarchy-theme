@@ -6,7 +6,8 @@ writes both schemes to theme.css plus manifest.json in the repository root.
 Pass --live to replace the matching scheme with current Omarchy colours from
 ~/.local/state/omarchy/current/theme/colors.toml; the other stays bundled. Pass --install to
 also copy the result into .obsidian/themes/Omarchy of every vault listed in
-~/.config/obsidian/obsidian.json and select it in appearance.json.
+~/.config/obsidian/obsidian.json and select it in appearance.json. With both
+--live and --install, only vault copies are updated; repository files are untouched.
 
 The theme is assembled from src/parts/: the generated colour block plus the
 static font, typography and geometry layers.
@@ -17,6 +18,7 @@ import os
 import pathlib
 import re
 import sys
+import tempfile
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 COLORS = ROOT / "src" / "colors.toml"
@@ -174,8 +176,13 @@ def main(argv=None):
     ap.add_argument("--install", action="store_true",
                     help="also install into every Obsidian vault")
     args = ap.parse_args(argv)
-    colors, body = build(ROOT, LIVE_COLORS if args.live else COLORS)
-    print(f"wrote {ROOT / 'theme.css'} and manifest.json")
+    colors_path = LIVE_COLORS if args.live else COLORS
+    if args.live and args.install:
+        with tempfile.TemporaryDirectory() as tmp:
+            colors, body = build(tmp, colors_path)
+    else:
+        colors, body = build(ROOT, colors_path)
+        print(f"wrote {ROOT / 'theme.css'} and manifest.json")
     print(f"accent {colors.get('accent')}  bg {colors.get('background')}  mode {colors.get('mode')}")
     if args.install:
         install(body)

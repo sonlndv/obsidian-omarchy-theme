@@ -36,6 +36,10 @@ Build from the current Omarchy palette and install into your configured vaults:
 python3 bin/build.py --live --install
 ```
 
+With `--live --install`, only the vault copies are updated; the committed
+`theme.css` and `manifest.json` in the repo root stay unchanged, so theme switches
+keep the Git tree clean. Without `--live`, builds still write the repo files.
+
 To follow future theme changes, save this as `obsidian-theme` (adjust the repo
 path if needed):
 

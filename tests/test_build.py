@@ -4,6 +4,7 @@ import pathlib
 import re
 import tempfile
 import unittest
+from unittest import mock
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 spec = importlib.util.spec_from_file_location("build", ROOT / "bin" / "build.py")
@@ -126,6 +127,33 @@ class BuildTest(unittest.TestCase):
     def test_no_important(self):
         self.assertNotIn("!important", self.css)
         self.assertNotIn("!important", (ROOT / "theme.css").read_text())
+
+    def test_live_install_preserves_repo_files(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = pathlib.Path(tmp) / "repo"
+            root.mkdir()
+            originals = {"theme.css": b"committed css\n",
+                         "manifest.json": b"committed manifest\n"}
+            for name, content in originals.items():
+                (root / name).write_bytes(content)
+            live = pathlib.Path(tmp) / "live.toml"
+            live.write_text(build.LIGHT_COLORS.read_text().replace(
+                build.read_colors(build.LIGHT_COLORS)["accent"], "#123456"))
+            vault = pathlib.Path(tmp) / "vault"
+            vault.mkdir()
+            vaults = pathlib.Path(tmp) / "obsidian.json"
+            vaults.write_text(json.dumps({"vaults": {"test": {"path": str(vault)}}}))
+            with mock.patch.multiple(build, ROOT=root, LIVE_COLORS=live, VAULTS=vaults):
+                build.main(["--live", "--install"])
+            for name, content in originals.items():
+                self.assertEqual((root / name).read_bytes(), content)
+            installed = vault / ".obsidian" / "themes" / build.THEME
+            css = (installed / "theme.css").read_text()
+            self.assertIn(".theme-dark", css)
+            self.assertIn(".theme-light", css)
+            self.assertEqual(variables(css, "light")["text-accent"], "#123456")
+            self.assertEqual(json.loads((installed / "manifest.json").read_text())["name"],
+                             build.THEME)
 
     def test_manifest(self):
         data = json.loads((self.out / "manifest.json").read_text())
