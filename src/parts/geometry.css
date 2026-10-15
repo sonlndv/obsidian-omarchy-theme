@@ -36,27 +36,27 @@ body {
 }
 
 /* Catch-all for elements that hardcode a radius rather than using a var. */
-.workspace-tab-header,
-.workspace-leaf-content,
-.modal,
-.prompt,
-.suggestion-container,
-.menu,
-.tooltip,
-.callout,
-.markdown-rendered table,
-.markdown-rendered img,
-.internal-embed,
-.tag,
-button,
-input,
-select,
-textarea {
-  border-radius: var(--sharp-radius) !important;
+body .workspace-tab-header,
+body .workspace-leaf-content,
+body .modal,
+body .prompt,
+body .suggestion-container,
+body .menu,
+body .tooltip,
+body .callout,
+body .markdown-rendered table,
+body .markdown-rendered img,
+body .internal-embed,
+body .tag,
+body button,
+body input,
+body select,
+body textarea {
+  border-radius: var(--sharp-radius);
 }
 
 /* Crisper separators to match the squarer geometry. */
-.workspace-split.mod-root .workspace-leaf,
-.workspace-tabs .workspace-leaf {
-  border-radius: var(--sharp-radius) !important;
+body .workspace-split.mod-root .workspace-leaf,
+body .workspace-tabs .workspace-leaf {
+  border-radius: var(--sharp-radius);
 }

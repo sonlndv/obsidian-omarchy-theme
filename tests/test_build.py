@@ -11,6 +11,23 @@ build = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(build)
 
 
+def contrast(first, second):
+    def luminance(color):
+        channels = [int(color[i:i + 2], 16) / 255 for i in (1, 3, 5)]
+        linear = [c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
+                  for c in channels]
+        return sum(c * weight for c, weight in zip(linear, (0.2126, 0.7152, 0.0722)))
+    light, dark = sorted((luminance(first), luminance(second)), reverse=True)
+    return (light + 0.05) / (dark + 0.05)
+
+
+def variables(css, scheme):
+    block = re.search(r"\.theme-" + scheme + r"\s*\{([^}]*)\}", css)
+    if block is None:
+        raise AssertionError(f"missing {scheme} block")
+    return dict(re.findall(r"--([\w-]+):\s*([^;]+);", block.group(1)))
+
+
 class BuildTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -42,8 +59,38 @@ class BuildTest(unittest.TestCase):
         self.assertIsNotNone(m)
         self.assertIn("--background-primary", m.group(1))
 
+    def test_both_schemes_and_contrast(self):
+        for scheme in ("dark", "light"):
+            values = variables(self.css, scheme)
+            for name in ("text-normal", "text-muted", "text-accent", "link-color",
+                         "h3-color", "code-normal", "code-string", "code-keyword"):
+                with self.subTest(scheme=scheme, variable=name):
+                    self.assertGreaterEqual(contrast(values[name], values["background-primary"]), 4.5)
+            self.assertGreaterEqual(contrast(values["text-faint"], values["background-primary"]), 3)
+
+    def test_palette_keys_match(self):
+        self.assertEqual(build.read_colors().keys(), build.read_colors(build.LIGHT_COLORS).keys())
+        self.assertEqual(build.read_colors(build.LIGHT_COLORS)["mode"], "light")
+
+    def test_live_replaces_only_matching_scheme(self):
+        for scheme, source in (("dark", build.COLORS), ("light", build.LIGHT_COLORS)):
+            with self.subTest(scheme=scheme), tempfile.TemporaryDirectory() as tmp:
+                path = pathlib.Path(tmp) / "live.toml"
+                path.write_text(source.read_text().replace(
+                    build.read_colors(source)["accent"], "#123456"))
+                _, css = build.build(pathlib.Path(tmp) / "out", path)
+                self.assertEqual(variables(css, scheme)["text-accent"], "#123456")
+                other = "light" if scheme == "dark" else "dark"
+                self.assertEqual(variables(css, other), variables(self.css, other))
+
+    def test_no_important(self):
+        self.assertNotIn("!important", self.css)
+        self.assertNotIn("!important", (ROOT / "theme.css").read_text())
+
     def test_manifest(self):
         data = json.loads((self.out / "manifest.json").read_text())
+        self.assertNotIn("description", data)
+        self.assertEqual(data["version"], "1.3.0")
         for key in ("name", "version", "minAppVersion", "author"):
             self.assertTrue(data.get(key), key)
 
