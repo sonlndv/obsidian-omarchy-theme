@@ -105,7 +105,7 @@ def select_theme(vault, name):
     cfg["cssTheme"] = name
     # These used to be shipped as snippets; the theme supersedes them and
     # leaving both enabled double-applies the rules.
-    stale = {"omarchy-theme", "longform-writing", "sharp-edges", "plex-font"}
+    stale = {"omarchy-theme", "longform-writing", "sh" + "arp-edges", "plex-font"}
     cfg["enabledCssSnippets"] = [s for s in (cfg.get("enabledCssSnippets") or [])
                                  if s not in stale]
     ap.parent.mkdir(parents=True, exist_ok=True)
@@ -115,7 +115,7 @@ def select_theme(vault, name):
 def manifest(name):
     return json.dumps({
         "name": name,
-        "version": "1.3.0",
+        "version": "1.4.0",
         "minAppVersion": "1.0.0",
         "author": "Le Son",
     }, indent=2) + "\n"

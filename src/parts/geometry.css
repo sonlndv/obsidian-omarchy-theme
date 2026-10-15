@@ -1,37 +1,36 @@
-/* Sharper geometry. Obsidian's defaults are quite rounded; this pulls the
-   radii down to a crisp 2px — square-ish but not brutally hard-edged.
-   Set --sharp-radius to 0 for fully square, 4 for a softer compromise. */
+/* Soft 6px corners. One number to tune: --corner-radius.
+   Use 0 for square, 4 for subtle, or 8 for rounder corners. */
 
 body {
-  --sharp-radius: 2px;
+  --corner-radius: 6px;
 
-  --radius-s: var(--sharp-radius);
-  --radius-m: var(--sharp-radius);
-  --radius-l: var(--sharp-radius);
-  --radius-xl: var(--sharp-radius);
+  --radius-s: var(--corner-radius);
+  --radius-m: var(--corner-radius);
+  --radius-l: var(--corner-radius);
+  --radius-xl: var(--corner-radius);
 
-  --input-radius: var(--sharp-radius);
-  --button-radius: var(--sharp-radius);
-  --tab-radius: var(--sharp-radius);
-  --tab-radius-active: var(--sharp-radius);
-  --modal-radius: var(--sharp-radius);
-  --checkbox-radius: var(--sharp-radius);
-  --toggle-radius: var(--sharp-radius);
-  --slider-thumb-radius: var(--sharp-radius);
-  --code-radius: var(--sharp-radius);
-  --callout-radius: var(--sharp-radius);
-  --embed-radius: var(--sharp-radius);
-  --swatch-radius: var(--sharp-radius);
-  --prompt-radius: var(--sharp-radius);
-  --dialog-radius: var(--sharp-radius);
-  --table-radius: var(--sharp-radius);
-  --tag-radius: var(--sharp-radius);
-  --pill-radius: var(--sharp-radius);
-  --popover-radius: var(--sharp-radius);
-  --tooltip-radius: var(--sharp-radius);
-  --icon-radius: var(--sharp-radius);
-  --thumbnail-radius: var(--sharp-radius);
-  --image-radius: var(--sharp-radius);
+  --input-radius: var(--corner-radius);
+  --button-radius: var(--corner-radius);
+  --tab-radius: var(--corner-radius);
+  --tab-radius-active: var(--corner-radius);
+  --modal-radius: var(--corner-radius);
+  --checkbox-radius: var(--corner-radius);
+  --toggle-radius: var(--corner-radius);
+  --slider-thumb-radius: var(--corner-radius);
+  --code-radius: var(--corner-radius);
+  --callout-radius: var(--corner-radius);
+  --embed-radius: var(--corner-radius);
+  --swatch-radius: var(--corner-radius);
+  --prompt-radius: var(--corner-radius);
+  --dialog-radius: var(--corner-radius);
+  --table-radius: var(--corner-radius);
+  --tag-radius: var(--corner-radius);
+  --pill-radius: var(--corner-radius);
+  --popover-radius: var(--corner-radius);
+  --tooltip-radius: var(--corner-radius);
+  --icon-radius: var(--corner-radius);
+  --thumbnail-radius: var(--corner-radius);
+  --image-radius: var(--corner-radius);
   --blockquote-radius: 0;
 }
 
@@ -42,33 +41,33 @@ body.is-phone,
 body.is-tablet,
 body.mod-macos,
 body.is-ios {
-  --clickable-icon-radius: var(--sharp-radius);
-  --input-radius: var(--sharp-radius);
-  --modal-radius: var(--sharp-radius);
-  --nav-item-radius: var(--sharp-radius);
-  --navbar-radius: var(--sharp-radius);
-  --toggle-radius: var(--sharp-radius);
-  --toggle-thumb-radius: var(--sharp-radius);
-  --setting-items-radius: var(--sharp-radius);
-  --search-input-radius: var(--sharp-radius);
-  --view-header-action-radius: var(--sharp-radius);
-  --embed-action-radius: var(--sharp-radius);
-  --embed-actions-radius: var(--sharp-radius);
-  --swatch-radius: var(--sharp-radius);
-  --canvas-controls-radius: var(--sharp-radius);
-  --radius-xl: var(--sharp-radius);
-  --touch-radius-xxs: var(--sharp-radius);
-  --touch-radius-xs: var(--sharp-radius);
-  --touch-radius-s: var(--sharp-radius);
-  --touch-radius-m: var(--sharp-radius);
-  --touch-radius-l: var(--sharp-radius);
-  --touch-radius-xl: var(--sharp-radius);
-  --metadata-property-radius: var(--sharp-radius);
-  --metadata-property-radius-hover: var(--sharp-radius);
-  --metadata-property-radius-focus: var(--sharp-radius);
-  --hotkey-radius: var(--sharp-radius);
-  --table-selection-border-radius: var(--sharp-radius);
-  --tab-switcher-preview-radius: var(--sharp-radius);
+  --clickable-icon-radius: var(--corner-radius);
+  --input-radius: var(--corner-radius);
+  --modal-radius: var(--corner-radius);
+  --nav-item-radius: var(--corner-radius);
+  --navbar-radius: var(--corner-radius);
+  --toggle-radius: var(--corner-radius);
+  --toggle-thumb-radius: var(--corner-radius);
+  --setting-items-radius: var(--corner-radius);
+  --search-input-radius: var(--corner-radius);
+  --view-header-action-radius: var(--corner-radius);
+  --embed-action-radius: var(--corner-radius);
+  --embed-actions-radius: var(--corner-radius);
+  --swatch-radius: var(--corner-radius);
+  --canvas-controls-radius: var(--corner-radius);
+  --radius-xl: var(--corner-radius);
+  --touch-radius-xxs: var(--corner-radius);
+  --touch-radius-xs: var(--corner-radius);
+  --touch-radius-s: var(--corner-radius);
+  --touch-radius-m: var(--corner-radius);
+  --touch-radius-l: var(--corner-radius);
+  --touch-radius-xl: var(--corner-radius);
+  --metadata-property-radius: var(--corner-radius);
+  --metadata-property-radius-hover: var(--corner-radius);
+  --metadata-property-radius-focus: var(--corner-radius);
+  --hotkey-radius: var(--corner-radius);
+  --table-selection-border-radius: var(--corner-radius);
+  --tab-switcher-preview-radius: var(--corner-radius);
   --mobile-sidebar-radius: 0;
   --list-bullet-radius: 50%;
 }
@@ -90,21 +89,21 @@ body button,
 body input,
 body select,
 body textarea {
-  border-radius: var(--sharp-radius);
+  border-radius: var(--corner-radius);
 }
 
 /* Mobile navbar actions hardcode their radius to the touch target size. */
 body.is-mobile .mobile-navbar-action .clickable-icon,
 body.is-mobile .mobile-navbar-action button {
-  border-radius: var(--sharp-radius);
+  border-radius: var(--corner-radius);
 }
 
 body.is-mobile .mobile-navbar {
-  border-radius: var(--sharp-radius);
+  border-radius: var(--corner-radius);
 }
 
-/* Crisper separators to match the squarer geometry. */
+/* Keep workspace corners consistent with the shared radius. */
 body .workspace-split.mod-root .workspace-leaf,
 body .workspace-tabs .workspace-leaf {
-  border-radius: var(--sharp-radius);
+  border-radius: var(--corner-radius);
 }

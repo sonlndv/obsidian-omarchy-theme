@@ -86,7 +86,7 @@ class BuildTest(unittest.TestCase):
         )
         for name in (*radii, "mobile-sidebar-radius"):
             with self.subTest(variable=name):
-                value = "0" if name == "mobile-sidebar-radius" else "var(--sharp-radius)"
+                value = "0" if name == "mobile-sidebar-radius" else "var(--corner-radius)"
                 declaration = rf"--{re.escape(name)}\s*:\s*{re.escape(value)}\s*;"
                 self.assertTrue(any(re.search(declaration, body) for body in mobile_rules), name)
 
@@ -158,7 +158,7 @@ class BuildTest(unittest.TestCase):
     def test_manifest(self):
         data = json.loads((self.out / "manifest.json").read_text())
         self.assertNotIn("description", data)
-        self.assertEqual(data["version"], "1.3.0")
+        self.assertEqual(data["version"], "1.4.0")
         for key in ("name", "version", "minAppVersion", "author"):
             self.assertTrue(data.get(key), key)
 
