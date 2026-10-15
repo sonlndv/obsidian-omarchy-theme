@@ -124,7 +124,9 @@ def css(c, scheme):
     })
     if scheme == "light":
         values.update({
-            "nav-item-background-active": mix_hex(c["dark_background"], c["foreground"], 0.12),
+            "background-modifier-border": alpha("muted", 0.25),
+            "table-border-color": alpha("muted", 0.45),
+            "nav-item-background-active": mix_hex(c["dark_background"], c["foreground"], 0.07),
             "nav-item-color-active": c["foreground"],
             "tag-color": c["bright_yellow"],
             "tag-background": alpha("accent", 0.12),
@@ -169,7 +171,7 @@ def select_theme(vault, name):
 def manifest(name):
     return json.dumps({
         "name": name,
-        "version": "1.5.1",
+        "version": "1.5.2",
         "minAppVersion": "1.0.0",
         "author": "Le Son",
     }, indent=2) + "\n"

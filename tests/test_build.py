@@ -151,13 +151,13 @@ class BuildTest(unittest.TestCase):
                 self.assertEqual(values["tag-border-width"], "1px")
                 self.assertNotEqual(values["tag-background"], values["text-highlight-bg"])
                 self.assertEqual(values["nav-item-background-active"],
-                                 (build.mix_hex(palette["dark_background"], palette["foreground"], 0.12)
+                                 (build.mix_hex(palette["dark_background"], palette["foreground"], 0.07)
                                   if scheme == "light" else
                                   build.mix_hex(palette["selection"], palette["muted"], 0.25)))
                 self.assertNotEqual(values["nav-item-background-active"],
                                     values["background-secondary"])
                 self.assertEqual(values["table-border-color"],
-                                 f"rgba({build.rgb(palette['muted'])}, 0.6)")
+                                 f"rgba({build.rgb(palette['muted'])}, {0.45 if scheme == 'light' else 0.6})")
                 self.assertEqual(values["code-background"], palette["lighter_background"])
                 self.assertNotEqual(values["code-background"], palette["background"])
                 self.assertEqual(values["code-normal"], palette["foreground"])
@@ -253,7 +253,7 @@ class BuildTest(unittest.TestCase):
     def test_manifest(self):
         data = json.loads((self.out / "manifest.json").read_text())
         self.assertNotIn("description", data)
-        self.assertEqual(data["version"], "1.5.1")
+        self.assertEqual(data["version"], "1.5.2")
         for key in ("name", "version", "minAppVersion", "author"):
             self.assertTrue(data.get(key), key)
 
