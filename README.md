@@ -3,7 +3,7 @@
 # Omarchy theme for Obsidian
 
 An Obsidian theme built from Omarchy colour palettes,
-with IBM Plex Mono embedded, a long-form writing layout and sharp edges.
+with IBM Plex Mono embedded, a long-form writing layout and soft rounded corners.
 
 ## Build
 
