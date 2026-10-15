@@ -35,6 +35,44 @@ body {
   --blockquote-radius: 0;
 }
 
+/* Override platform radii with higher specificity than Obsidian's defaults. */
+body,
+body.is-mobile,
+body.is-phone,
+body.is-tablet,
+body.mod-macos,
+body.is-ios {
+  --clickable-icon-radius: var(--sharp-radius);
+  --input-radius: var(--sharp-radius);
+  --modal-radius: var(--sharp-radius);
+  --nav-item-radius: var(--sharp-radius);
+  --navbar-radius: var(--sharp-radius);
+  --toggle-radius: var(--sharp-radius);
+  --toggle-thumb-radius: var(--sharp-radius);
+  --setting-items-radius: var(--sharp-radius);
+  --search-input-radius: var(--sharp-radius);
+  --view-header-action-radius: var(--sharp-radius);
+  --embed-action-radius: var(--sharp-radius);
+  --embed-actions-radius: var(--sharp-radius);
+  --swatch-radius: var(--sharp-radius);
+  --canvas-controls-radius: var(--sharp-radius);
+  --radius-xl: var(--sharp-radius);
+  --touch-radius-xxs: var(--sharp-radius);
+  --touch-radius-xs: var(--sharp-radius);
+  --touch-radius-s: var(--sharp-radius);
+  --touch-radius-m: var(--sharp-radius);
+  --touch-radius-l: var(--sharp-radius);
+  --touch-radius-xl: var(--sharp-radius);
+  --metadata-property-radius: var(--sharp-radius);
+  --metadata-property-radius-hover: var(--sharp-radius);
+  --metadata-property-radius-focus: var(--sharp-radius);
+  --hotkey-radius: var(--sharp-radius);
+  --table-selection-border-radius: var(--sharp-radius);
+  --tab-switcher-preview-radius: var(--sharp-radius);
+  --mobile-sidebar-radius: 0;
+  --list-bullet-radius: 50%;
+}
+
 /* Catch-all for elements that hardcode a radius rather than using a var. */
 body .workspace-tab-header,
 body .workspace-leaf-content,
@@ -52,6 +90,16 @@ body button,
 body input,
 body select,
 body textarea {
+  border-radius: var(--sharp-radius);
+}
+
+/* Mobile navbar actions hardcode their radius to the touch target size. */
+body.is-mobile .mobile-navbar-action .clickable-icon,
+body.is-mobile .mobile-navbar-action button {
+  border-radius: var(--sharp-radius);
+}
+
+body.is-mobile .mobile-navbar {
   border-radius: var(--sharp-radius);
 }
 

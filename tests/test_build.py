@@ -49,6 +49,46 @@ class BuildTest(unittest.TestCase):
         self.assertIn(".is-mobile", self.css)
         self.assertIn("safe-area-inset", self.css)
 
+    def test_platform_radius_overrides(self):
+        css = re.sub(r"/\*.*?\*/", "", self.css, flags=re.DOTALL)
+        mobile_rules = [body for selector, body in re.findall(r"([^{}]+)\{([^{}]*)\}", css)
+                        if any(part.strip() == "body.is-mobile" for part in selector.split(","))]
+        self.assertTrue(mobile_rules)
+        radii = (
+            "clickable-icon-radius",
+            "input-radius",
+            "modal-radius",
+            "nav-item-radius",
+            "navbar-radius",
+            "toggle-radius",
+            "toggle-thumb-radius",
+            "setting-items-radius",
+            "search-input-radius",
+            "view-header-action-radius",
+            "embed-action-radius",
+            "embed-actions-radius",
+            "swatch-radius",
+            "canvas-controls-radius",
+            "radius-xl",
+            "touch-radius-xxs",
+            "touch-radius-xs",
+            "touch-radius-s",
+            "touch-radius-m",
+            "touch-radius-l",
+            "touch-radius-xl",
+            "metadata-property-radius",
+            "metadata-property-radius-hover",
+            "metadata-property-radius-focus",
+            "hotkey-radius",
+            "table-selection-border-radius",
+            "tab-switcher-preview-radius",
+        )
+        for name in (*radii, "mobile-sidebar-radius"):
+            with self.subTest(variable=name):
+                value = "0" if name == "mobile-sidebar-radius" else "var(--sharp-radius)"
+                declaration = rf"--{re.escape(name)}\s*:\s*{re.escape(value)}\s*;"
+                self.assertTrue(any(re.search(declaration, body) for body in mobile_rules), name)
+
     def test_last_text_font_preserves_embedded_fallback(self):
         declarations = re.findall(r"--font-text-theme\s*:\s*([^;]+);", self.css)
         self.assertTrue(declarations)
