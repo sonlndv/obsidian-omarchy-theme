@@ -1,64 +1,65 @@
-![Omarchy theme](screenshot.png)
-
 # Omarchy theme for Obsidian
 
-An Obsidian theme built from Omarchy colour palettes,
-with IBM Plex Mono embedded, a long-form writing layout and soft rounded corners.
+Omarchy 1.6.0 brings the accepted Sonwork dark/light palette to the normal
+community theme: Geist prose and interface text, Space Mono headings/code,
+cyan actions, native Obsidian layout and the existing soft corners. Original
+licensed Latin and Vietnamese font subsets are embedded for offline/mobile use.
+Full font notices are included in CSS and the adjacent OFL files.
 
-## Build
-
-    python3 bin/build.py
-
-Writes `theme.css` and `manifest.json` to the repo root (both are committed).
-Options: `--live` replaces the matching light or dark palette with the current
-Omarchy theme colours; the other palette stays bundled. `--install` also copies
-the result into every vault listed
-in `~/.config/obsidian/obsidian.json` and selects the theme.
-
-Tests: `python3 -m unittest discover -s tests`
-
-## Install
-
-Copy `theme.css` and `manifest.json` into `<vault>/.obsidian/themes/Omarchy/`,
-then choose **Omarchy** under Settings → Appearance → Themes.
-
-## Light and dark
-
-Both modes are included: navy and gold from `src/colors.toml`, and warm paper
-with navy ink and deep amber from `src/colors-light.toml`. Choose Light, Dark,
-or Adapt to system under Obsidian Settings → Appearance → Base color scheme.
-
-## Follow Omarchy
-
-Build from the current Omarchy palette and install into your configured vaults:
+## Build and verify
 
 ```sh
-python3 bin/build.py --live --install
+python3 -B bin/build.py
+python3 -B -m unittest discover -s tests -v
+node --check companion/main.js
+node --test tests/test_companion.cjs
 ```
 
-With `--live --install`, only the vault copies are updated; the committed
-`theme.css` and `manifest.json` in the repo root stay unchanged, so theme switches
-keep the Git tree clean. Without `--live`, builds still write the repo files.
+The default build writes reproducible root `theme.css`, `manifest.json` and
+font licenses for **Omarchy 1.6.0**. Python discovery also runs the companion
+syntax and Node built-in tests, so it is the aggregate check. CI runs these
+checks and rebuilds the root artifacts before checking for generated diffs.
 
-To follow future theme changes, save this as `obsidian-theme` (adjust the repo
-path if needed):
+The measured public [Sonwork](https://sonwork.org/) palette is recorded in
+`src/sonwork/palette.json`. The theme keeps preferred-first native text scaling,
+about 68ch readable line length and 1.7 leading. Choose Obsidian's readable-line
+length setting and Light/Dark/Adapt to system under Appearance. Long code and
+tables retain native scrolling. No artwork, website navigation or scripts ship.
 
-```sh
-#!/bin/sh
-exec python3 "$HOME/code/obsidian-omarchy-theme/bin/build.py" --live --install
-```
+## Update or install the theme
 
-Install it with `omarchy hook install theme-set ./obsidian-theme`. This copies
-an executable hook into `~/.config/omarchy/hooks/theme-set.d/`. Each theme change
-rebuilds both blocks, replaces the block matching Omarchy's mode, and installs
-the result. Use Obsidian's **Adapt to system** setting to follow system mode.
+Existing users can update **Omarchy** through its current community-theme entry.
+For manual installation, copy root `theme.css`, `manifest.json`, `OFL-Geist.txt`
+and `OFL-SpaceMono.txt` into `<vault>/.obsidian/themes/Omarchy/`, then select
+Omarchy under Appearance. A theme update does **not** install or enable the
+optional companion. Normal works independently of any plugin.
 
-## iPhone
+`python3 -B bin/build.py --preset sonwork` retains the separately named fixed
+**Omarchy Sonwork** preview in `dist/sonwork/`. It rejects `--live`/`--install`.
+Remove a manual preview by selecting another theme and deleting only its theme
+folder. Do not delete notes or appearance settings.
 
-Once listed in the community directory, install from Settings > Appearance >
-Themes > Manage. The mobile rules (safe-area padding, 17px editor text) are
-untested on iOS until verified.
+## Deliberately follow Omarchy colours
 
-## License
+`python3 -B bin/build.py --live` replaces the matching light/dark colour block
+from `~/.local/state/omarchy/current/theme/colors.toml`, retaining the other
+Sonwork scheme and the new fonts/compatibility layer. This is a deliberate
+palette override; it can change heading and accent colours from the fixed look.
+The existing `--live --install` hook interface remains available and updates
+only configured vault copies, leaving root artifacts untouched. `--install`
+selects Omarchy in all configured vaults; it is never needed for preview and
+has not been executed against live vaults in this author pass. Unreadable
+appearance JSON now fails closed rather than replacing preferences.
 
-MIT. See [LICENSE](LICENSE).
+## Optional writing companion
+
+See [companion/README.md](companion/README.md) for manual installation, Zen,
+optional typewriter, width/title settings, removal and packaging. The companion
+has no dependencies or prebound hotkeys. Zen always starts off.
+
+See [COMPATIBILITY.md](COMPATIBILITY.md) for scoped plugin contracts and limits,
+and [CHANGELOG.md](CHANGELOG.md) for changes. Native app/plugin acceptance is a
+separate parent QA step; no physical iPhone certification is claimed.
+
+MIT theme/companion license: [LICENSE](LICENSE). Fonts retain their full OFL
+copyright and license notices.

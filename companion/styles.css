@@ -1,0 +1,25 @@
+/* Hide navigation only, never plugin toolbars, Markdown content or modals. */
+body[data-ow-zen="true"] .workspace > .workspace-ribbon,
+body[data-ow-zen="true"] .workspace > .workspace-split.mod-left-split,
+body[data-ow-zen="true"] .workspace > .workspace-split.mod-right-split,
+body[data-ow-zen="true"] .workspace-split.mod-root > .workspace-tabs > .workspace-tab-header-container,
+body[data-ow-zen="true"] > .app-container > .status-bar {
+  display: none;
+}
+.ow-exit-zen {
+  position: fixed;
+  top: max(8px, env(safe-area-inset-top, 0px));
+  right: max(12px, env(safe-area-inset-right, 0px));
+  z-index: 30;
+  min-height: 44px;
+  padding: 0.5em 1em;
+  color: var(--text-normal);
+  background: var(--background-secondary);
+  border: 1px solid var(--background-modifier-border);
+}
+.ow-exit-zen:focus-visible { outline: 2px solid var(--interactive-accent); }
+body[data-ow-width="narrow"] .workspace-leaf-content[data-type="markdown"] { --file-line-width: 56ch; }
+body[data-ow-width="standard"] .workspace-leaf-content[data-type="markdown"] { --file-line-width: 68ch; }
+body[data-ow-width="wide"] .workspace-leaf-content[data-type="markdown"] { --file-line-width: 82ch; }
+body[data-ow-hide-title="true"] .workspace-leaf-content[data-type="markdown"] .inline-title { display: none; }
+body[data-ow-zen="true"] .ow-typewriter .markdown-source-view.mod-cm6 .cm-content { padding-bottom: 50vh; }
