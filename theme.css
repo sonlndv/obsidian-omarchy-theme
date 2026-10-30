@@ -70,11 +70,18 @@
   --checkbox-color-hover: #39d0fc;
   --checkbox-marker-color: #02050d;
   --h1-color: #f0f4f7;
-  --h2-color: #f0f4f7;
-  --h3-color: #f0f4f7;
+  --h2-color: #82defa;
+  --h3-color: #82defa;
   --h4-color: #f0f4f7;
   --h5-color: #f0f4f7;
   --h6-color: #f0f4f7;
+  --graph-node: #65bff0;
+  --graph-node-focused: #f5b488;
+  --graph-node-tag: #83d5b4;
+  --graph-node-attachment: #b7a1ef;
+  --graph-node-unresolved: #8aacc4;
+  --graph-line: #3c5c70;
+  --graph-text: #abb2ba;
   --interactive-accent-rgb: 57, 208, 252;
   --text-selection: rgba(57, 208, 252, 0.18);
   --text-highlight-bg: rgba(57, 208, 252, 0.14);
@@ -152,11 +159,18 @@
   --checkbox-color-hover: #006cac;
   --checkbox-marker-color: #f8fafd;
   --h1-color: #0b1421;
-  --h2-color: #0b1421;
-  --h3-color: #0b1421;
+  --h2-color: #044974;
+  --h3-color: #044974;
   --h4-color: #0b1421;
   --h5-color: #0b1421;
   --h6-color: #0b1421;
+  --graph-node: #156da0;
+  --graph-node-focused: #9c470d;
+  --graph-node-tag: #20745b;
+  --graph-node-attachment: #7554aa;
+  --graph-node-unresolved: #527389;
+  --graph-line: #a1b3c2;
+  --graph-text: #333e4c;
   --interactive-accent-rgb: 0, 108, 172;
   --text-selection: rgba(0, 108, 172, 0.18);
   --text-highlight-bg: rgba(0, 108, 172, 0.14);
@@ -633,4 +647,33 @@ body .tasknotes-plugin {
   --tn-border-color: var(--background-modifier-border);
   --tn-interactive-accent: var(--interactive-accent);
   --tn-interactive-accent-hover: var(--interactive-accent-hover);
+}
+
+/* Obsidian 1.14.5 probes these classes directly on body, outside leaves.
+   Native Groups remain authoritative; no colour-fill-N overrides. */
+body .graph-view.color-fill { color: var(--graph-node, var(--text-accent)); }
+body .graph-view.color-fill-focused,
+body .graph-view.color-circle,
+body .graph-view.color-fill-highlight {
+  color: var(--graph-node-focused, var(--text-warning));
+}
+body .graph-view.color-fill-tag { color: var(--graph-node-tag, var(--color-green)); }
+body .graph-view.color-fill-attachment { color: var(--graph-node-attachment, var(--color-purple)); }
+body .graph-view.color-fill-unresolved {
+  color: var(--graph-node-unresolved, var(--text-muted));
+  opacity: 0.8;
+}
+body .graph-view.color-line { color: var(--graph-line, var(--background-modifier-border)); }
+body .graph-view.color-line-highlight { color: var(--graph-node-focused, var(--text-warning)); }
+body .graph-view.color-text { color: var(--graph-text, var(--text-normal)); }
+
+/* Native File explorer / Outline only; no plugin toolbar or layout changes. */
+.workspace-leaf-content[data-type="file-explorer"] .nav-file-title.is-active,
+.workspace-leaf-content[data-type="outline"] .tree-item-self.is-active {
+  box-shadow: inset 1px 0 0 var(--interactive-accent);
+}
+.workspace-leaf-content[data-type="file-explorer"] .nav-file-title:focus-visible,
+.workspace-leaf-content[data-type="outline"] .tree-item-self:focus-visible {
+  outline: 1px solid var(--interactive-accent);
+  outline-offset: -1px;
 }

@@ -171,7 +171,7 @@ def select_theme(vault, name):
 def manifest(name):
     return json.dumps({
         "name": name,
-        "version": "1.6.0",
+        "version": "1.6.1",
         "minAppVersion": "1.0.0",
         "author": "Le Son",
     }, indent=2) + "\n"
@@ -205,6 +205,8 @@ def build(out_dir, colors_path=None):
         body = re.sub(r"\.theme-" + scheme + r"\s*\{[^}]*\}",
                       lambda _: css(colors, scheme), body, count=1)
     body += "\n" + (PARTS / "plugin-compat.css").read_text()
+    body += "\n" + (PARTS / "graph.css").read_text()
+    body += "\n" + (PARTS / "sidebar.css").read_text()
     out = pathlib.Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     (out / "theme.css").write_text(body)
@@ -274,6 +276,16 @@ def sonwork_css():
         }
         roles.update({f"h{level}-color": "ink" for level in range(1, 7)})
         values = {name: c[key] for name, key in roles.items()}
+        # Derived roles, never changes to the measured source tokens.
+        values.update({"h2-color": mix_hex(c["ink"], c["lume"], 0.6),
+                       "h3-color": mix_hex(c["ink"], c["lume"], 0.6)})
+        graph = {
+            "dark": ("#65bff0", "#f5b488", "#83d5b4", "#b7a1ef", "#8aacc4", "#3c5c70"),
+            "light": ("#156da0", "#9c470d", "#20745b", "#7554aa", "#527389", "#a1b3c2"),
+        }
+        values.update(zip(("graph-node", "graph-node-focused", "graph-node-tag",
+                           "graph-node-attachment", "graph-node-unresolved", "graph-line"), graph[scheme]))
+        values["graph-text"] = c["ink-2"]
         values.update({
             "interactive-accent-rgb": rgb(c["lume"]),
             "text-selection": f"rgba({rgb(c['lume'])}, 0.18)",

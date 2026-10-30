@@ -20,14 +20,30 @@ class Plugin {
   async saveData(data) { this.saved = structuredClone(data); this.saves = (this.saves || 0)+1; }
   addCommand(c) { this.commands.push(c); }
   addSettingTab() {}
+  addRibbonIcon(icon, label, callback) { this.ribbon = {icon, label, callback}; }
+}
+class Menu {
+  constructor() { this.items=[]; }
+  addItem(fn) {
+    const item = {};
+    for (const key of ['Title','Icon','Checked','Disabled']) item['set'+key] = value => { item[key.toLowerCase()]=value; return item; };
+    item.onClick = fn => { item.callback=fn; return item; };
+    fn(item); this.items.push(item); return this;
+  }
+  addSeparator() {}
+  onHide(fn) { this.onhide=fn; return this; }
+  hide() { this.hidden=true; this.onhide?.(); }
+  showAtMouseEvent(event) { this.position=event; }
+  showAtPosition(position, doc) { this.position=position; this.positionDocument=doc; }
 }
 const original = Module._load;
-Module._load = function(id,...args) { return id === 'obsidian' ? {Plugin, PluginSettingTab: class {}, Setting: class {}, MarkdownView: class {}} : original.call(this,id,...args); };
+Module._load = function(id,...args) { return id === 'obsidian' ? {Plugin, PluginSettingTab: class {}, Setting: class {}, MarkdownView: class {}, Menu} : original.call(this,id,...args); };
 const Writing = require('../companion/main.js');
 Module._load = original;
 function setup(data) {
   global.document = new Element(); document.body = new Element(); document.createElement = () => new Element();
-  document.querySelector = () => null;
+  document.querySelector = () => null; document.querySelectorAll = () => [];
+  global.window = {innerWidth: 800}; global.getComputedStyle = el => ({visibility: el.visibility || 'visible'});
   let next = 0; const frames = new Map();
   global.requestAnimationFrame = f => { frames.set(++next,f); return next; };
   global.cancelAnimationFrame = id => frames.delete(id);
@@ -46,7 +62,7 @@ test('conservative normalization, startup and assignable commands', async () => 
   assert.deepEqual(Writing.normalize({zen:true, width:'bad',typewriter:1,hideInlineTitle:'yes'}),Writing.DEFAULTS);
   const {p} = setup(); await p.onload();
   assert.equal(p.zen,false); assert.equal(p.saves,undefined);
-  assert.deepEqual(p.commands.map(c => c.id),['toggle-zen','toggle-typewriter']);
+  assert.deepEqual(p.commands.map(c => c.id),['toggle-zen','toggle-typewriter','open-writing-tools']);
   assert.ok(p.commands.every(c => !c.hotkeys)); p.onunload();
 });
 test('enter/exit/unload restore owned presentation without app/note/settings mutations', async () => {
@@ -79,4 +95,35 @@ test('typewriter centers real cursor range only for focused unselected source ed
   assert.equal(calls.length,1);
   p.pausedUntil=0; document.fire('keyup',{key:'a'}); await p.change('typewriter',false);
   assert.equal(frames.size,0); assert.equal(p.padded,null); p.onunload();
+});
+
+test('native writing tools are explicit, disabled safely, exit Zen before opening panes, close on unload', async () => {
+  const {p} = setup(); const actions=[];
+  let available=['outline:open','backlink:open'];
+  p.app.commands={listCommands:()=>available.map(id=>({id})),executeCommandById:id=>actions.push([id,p.zen])};
+  await p.onload(); assert.deepEqual(actions,[]); assert.equal(p.menu,undefined); assert.equal(p.saves,undefined);
+  assert.equal(p.ribbon.icon,'pen-tool');
+  p.ribbon.callback({clientX:10,clientY:10}); assert.equal(p.menu.items.length,4);
+  await p.menu.items[1].callback(); assert.equal(p.settings.typewriter,true); assert.equal(p.saves,1);
+  p.menu.items[0].callback(); assert.equal(p.zen,true);
+  p.menu.items[2].callback(); assert.deepEqual(actions,[['outline:open',false]]);
+  p.setZen(true); p.menu.items[3].callback(); assert.deepEqual(actions[1],['backlink:open',false]);
+  const old=p.menu; available=[];
+  p.commands.find(c=>c.id==='open-writing-tools').callback(); assert.equal(old.hidden,true);
+  assert.equal(p.menu.positionDocument, document, 'command menu must explicitly use the main document');
+  assert.equal(p.menu.items[2].disabled,true); assert.equal(p.menu.items[3].disabled,true);
+  p.setZen(true); p.menu.items[2].callback(); assert.equal(p.zen,true); assert.equal(actions.length,2);
+  const owned=p.menu; p.onunload(); assert.equal(owned.hidden,true); assert.equal(p.menu,null);
+  assert.equal(require('../companion/manifest.json').id,'omarchy-writing');
+  assert.equal(require('../companion/manifest.json').version,'0.2.0');
+});
+test('visible native/owned menus suppress pending typewriter; hidden/disconnected menus do not', async () => {
+  const {p,calls,flush} = setup({typewriter:true}); await p.onload(); p.setZen(true);
+  const native={isConnected:true,getClientRects:()=>[{}],visibility:'visible'};
+  document.querySelectorAll=()=>[native]; document.fire('keyup',{key:'a'}); flush(); assert.equal(calls.length,0);
+  native.getClientRects=()=>[]; document.fire('keyup',{key:'a'}); flush(); assert.equal(calls.length,1);
+  native.getClientRects=()=>[{}]; native.visibility='hidden'; document.fire('keyup',{key:'a'}); flush(); assert.equal(calls.length,2);
+  native.visibility='visible'; native.isConnected=false; document.fire('keyup',{key:'a'}); flush(); assert.equal(calls.length,3);
+  p.openTools(); document.fire('keyup',{key:'a'}); flush(); assert.equal(calls.length,3);
+  p.menu.hide(); document.fire('keyup',{key:'a'}); flush(); assert.equal(calls.length,4); p.onunload();
 });

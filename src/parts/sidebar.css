@@ -1,0 +1,10 @@
+/* Native File explorer / Outline only; no plugin toolbar or layout changes. */
+.workspace-leaf-content[data-type="file-explorer"] .nav-file-title.is-active,
+.workspace-leaf-content[data-type="outline"] .tree-item-self.is-active {
+  box-shadow: inset 1px 0 0 var(--interactive-accent);
+}
+.workspace-leaf-content[data-type="file-explorer"] .nav-file-title:focus-visible,
+.workspace-leaf-content[data-type="outline"] .tree-item-self:focus-visible {
+  outline: 1px solid var(--interactive-accent);
+  outline-offset: -1px;
+}
