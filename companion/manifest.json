@@ -1,0 +1,9 @@
+{
+  "id": "omarchy-writing",
+  "name": "Omarchy Writing",
+  "version": "0.1.0",
+  "minAppVersion": "1.5.0",
+  "description": "Opt-in Zen, writing width and optional typewriter scrolling.",
+  "author": "Le Son",
+  "isDesktopOnly": false
+}

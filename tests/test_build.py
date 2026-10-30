@@ -36,7 +36,10 @@ class BuildTest(unittest.TestCase):
         cls.tmp = tempfile.TemporaryDirectory()
         cls.out = pathlib.Path(cls.tmp.name)
         build.build(cls.out)
-        cls.css = (cls.out / "theme.css").read_text()
+        # Preserve the legacy palette/IBM fallback fixture contracts explicitly;
+        # the normal 1.6.0 artifact is covered by test_sonwork/test_release.
+        cls.css = build.assemble({"dark": build.read_colors(build.COLORS),
+                                  "light": build.read_colors(build.LIGHT_COLORS)})
 
     @classmethod
     def tearDownClass(cls):
@@ -217,7 +220,7 @@ class BuildTest(unittest.TestCase):
                 _, css = build.build(pathlib.Path(tmp) / "out", path)
                 self.assertEqual(variables(css, scheme)["text-accent"], "#123456")
                 other = "light" if scheme == "dark" else "dark"
-                self.assertEqual(variables(css, other), variables(self.css, other))
+                self.assertEqual(variables(css, other), variables(build.sonwork_css(), other))
 
     def test_no_important(self):
         self.assertNotIn("!important", self.css)
@@ -253,7 +256,7 @@ class BuildTest(unittest.TestCase):
     def test_manifest(self):
         data = json.loads((self.out / "manifest.json").read_text())
         self.assertNotIn("description", data)
-        self.assertEqual(data["version"], "1.5.2")
+        self.assertEqual(data["version"], "1.6.0")
         for key in ("name", "version", "minAppVersion", "author"):
             self.assertTrue(data.get(key), key)
 

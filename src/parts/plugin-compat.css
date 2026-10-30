@@ -1,0 +1,28 @@
+/* Observed contracts: Maps 0.2.2, Note Toolbar 1.35.22,
+   Omnisearch 1.32.0, QuickAdd 2.33.1, TaskNotes 4.14.0.
+   Only colour aliases: keep plugin layouts, icons and semantic statuses. */
+body .bases-map-container {
+  --bases-map-marker-background: var(--interactive-accent);
+  --bases-map-marker-icon-color: var(--text-on-accent);
+}
+body .cg-note-toolbar-container,
+body .cg-note-toolbar-callout {
+  --cg-nt-tbar-bg-color: var(--background-primary);
+  --cg-nt-tbar-border-color: var(--background-modifier-border);
+  --cg-nt-item-text-color: var(--text-muted);
+  --cg-nt-item-text-color-hover: var(--text-normal);
+}
+body .omnisearch-modal {
+  --omnisearch-highlight-color: var(--text-highlight-bg);
+  --omnisearch-highlight-text-color: var(--text-normal);
+}
+/* QuickAdd already uses native tokens; scope ordinary text only. */
+body .quickAddModal { color: var(--text-normal); }
+body .tasknotes-plugin {
+  --tn-text-normal: var(--text-normal);
+  --tn-text-muted: var(--text-muted);
+  --tn-text-faint: var(--text-faint);
+  --tn-border-color: var(--background-modifier-border);
+  --tn-interactive-accent: var(--interactive-accent);
+  --tn-interactive-accent-hover: var(--interactive-accent-hover);
+}
