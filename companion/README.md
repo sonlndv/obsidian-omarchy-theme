@@ -37,7 +37,20 @@ unselected cursor after user input or keyboard movement using public
 There is no idle loop or read-mode scrolling. Wheel/touch/pointer interaction
 pauses centering briefly; selections, composition, modals/suggestions, Escape
 and unrelated inputs do not trigger it. Exact centering depends on Obsidian's
-editor API and viewport; parent must validate native behavior and plugins.
+editor API and viewport. In isolated Obsidian 1.14.5, native keyboard movement
+centered the cursor, manual scrolling paused it, and selections, composition
+and an open command palette suppressed it. Escape closed the native palette
+without leaving Zen. Composition-event checks are not physical IME certification.
+
+## Known limits
+
+Zen/typewriter are main-window features in 0.1.0; use the commands in the main
+Obsidian window, and do not expect them to follow a detached/pop-out editor.
+A 390×844 desktop viewport with 200% preferred editor text was checked, but this
+is not an iPhone, mobile-keyboard or physical touch test. Native keyboard Enter
+and pointer activation of Exit Zen were checked. Exit and active-Zen unload
+restored layout/presentation without changing the synthetic notes or existing
+core preferences.
 
 Only explicit settings/command changes call this plugin's `saveData`. Zen state
 is not persisted. Disable the companion to restore presentation; to remove it,

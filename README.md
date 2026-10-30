@@ -57,9 +57,12 @@ See [companion/README.md](companion/README.md) for manual installation, Zen,
 optional typewriter, width/title settings, removal and packaging. The companion
 has no dependencies or prebound hotkeys. Zen always starts off.
 
-See [COMPATIBILITY.md](COMPATIBILITY.md) for scoped plugin contracts and limits,
-and [CHANGELOG.md](CHANGELOG.md) for changes. Native app/plugin acceptance is a
-separate parent QA step; no physical iPhone certification is claimed.
+See [COMPATIBILITY.md](COMPATIBILITY.md) for scoped plugin contracts and the
+native fixture checks, and [CHANGELOG.md](CHANGELOG.md) for changes. The theme
+and companion were exercised in isolated Obsidian 1.14.5 with synthetic notes;
+no live vault was changed. The companion's first release targets the main
+window. Detached-editor behavior and physical iPhone operation are not certified.
+Explicit user font overrides still take precedence over the theme's defaults.
 
 MIT theme/companion license: [LICENSE](LICENSE). Fonts retain their full OFL
 copyright and license notices.

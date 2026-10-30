@@ -1,9 +1,19 @@
 # Plugin compatibility
 
 The normal theme always includes `src/parts/plugin-compat.css`, independently
-of the companion. Contracts were supplied for the following installed versions;
-third-party packages/configurations are not shipped. Native plugin interaction
-acceptance remains pending parent QA, rather than being inferred from CSS tests.
+of the companion. The following exact installed packages were exercised in
+isolated Obsidian 1.14.5 using synthetic notes, not the user's vault or plugin
+configuration. Third-party packages/configurations are not shipped.
+
+Native checks covered real Omnisearch results and Escape, QuickAdd prompt entry
+and submission, TaskNotes form input and creation of a synthetic task, and Note
+Toolbar's settings/new-item UI plus frontmatter-bound toolbar container. The
+Maps canvas, view controls and native marker-colour aliases were checked with
+public example coordinates and network tiles blocked. These representative
+checks are not certification of every plugin feature: custom toolbar actions,
+Maps tiles/marker popups, authentication, sync and physical-device behavior were
+not exhaustively tested. TaskNotes fixture input used a synthetic input event
+before native Save activation; no real task was created.
 
 | Plugin | Version | Theme integration |
 | --- | --- | --- |
