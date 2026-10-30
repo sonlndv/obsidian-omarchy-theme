@@ -21,8 +21,8 @@ entry and plugin IDs are unchanged: **Omarchy** and **Omarchy Writing**.
   Select Omarchy in Appearance; reselect it or reload Obsidian after replacement.
 
 No local build or font installation is needed for those installation routes.
-Use only reviewed/published release files; this author pass does not certify
-publication. For removal, choose another theme before removing its theme folder.
+Use the reviewed files from the chosen published release. For removal, choose
+another theme before removing its theme folder.
 
 ## Graph and side tools
 
@@ -89,10 +89,14 @@ Original font bytes/notices and plugin compatibility are retained. MIT license:
 
 ## Limits and rollback
 
-Native graph, menu, ribbon, core-pane actions and visual acceptance for this
-refinement remain parent QA work; passing source tests is not native acceptance
-or publication. Companion behavior targets the main window, not detached editor
-windows. Narrow desktop testing is not physical iPhone/mobile IME certification.
+Verified in isolated Obsidian 1.14.5 with synthetic notes: both graph palettes,
+real node hover, painted heading/prose fonts, ribbon/command menus, native
+Outline/Backlinks, keyboard Zen and Exit, real cursor centering, menu guards and
+active-Zen unload cleanup. The command menu explicitly targets the main document
+even after Graph used an iframe. Standard SDK ribbon metadata and explicit pane
+actions remain native; Zen does not rewrite pane arrangements. Companion
+behavior targets the main window, not detached editors. The 390px/200% preferred-
+size probe is desktop evidence, not physical iPhone/mobile IME certification.
 See [COMPATIBILITY.md](COMPATIBILITY.md) and [CHANGELOG.md](CHANGELOG.md).
 
 To roll back, disable Omarchy Writing, then replace only the Omarchy theme files

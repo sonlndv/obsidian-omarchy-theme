@@ -63,7 +63,7 @@ class OmarchyWriting extends Plugin {
         .onClick(() => this.openPane(id)));
     }
     if (event) menu.showAtMouseEvent(event);
-    else menu.showAtPosition({ x: Math.max(0, window.innerWidth - 240), y: 64 });
+    else menu.showAtPosition({ x: Math.max(0, window.innerWidth - 240), y: 64 }, document);
   }
   visibleMenu() {
     // Native menus can leave hidden DOM behind; only visible menus suppress input.

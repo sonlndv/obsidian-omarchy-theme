@@ -43,6 +43,9 @@ Omarchy Writing 0.2.0 uses the SDK Menu/ribbon and feature-checks the native
 command registry for `outline:open`/`backlink:open`; it does not enable plugins.
 The original toggle IDs and settings schema remain compatible with 0.1.0.
 Visible menus block typewriter; hidden remnants do not. Main-window-only behavior
-and physical mobile/IME limits still apply. New graph/menu/ribbon/core-pane
-interactions require fresh parent native checks; previous fixture results above
-are historical evidence, not acceptance of this refinement.
+and physical mobile/IME limits still apply. Fresh native 1.14.5 checks used
+synthetic data for both graph palettes/hover, all four menu actions, keyboard
+Zen/Exit, real cursor centering, menu guards and active-mode unload. Command
+menus explicitly bind the main document rather than a previously active Graph
+iframe. The third-party workflow checks above are retained 1.6.0 evidence; their
+compatibility layer is byte-unchanged, not newly recertified exhaustively here.

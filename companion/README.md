@@ -1,8 +1,10 @@
 # Omarchy Writing 0.2.0
 
 Optional CommonJS Obsidian companion, ID `omarchy-writing`. Uses only Obsidian's
-provided SDK and browser APIs. No network, note reads/writes, editor text writes,
-layout persistence, other plugin configuration changes or default hotkeys.
+provided SDK and browser APIs. No network, note-content reads/writes, editor text
+writes, automated workspace-layout rewrite, other plugin configuration changes
+or default hotkeys. Obsidian manages normal ribbon metadata and remembers panes
+opened through explicit native actions; Zen itself does not collapse/rewrite them.
 
 ## Install or upgrade
 
@@ -17,7 +19,10 @@ To upgrade an existing installation, disable the companion first, then replace
 only `main.js`, `styles.css`, `manifest.json` (and documentation) in the SAME
 `.obsidian/plugins/omarchy-writing/` folder. **Keep `data.json`** to retain your
 settings. Do not delete/recreate the folder or rename the ID. Re-enable the
-companion and verify its version in settings. Zen still starts off.
+companion and check that **Open writing tools** is available. Zen still starts
+off. Obsidian 1.14.5 can cache the old manifest version while the app stays open;
+if its label is stale, check again after your next normal app opening with work
+saved. Do not reset the vault or force a reload just to refresh that label.
 
 ## Open writing tools
 
@@ -66,9 +71,12 @@ installed, and existing IME/selection/manual-scroll guards remain.
 ## Known limits
 
 Zen/typewriter/menu actions target the main Obsidian window. Detached/pop-out
-editors are not supported. Native checks for 0.2.0 remain parent QA; earlier
-0.1.0 results do not certify the new ribbon/menu. Desktop narrow-view tests do
-not certify physical iPhone/touch/mobile-keyboard/IME operation. The native
+editors are not supported. Native 0.2.0 checks in isolated Obsidian 1.14.5 covered
+the pen ribbon, main-document command menu after Graph, all four menu actions,
+keyboard selection/Zen, cursor centering, menu/Escape guards and unload cleanup.
+A 390px desktop viewport at a directly probed 200% preferred text size retained a
+hit-testable 44px Exit button and keyboard exit. These checks do not certify
+physical iPhone/touch/mobile-keyboard/IME operation or older SDK versions. The native
 command registry is feature-checked; unavailable Outline/Backlinks actions are
 disabled rather than enabling core plugins or inventing pane APIs.
 

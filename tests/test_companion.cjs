@@ -34,7 +34,7 @@ class Menu {
   onHide(fn) { this.onhide=fn; return this; }
   hide() { this.hidden=true; this.onhide?.(); }
   showAtMouseEvent(event) { this.position=event; }
-  showAtPosition(position) { this.position=position; }
+  showAtPosition(position, doc) { this.position=position; this.positionDocument=doc; }
 }
 const original = Module._load;
 Module._load = function(id,...args) { return id === 'obsidian' ? {Plugin, PluginSettingTab: class {}, Setting: class {}, MarkdownView: class {}, Menu} : original.call(this,id,...args); };
@@ -110,6 +110,7 @@ test('native writing tools are explicit, disabled safely, exit Zen before openin
   p.setZen(true); p.menu.items[3].callback(); assert.deepEqual(actions[1],['backlink:open',false]);
   const old=p.menu; available=[];
   p.commands.find(c=>c.id==='open-writing-tools').callback(); assert.equal(old.hidden,true);
+  assert.equal(p.menu.positionDocument, document, 'command menu must explicitly use the main document');
   assert.equal(p.menu.items[2].disabled,true); assert.equal(p.menu.items[3].disabled,true);
   p.setZen(true); p.menu.items[2].callback(); assert.equal(p.zen,true); assert.equal(actions.length,2);
   const owned=p.menu; p.onunload(); assert.equal(owned.hidden,true); assert.equal(p.menu,null);
