@@ -1,5 +1,5 @@
 'use strict';
-const { Plugin, PluginSettingTab, Setting, MarkdownView } = require('obsidian');
+const { Plugin, PluginSettingTab, Setting, MarkdownView, Menu } = require('obsidian');
 const DEFAULTS = Object.freeze({ typewriter: false, width: 'standard', hideInlineTitle: false });
 function normalize(data) {
   data = data && typeof data === 'object' ? data : {};
@@ -31,7 +31,45 @@ class OmarchyWriting extends Plugin {
     this.applySettings();
     this.addCommand({ id: 'toggle-zen', name: 'Toggle Zen', callback: () => this.setZen(!this.zen) });
     this.addCommand({ id: 'toggle-typewriter', name: 'Toggle typewriter', callback: () => this.change('typewriter', !this.settings.typewriter) });
+    this.addCommand({ id: 'open-writing-tools', name: 'Open writing tools', callback: () => this.openTools() });
+    this.addRibbonIcon('pen-tool', 'Open writing tools', event => this.openTools(event));
     this.addSettingTab(new WritingSettings(this.app, this));
+  }
+  availableCommand(id) {
+    const commands = this.app.commands;
+    return !!(commands && typeof commands.listCommands === 'function' &&
+      typeof commands.executeCommandById === 'function' &&
+      commands.listCommands().some(command => command.id === id));
+  }
+  openPane(id) {
+    // Recheck at invocation: a core plugin may have been disabled since opening.
+    if (!this.availableCommand(id)) return;
+    this.setZen(false);
+    this.app.commands.executeCommandById(id);
+  }
+  openTools(event) {
+    if (this.menu) this.menu.hide();
+    this.cancel();
+    const menu = new Menu();
+    this.menu = menu;
+    menu.onHide(() => { if (this.menu === menu) this.menu = null; });
+    menu.addItem(item => item.setTitle(this.zen ? 'Exit Zen' : 'Enter Zen')
+      .setIcon('focus').onClick(() => this.setZen(!this.zen)));
+    menu.addItem(item => item.setTitle('Typewriter').setChecked(this.settings.typewriter)
+      .onClick(() => this.change('typewriter', !this.settings.typewriter)));
+    menu.addSeparator();
+    for (const [title, id, icon] of [['Open Outline', 'outline:open', 'list'], ['Open Backlinks', 'backlink:open', 'links-coming-in']]) {
+      menu.addItem(item => item.setTitle(title).setIcon(icon).setDisabled(!this.availableCommand(id))
+        .onClick(() => this.openPane(id)));
+    }
+    if (event) menu.showAtMouseEvent(event);
+    else menu.showAtPosition({ x: Math.max(0, window.innerWidth - 240), y: 64 });
+  }
+  visibleMenu() {
+    // Native menus can leave hidden DOM behind; only visible menus suppress input.
+    return !!this.menu || [...document.querySelectorAll('.menu')].some(el =>
+      el.isConnected && el.getClientRects().length > 0 &&
+      getComputedStyle(el).visibility !== 'hidden');
   }
   async change(key, value) {
     this.settings = normalize({ ...this.settings, [key]: value });
@@ -59,7 +97,7 @@ class OmarchyWriting extends Plugin {
     }
   }
   eligible(view) {
-    return this.zen && this.settings.typewriter && !this.composing &&
+    return this.zen && this.settings.typewriter && !this.composing && !this.visibleMenu() &&
       Date.now() >= this.pausedUntil && view && view === this.activeView() &&
       view.getMode() === 'source' && view.editor.hasFocus() && !view.editor.somethingSelected() &&
       view.containerEl.contains(document.activeElement) &&
@@ -126,6 +164,8 @@ class OmarchyWriting extends Plugin {
     if (old === null) this.body.removeAttribute(key); else this.body.setAttribute(key, old);
   }
   onunload() {
+    if (this.menu) this.menu.hide();
+    this.menu = null;
     this.setZen(false); this.cancel();
     for (const key of this.previous.keys()) this.restore(key);
   }

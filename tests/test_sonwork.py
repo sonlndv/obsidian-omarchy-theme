@@ -36,7 +36,8 @@ class SonworkTest(unittest.TestCase):
             for role, token in roles.items():
                 self.assertEqual(values[role], c[token], (scheme, role))
             for level in range(1, 7):
-                self.assertEqual(values[f'h{level}-color'], c['ink'])
+                self.assertEqual(values[f'h{level}-color'],
+                                 build.mix_hex(c['ink'], c['lume'], .6) if level in (2, 3) else c['ink'])
             self.assertIn('rgba(', values['text-selection'])
             self.assertIn('outline: 2px solid var(--interactive-accent)', self.css)
 

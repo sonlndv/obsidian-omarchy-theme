@@ -1,68 +1,103 @@
-# Omarchy theme for Obsidian
+# Omarchy for Obsidian
 
-Omarchy 1.6.0 brings the accepted Sonwork dark/light palette to the normal
-community theme: Geist prose and interface text, Space Mono headings/code,
-cyan actions, native Obsidian layout and the existing soft corners. Original
-licensed Latin and Vietnamese font subsets are embedded for offline/mobile use.
-Full font notices are included in CSS and the adjacent OFL files.
+**Omarchy 1.6.1** keeps the accepted cool dark/light surfaces, Geist prose and
+interface text, Space Mono headings/code and soft native controls. H2/H3 have a
+restrained cyan/ink blend; other headings stay ink. Original licensed Latin and
+Vietnamese subsets are embedded for offline use. Names, repository/community
+entry and plugin IDs are unchanged: **Omarchy** and **Omarchy Writing**.
 
-## Build and verify
+## Install or update the theme
+
+- **Existing community installation:** open Settings → Appearance → Themes,
+  check for updates and update **Omarchy**. Keep Omarchy selected. This updates
+  the theme only; it never installs or updates the companion.
+- **New community installation:** Settings → Appearance → Manage, search for
+  **Omarchy**, install it, then select it. Choose Light, Dark or Adapt to system.
+- **Manual ZIP:** download the source ZIP for the desired tagged release from
+  this repository's Releases page and extract it. Copy only root `theme.css`,
+  `manifest.json`, `OFL-Geist.txt`, `OFL-SpaceMono.txt` and `LICENSE` into
+  `<vault>/.obsidian/themes/Omarchy/` (create that folder if needed). The files
+  belong directly in `Omarchy/`, without an extra extracted repository folder.
+  Select Omarchy in Appearance; reselect it or reload Obsidian after replacement.
+
+No local build or font installation is needed for those installation routes.
+Use only reviewed/published release files; this author pass does not certify
+publication. For removal, choose another theme before removing its theme folder.
+
+## Graph and side tools
+
+Ordinary graph notes are cool blue/cyan, tags mint, attachments violet,
+unresolved notes quieter blue, and focused/hover nodes peach/ochre. Links stay
+restrained and labels use readable secondary ink. The theme uses supported graph
+colour probes, including the native unresolved alpha; it does not change sizes,
+physics, zoom, graph data or animation behavior.
+
+For varied **cluster** colours, open the native graph settings and add manual
+**Groups** with your own search queries and colours. Native Groups override the
+per-node theme colours. **Show tags** and **Attachments** are optional native
+filters; enable them yourself if useful. CSS neither assigns clusters nor
+changes those settings. File explorer and Outline active/focused rows gain a
+restrained 1px cyan indicator, without changing panel layout or plugin icons.
+
+Optional **Omarchy Writing 0.2.0** adds a pen ribbon button and **Open writing
+tools** command: toggle Zen/typewriter or explicitly open native Outline and
+Backlinks. No extra community plugins are needed for those panes. Enable the
+corresponding Obsidian core plugin yourself if its menu action is unavailable.
+The companion never enables plugins. See [companion/README.md](companion/README.md)
+for clean installation, same-folder upgrades retaining `data.json`, hotkeys,
+comfort settings and removal. Normal works without the companion.
+
+## Text and palette preferences
+
+The theme follows native preferred text sizing with about 68ch readable line
+length and 1.7 leading; enable Obsidian's readable-line-length setting. Explicit
+user interface/text/monospace font overrides take precedence. Mobile safe areas
+and native long code/table scrolling remain. Companion width/title preferences
+are opt-in presentation changes, not note edits.
+
+The measured public [Sonwork](https://sonwork.org/) palette facts remain in
+`src/sonwork/palette.json`; the current heading/graph roles are derived theme
+choices, not edits to that reference. Sonwork is provenance, not a new product
+name. `--preset sonwork` remains a legacy development preview option with its
+existing paths/name and rejection of `--live`/`--install`; ordinary users should
+install **Omarchy**.
+
+`python3 -B bin/build.py --live` deliberately replaces the matching scheme from
+`~/.local/state/omarchy/current/theme/colors.toml`, retaining the other scheme,
+fonts and compatibility layers. This explicitly overrides the fixed palette,
+including heading/graph roles; missing graph roles have native semantic fallbacks.
+The existing `--live --install` interface updates configured vault copies only,
+leaving root artifacts untouched. `--install` selects Omarchy in all configured
+vaults and is not needed for preview. Unreadable appearance JSON fails closed.
+No hook or live installer was executed during this author pass.
+
+## Build and checks
 
 ```sh
 python3 -B bin/build.py
 python3 -B -m unittest discover -s tests -v
 node --check companion/main.js
 node --test tests/test_companion.cjs
+python3 -B bin/package_companion.py
 ```
 
-The default build writes reproducible root `theme.css`, `manifest.json` and
-font licenses for **Omarchy 1.6.0**. Python discovery also runs the companion
-syntax and Node built-in tests, so it is the aggregate check. CI runs these
-checks and rebuilds the root artifacts before checking for generated diffs.
+Default output is reproducible root `theme.css`, `manifest.json` and OFL notices.
+Python discovery is the aggregate: it includes Node syntax/companion checks and
+package/version/allowlist tests. CI runs it, rebuilds and checks generated diffs.
+Original font bytes/notices and plugin compatibility are retained. MIT license:
+[LICENSE](LICENSE); embedded fonts retain their full OFL notices, also in CSS.
 
-The measured public [Sonwork](https://sonwork.org/) palette is recorded in
-`src/sonwork/palette.json`. The theme keeps preferred-first native text scaling,
-about 68ch readable line length and 1.7 leading. Choose Obsidian's readable-line
-length setting and Light/Dark/Adapt to system under Appearance. Long code and
-tables retain native scrolling. No artwork, website navigation or scripts ship.
+## Limits and rollback
 
-## Update or install the theme
+Native graph, menu, ribbon, core-pane actions and visual acceptance for this
+refinement remain parent QA work; passing source tests is not native acceptance
+or publication. Companion behavior targets the main window, not detached editor
+windows. Narrow desktop testing is not physical iPhone/mobile IME certification.
+See [COMPATIBILITY.md](COMPATIBILITY.md) and [CHANGELOG.md](CHANGELOG.md).
 
-Existing users can update **Omarchy** through its current community-theme entry.
-For manual installation, copy root `theme.css`, `manifest.json`, `OFL-Geist.txt`
-and `OFL-SpaceMono.txt` into `<vault>/.obsidian/themes/Omarchy/`, then select
-Omarchy under Appearance. A theme update does **not** install or enable the
-optional companion. Normal works independently of any plugin.
-
-`python3 -B bin/build.py --preset sonwork` retains the separately named fixed
-**Omarchy Sonwork** preview in `dist/sonwork/`. It rejects `--live`/`--install`.
-Remove a manual preview by selecting another theme and deleting only its theme
-folder. Do not delete notes or appearance settings.
-
-## Deliberately follow Omarchy colours
-
-`python3 -B bin/build.py --live` replaces the matching light/dark colour block
-from `~/.local/state/omarchy/current/theme/colors.toml`, retaining the other
-Sonwork scheme and the new fonts/compatibility layer. This is a deliberate
-palette override; it can change heading and accent colours from the fixed look.
-The existing `--live --install` hook interface remains available and updates
-only configured vault copies, leaving root artifacts untouched. `--install`
-selects Omarchy in all configured vaults; it is never needed for preview and
-has not been executed against live vaults in this author pass. Unreadable
-appearance JSON now fails closed rather than replacing preferences.
-
-## Optional writing companion
-
-See [companion/README.md](companion/README.md) for manual installation, Zen,
-optional typewriter, width/title settings, removal and packaging. The companion
-has no dependencies or prebound hotkeys. Zen always starts off.
-
-See [COMPATIBILITY.md](COMPATIBILITY.md) for scoped plugin contracts and the
-native fixture checks, and [CHANGELOG.md](CHANGELOG.md) for changes. The theme
-and companion were exercised in isolated Obsidian 1.14.5 with synthetic notes;
-no live vault was changed. The companion's first release targets the main
-window. Detached-editor behavior and physical iPhone operation are not certified.
-Explicit user font overrides still take precedence over the theme's defaults.
-
-MIT theme/companion license: [LICENSE](LICENSE). Fonts retain their full OFL
-copyright and license notices.
+To roll back, disable Omarchy Writing, then replace only the Omarchy theme files
+with the retained **1.6.0** release files and reselect the theme/reload. To roll
+back the companion, replace its three runtime files with the retained **0.1.0**
+files in the same `omarchy-writing` folder while disabled, retaining `data.json`.
+Never reset notes, graph settings, hotkeys or other plugin settings. Publication
+and any upstream corrective patch remain separate reviewed actions.

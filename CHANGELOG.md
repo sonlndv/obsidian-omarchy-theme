@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.6.1 / Omarchy Writing 0.2.0
+
+- Keep Omarchy / Omarchy Writing names, IDs, original fonts and palette facts.
+- Derive restrained cyan/ink H2/H3 roles; keep other headings ink.
+- Add distinct supported graph node colours, readable unresolved nodes and warm
+  focus/hover, retaining native Groups/data/physics and restrained links.
+- Add 1px native File explorer/Outline selection/focus indicators.
+- Add an SDK ribbon and writing-tools menu with explicit native Outline/Backlinks
+  actions, unavailable-command guards and menu-aware typewriter suppression.
+- Derive deterministic companion package name/version from its manifest; retain
+  an explicit public-file allowlist. Clarify theme/companion upgrade and rollback.
+- Native rendering/plugin review and publication remain separate parent checks.
+
 ## 1.6.0
 
 - Promote the accepted Sonwork dark/light palette and embedded Geist/Space Mono

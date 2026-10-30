@@ -1,20 +1,42 @@
-# Omarchy Writing 0.1.0
+# Omarchy Writing 0.2.0
 
 Optional CommonJS Obsidian companion, ID `omarchy-writing`. Uses only Obsidian's
 provided SDK and browser APIs. No network, note reads/writes, editor text writes,
 layout persistence, other plugin configuration changes or default hotkeys.
 
-Copy `main.js`, `styles.css`, `manifest.json` and this README into one chosen
-vault's `.obsidian/plugins/omarchy-writing/`, then explicitly enable **Omarchy
-Writing** in Community plugins. The theme updater cannot install it. The Normal
-theme is fully usable without this companion. Minimum Obsidian version: 1.5.0.
+## Install or upgrade
 
-Commands (assign shortcuts in Settings → Hotkeys):
+For a clean optional install, extract the companion release ZIP and copy its
+`omarchy-writing/` folder into one chosen vault's `.obsidian/plugins/`. Its
+`main.js`, `styles.css` and `manifest.json` must sit directly in that folder.
+Enable **Omarchy Writing** explicitly in Community plugins. Minimum Obsidian
+version is 1.5.0. This is a manual companion, not a community-plugin listing.
+The Omarchy theme updater cannot install/update it; Normal needs no companion.
 
-- `omarchy-writing:toggle-zen`: enter/exit Zen. Zen always starts off, including
-  after restart. A visible keyboard/touch **Exit Zen** button also exits.
-- `omarchy-writing:toggle-typewriter`: change the optional typewriter setting.
-  This persists only this companion's preference; it does not enter Zen.
+To upgrade an existing installation, disable the companion first, then replace
+only `main.js`, `styles.css`, `manifest.json` (and documentation) in the SAME
+`.obsidian/plugins/omarchy-writing/` folder. **Keep `data.json`** to retain your
+settings. Do not delete/recreate the folder or rename the ID. Re-enable the
+companion and verify its version in settings. Zen still starts off.
+
+## Open writing tools
+
+Click the pen ribbon button, or run **Omarchy Writing: Open writing tools** in
+the command palette. In Zen, the ribbon is hidden; the command remains usable.
+Assign a shortcut under Settings → Hotkeys if desired; no hotkey is prebound.
+The small native menu offers Zen, typewriter, Outline and Backlinks. Opening a
+pane explicitly exits Zen first so the pane can be seen. Unavailable native
+commands are disabled and rechecked on invocation. Enable Outline/Backlinks in
+Obsidian Core plugins yourself if wanted; no extra community plugin is needed.
+Nothing opens/rearranges panes or enables plugins at startup.
+
+Stable commands:
+
+- `omarchy-writing:open-writing-tools`: open the native tools menu.
+- `omarchy-writing:toggle-zen`: enter/exit Zen. Zen always starts off. A visible
+  keyboard/touch **Exit Zen** button also exits.
+- `omarchy-writing:toggle-typewriter`: change the optional typewriter setting,
+  persisting only this companion's preference; this does not enter Zen.
 
 Zen hides desktop side navigation/ribbons, tab headers and status chrome using
 scoped CSS. Native view headers, plugin content, toolbars, menus, suggestions
@@ -35,22 +57,20 @@ With typewriter enabled, only Zen source editing centers the focused,
 unselected cursor after user input or keyboard movement using public
 `Editor.scrollIntoView(range, true)`. Bottom space is scoped to that editor.
 There is no idle loop or read-mode scrolling. Wheel/touch/pointer interaction
-pauses centering briefly; selections, composition, modals/suggestions, Escape
-and unrelated inputs do not trigger it. Exact centering depends on Obsidian's
-editor API and viewport. In isolated Obsidian 1.14.5, native keyboard movement
-centered the cursor, manual scrolling paused it, and selections, composition
-and an open command palette suppressed it. Escape closed the native palette
-without leaving Zen. Composition-event checks are not physical IME certification.
+pauses centering briefly; selections, composition, visible native menus, modals/suggestions, Escape
+and unrelated inputs do not trigger it. Exact centering depends on Obsidian's editor API and viewport.
+Hidden/disconnected menu elements do not permanently block typewriter. Owned
+menus close on unload; Obsidian's SDK owns ribbon cleanup. No Escape handler is
+installed, and existing IME/selection/manual-scroll guards remain.
 
 ## Known limits
 
-Zen/typewriter are main-window features in 0.1.0; use the commands in the main
-Obsidian window, and do not expect them to follow a detached/pop-out editor.
-A 390×844 desktop viewport with 200% preferred editor text was checked, but this
-is not an iPhone, mobile-keyboard or physical touch test. Native keyboard Enter
-and pointer activation of Exit Zen were checked. Exit and active-Zen unload
-restored layout/presentation without changing the synthetic notes or existing
-core preferences.
+Zen/typewriter/menu actions target the main Obsidian window. Detached/pop-out
+editors are not supported. Native checks for 0.2.0 remain parent QA; earlier
+0.1.0 results do not certify the new ribbon/menu. Desktop narrow-view tests do
+not certify physical iPhone/touch/mobile-keyboard/IME operation. The native
+command registry is feature-checked; unavailable Outline/Backlinks actions are
+disabled rather than enabling core plugins or inventing pane APIs.
 
 Only explicit settings/command changes call this plugin's `saveData`. Zen state
 is not persisted. Disable the companion to restore presentation; to remove it,
@@ -63,8 +83,12 @@ Packaging from the repository root (no dependency installation):
 python3 -B bin/package_companion.py
 ```
 
-Produces `dist/omarchy-writing-0.1.0.zip` with an `omarchy-writing/` directory,
+Produces `dist/omarchy-writing-0.2.0.zip` with an `omarchy-writing/` directory,
 the three runtime files, this README and the repository MIT license. Do not add
 `data.json`, private fixture notes, logs or third-party packages to the archive.
 Test with `node --test tests/test_companion.cjs` (Node built-in runner). These
 are SDK/DOM contract tests, not native-plugin or physical iPhone certification.
+
+For rollback, disable this companion and restore the three 0.1.0 runtime files
+in the same folder, preserving `data.json`, then re-enable it. Disable it before
+rolling back the Omarchy theme to 1.6.0; no note/layout reset is needed.
