@@ -1,135 +1,111 @@
-# Omarchy Writing 0.3.0
+# Mounty Writing 0.4.0
 
-Optional CommonJS Obsidian companion, ID `omarchy-writing`. Uses only Obsidian's
-provided SDK and browser APIs. No network, note-content reads/writes, editor text
-writes, automated workspace-layout rewrite, other plugin configuration changes
-or default hotkeys. Obsidian manages normal ribbon metadata and remembers panes
-opened through explicit native actions; Zen itself does not collapse/rewrite them.
+Optional writing controls for Mounty: Zen, optional typewriter scrolling,
+Markdown width/title preferences, and a small native writing-tools menu. The
+theme works without this companion. It uses only Obsidian's provided SDK
+and browser APIs, without external dependencies, network or shell execution.
 
-## Install or upgrade
+## Install or update
 
-For a clean optional install, extract the companion release ZIP and copy its
-`omarchy-writing/` folder into one chosen vault's `.obsidian/plugins/`. Its
-`main.js`, `styles.css` and `manifest.json` must sit directly in that folder.
-Enable **Omarchy Writing** explicitly in Community plugins. Minimum Obsidian
-version is 1.5.0. This is a manual companion, not a community-plugin listing.
-The Omarchy theme updater cannot install/update it; Normal needs no companion.
+The display name is now **Mounty Writing**. The stable plugin ID and folder
+remain **omarchy-writing**; command IDs and `data.json` preferences are preserved.
+The theme updater does not install or update this optional manual companion.
 
-To upgrade an existing installation, disable the companion first, then replace
-only `main.js`, `styles.css`, `manifest.json` (and documentation) in the SAME
-`.obsidian/plugins/omarchy-writing/` folder. **Keep `data.json`** to retain your
-settings. Do not delete/recreate the folder or rename the ID. Re-enable the
-companion and check that **Open writing tools** is available. Zen still starts
-off. Obsidian 1.14.5 can cache the old manifest version while the app stays open;
-if its label is stale, check again after your next normal app opening with work
-saved. Do not reset the vault or force a reload just to refresh that label.
+- **Clean install:** extract `omarchy-writing-0.4.0.zip`, place its
+  `omarchy-writing/` folder under one chosen vault's `.obsidian/plugins/`, then
+  explicitly enable Mounty Writing in Community plugins. Runtime files must sit
+  directly in that folder, without another nested archive directory.
+- **Upgrade:** disable the existing Omarchy/Mounty Writing companion, replace
+  only `main.js`, `styles.css`, `manifest.json` and documentation in the SAME
+  folder, retain **data.json**, then re-enable it. Do not create a new plugin ID
+  or discard settings. Minimum declared Obsidian version remains 1.5.0.
 
-## Open writing tools
+A staged runtime or release ZIP is not activation: explicitly enable the companion
+and verify it in the chosen vault after updating.
 
-Click the pen ribbon button, or run **Omarchy Writing: Open writing tools** in
-the command palette. In Zen, the ribbon is hidden; the command remains usable.
-Assign a shortcut under Settings → Hotkeys if desired; no hotkey is prebound.
-The small native menu offers Zen, typewriter, Outline and Backlinks. Opening a
-pane explicitly exits Zen first so the pane can be seen. Unavailable native
-commands are disabled and rechecked on invocation. Enable Outline/Backlinks in
-Obsidian Core plugins yourself if wanted; no extra community plugin is needed.
-Nothing opens/rearranges panes or enables plugins at startup.
+## Writing tools
 
-Stable commands:
+Click the pen ribbon, or use **Mounty Writing: Open writing tools** in the command
+palette. The native menu offers Zen, typewriter, Outline and Backlinks. Opening
+a pane is explicit and exits Zen first; no pane opens at startup. Unavailable
+core commands are disabled and rechecked on invocation. Enable Obsidian's own
+Outline/Backlinks core plugins yourself if wanted; no extra community plugins
+are needed. Native command menus explicitly use the main document.
 
-- `omarchy-writing:open-writing-tools`: open the native tools menu.
-- `omarchy-writing:toggle-zen`: enter/exit Zen. Zen always starts off. A visible
-  keyboard/touch **Exit Zen** button also exits.
-- `omarchy-writing:toggle-typewriter`: change the optional typewriter setting,
-  persisting only this companion's preference; this does not enter Zen.
+Stable assignable commands (no default hotkeys):
 
-Zen hides desktop side navigation/ribbons, tab headers and status chrome using
-scoped CSS. Native view headers, plugin content, toolbars, menus, suggestions
-and modals remain available. It never collapses a sidebar or rewrites layout.
-Exit/unload removes the temporary button, listeners, queued frame and editor
-padding class and restores owned body attributes. Escape is deliberately never
-bound: IME, Vim, modal and suggestion handling keep their own keys. Mobile shell
-variants may expose additional navigation; native runtime review is required.
+- `omarchy-writing:open-writing-tools`
+- `omarchy-writing:toggle-zen`
+- `omarchy-writing:toggle-typewriter`
 
-Settings are conservative: typewriter **off**, width **standard**, hide filename
-inline title **off**. Narrow/standard/wide set Markdown readable-line width to
-56/68/82ch (including Normal); enable Obsidian's readable-line-length option.
-Other plugin views are untouched. Hide filename title hides only Markdown's
-inline filename presentation; your own H1 stays. No notes are inspected to
-choose this preference. Native text-size controls are never overridden.
+Zen always starts OFF. It hides surrounding native navigation with CSS, without
+collapsing panels or persisting layout. Plugin content/toolbars, menus and
+modals remain. **Exit Zen** is visible and keyboard/touch accessible; the command
+also exits when the ribbon is hidden. No Escape handler hijacks IME, Vim,
+suggestions, menus or native dialogs. Unload restores owned body attributes and
+removes the button, listeners, frame and editor-padding class; the SDK cleans
+the ribbon and the owned menu is closed.
 
-With typewriter enabled, only Zen source editing centers the focused,
-unselected cursor after user input or keyboard movement using public
-`Editor.scrollIntoView(range, true)`. Bottom space is scoped to that editor.
-There is no idle loop or read-mode scrolling. Wheel/touch/pointer interaction
-pauses centering briefly; selections, composition, visible native menus, modals/suggestions, Escape
-and unrelated inputs do not trigger it. Exact centering depends on Obsidian's editor API and viewport.
-Hidden/disconnected menu elements do not permanently block typewriter. Owned
-menus close on unload; Obsidian's SDK owns ribbon cleanup. No Escape handler is
-installed, and existing IME/selection/manual-scroll guards remain.
+## Conservative preferences
 
-## Known limits
+- **Typewriter OFF:** when explicitly enabled, only Zen source editing centers
+  a focused unselected cursor after input/keyboard movement via public
+  `Editor.scrollIntoView(range, true)`. No idle loop or reading-mode scrolling.
+  Selection, composition, modals/suggestions and visible menus suppress it;
+  hidden menu remnants do not. Manual wheel/touch/pointer interaction pauses it.
+- **Width standard:** narrow/standard/wide are 56/68/82ch in Markdown only.
+  Enable Obsidian's native readable-line-length setting. Other plugin views stay
+  native and preferred text sizing is unchanged.
+- **Hide filename title OFF:** opt in to hide Markdown's filename inline title
+  while keeping your own H1. Notes are never scanned or rewritten.
+- **Follow Omarchy colours OFF:** immediately protects Mounty's fixed semantic
+  palette when the loaded theme carries the retained Omarchy identity marker,
+  including emphasis, heading and graph roles. Another theme is not recoloured.
+  New roles match the theme source; original fonts/geometry stay unchanged.
 
-Zen/typewriter/menu actions target the main Obsidian window. Detached/pop-out
-editors are not supported. Native 0.2.0 checks in isolated Obsidian 1.14.5 covered
-the pen ribbon, main-document command menu after Graph, all four menu actions,
-keyboard selection/Zen, cursor centering, menu/Escape guards and unload cleanup.
-A 390px desktop viewport at a directly probed 200% preferred text size retained a
-hit-testable 44px Exit button and keyboard exit. These checks do not certify
-physical iPhone/touch/mobile-keyboard/IME operation or older SDK versions. The native
-command registry is feature-checked; unavailable Outline/Backlinks actions are
-disabled rather than enabling core plugins or inventing pane APIs.
+Only explicit preference/command changes save this plugin's settings. Zen state
+is not persisted. External preference changes reload only this plugin's data
+without saving back. CSS changes reconcile the palette with one guarded native
+notification per attribute transition. The stable internal marker/attribute and
+`followOmarchyColors` key remain compatible with 0.3; update both distributions
+for the new protected emphasis colours.
 
-Only explicit settings/command changes call this plugin's `saveData`. Zen state
-is not persisted. Disable the companion to restore presentation; to remove it,
-disable it first and delete only its plugin folder. Notes and other settings
-are left intact. This plugin is opt-in/manual, not a community plugin listing.
+ON permits the **next normal desktop Omarchy theme application** to supply live
+colours through a separately reviewed scoped hook. It does not switch OS theme,
+execute a command, rebuild immediately or promise phone sync. For a policy vault
+selected as Mounty, the hook updates Mounty's matching folder/manifest; Omarchy
+still works. OFF also protects already-live CSS locally. The hook separately
+blocks future policy-vault writes when OFF/missing/invalid. Without the policy
+flag, legacy bulk behavior remains. See the [root guide](../README.md) for deliberate
+exact-vault setup, backups outside the executable hook directory and native Groups.
 
-Packaging from the repository root (no dependency installation):
+## Limits, removal and rollback
+
+Behavior targets the main window, not detached/pop-out editors. The 1.7.0/0.4.0
+formatting, palette, menu/Exit and cleanup checks use an isolated synthetic desktop
+vault; they are not physical iPhone, mobile keyboard/touch/IME, remote-sync or full
+accessibility certification. Older SDK command/notification limits remain. A
+published package is not proof that a particular vault has loaded it.
+
+Disable the companion to restore presentation. For removal, delete only its
+plugin folder after disabling it; retain `data.json` if returning later. For
+rollback, restore the backed-up runtime in the same folder while disabled and
+keep preferences; restore/select the retained Omarchy theme as needed. Admin
+owns hook rollback. Older hook/companion pairs may not enforce follow-colours;
+verify before allowing desktop writes. Never reset notes, groups or other
+settings. This companion does not read/write note content, graph configuration,
+other plugin settings, hotkeys or layout.
+
+## Package and verify
 
 ```sh
 python3 -B bin/package_companion.py
+node --check companion/main.js
+node --test tests/test_companion.cjs
 ```
 
-Produces `dist/omarchy-writing-0.3.0.zip` with an `omarchy-writing/` directory,
-the three runtime files, this README and the repository MIT license. Do not add
-`data.json`, private fixture notes, logs or third-party packages to the archive.
-Test with `node --test tests/test_companion.cjs` (Node built-in runner). These
-are SDK/DOM contract tests, not native-plugin or physical iPhone certification.
-
-For rollback, disable this companion and restore the three 0.1.0 runtime files
-in the same folder, preserving `data.json`, then re-enable it. Disable it before
-rolling back the Omarchy theme to 1.6.0; no note/layout reset is needed.
-
-## Follow Omarchy colours (0.3.0)
-
-In Settings → Omarchy Writing, **Follow Omarchy colours** starts OFF. Only an
-explicit boolean true enables it; older/missing settings preserve the existing
-normalized typewriter/width/title preferences and default this new key to false.
-The toggle uses only this plugin's `saveData`; external settings sync reloads
-without an automatic save. No notes, graph/group settings or other plugin files
-are read or written. It installs no hook and executes no shell commands.
-
-OFF immediately restores the fixed Sonwork dark/light semantic colour roles
-(including headings/graph) when computed styles identify loaded **Omarchy** CSS.
-The owned `data-ow-palette` attribute is removed for other themes. Original body
-state is restored on unload and the CSS-change listener is removed. Fonts and
-geometry are not overridden. A versioned Omarchy identity marker is required;
-older theme builds without the marker cannot be protected by this layer. Native
-CSS-change events refresh palette/graph consumers once per attribute transition.
-
-ON permits the NEXT desktop Omarchy theme application to supply live colours
-through the separately reviewed scoped hook policy. It does not switch OS theme
-or fetch/rebuild files. OFF protects already-live CSS locally; the hook gate
-additionally prevents subsequent writes to the one explicitly named registered
-vault. Other vaults retain their original hook behavior. With no companion enabled,
-there is no local protection layer; the builder policy still fails closed for a
-missing/false preference. Never claim staging runtime files enabled the plugin.
-
-Theme/plugin/settings synchronization to another device must actually occur;
-no remote-phone sync, physical mobile/IME certification or detached-window support
-is promised. Existing older-SDK/main-window limitations remain. The native CLI
-filesystem endpoint is a separate gate, not repaired here. Parent owns fresh
-native checks, review, activation and the final flow; Admin alone deploys the
-reviewed shared-hook wrapper. On rollback, preserve `data.json` and restore only
-backed-up owned files; an old hook/companion pair may not enforce this preference.
+The ZIP derives ID/version from its manifest, uses deterministic metadata, and
+contains exactly the three runtime files, this README and MIT LICENSE under
+`omarchy-writing/`. No `data.json`, private fixture, log or third-party package
+is included. Python aggregate discovery also runs the companion contract tests;
+these do not replace native acceptance or activation evidence.

@@ -1,5 +1,25 @@
 # Changelog
 
+## Mounty 1.7.0 / Mounty Writing 0.4.0
+
+- Brand the manual theme Mounty and companion Mounty Writing, retaining the
+  community Omarchy updater name, repository, hook source path, plugin ID,
+  preference schema and commands. No registry migration is implied.
+- Cover native Live Preview `<u>` and formatted-link inheritance; document CM
+  flat combined-emphasis precedence and provide a parent-callable native probe.
+- Add exact peach bold/inline-code, lilac italic, mint underline and slate
+  strikethrough roles; retain heading/link semantics, native sizing and fonts.
+- Expose cyan/mint/lilac/peach/stone graph roles with scoped 0.8 unresolved opacity and ≥3:1 composite contrast;
+  leave Groups/data/physics untouched.
+- Package a matching Mounty folder/manifest with CSS identical to the compatible
+  root Omarchy distribution, using a deterministic public-file allowlist.
+- Keep the approved hook wrapper bytes. Scoped ON installs retain a selected
+  literal Mounty or Omarchy destination; unsafe/unsupported selections deny.
+- Update installation, exact-vault hook and rollback guides; add real dark/light,
+  writing-menu and Zen pictures with synthetic content.
+- Document and test a small graph system: ordinary cyan, active peach, reference
+  mint, with first-matching-Group precedence; no automatic taxonomy or real-group writes.
+
 ## 1.6.2 / Omarchy Writing 0.3.0
 
 - Add Follow Omarchy colours, default OFF, with marker-guarded fixed-palette

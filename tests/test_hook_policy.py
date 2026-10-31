@@ -95,7 +95,7 @@ class HookPolicyTest(unittest.TestCase):
                 build.main(['--live','--install','--policy-vault',str(policy)])
             for vault in (policy,other):
                 self.assertEqual((vault/'.obsidian/themes/Omarchy/theme.css').read_text(),expected)
-                self.assertEqual(json.loads((vault/'.obsidian/themes/Omarchy/manifest.json').read_text())['version'],'1.6.2')
+                self.assertEqual(json.loads((vault/'.obsidian/themes/Omarchy/manifest.json').read_text())['version'],'1.7.0')
             self.assertEqual(pref.read_bytes(),pref_before)
 
     def destination_state(self, root):

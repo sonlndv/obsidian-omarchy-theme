@@ -1,4 +1,4 @@
-# Plugin compatibility
+# Mounty compatibility
 
 The normal theme always includes `src/parts/plugin-compat.css`, independently
 of the companion. The following exact installed packages were exercised in
@@ -65,3 +65,56 @@ behavior. Parent still owns native OFF/ON/OFF, theme-switch/graph checks and fin
 activation/review. Source/package creation does not establish activation, phone
 sync or physical iPhone/IME support. Main-window and older-SDK limitations remain;
 the missing native CLI filesystem endpoint is unchanged.
+
+## Mounty 1.7.0 / Mounty Writing 0.4.0
+
+The previous version sections above are historical evidence, not fresh acceptance
+of this refinement. Mounty's selected emphasis roles target native rendered
+strong/em/u/s/del/inline code and CM equivalents; fenced syntax, heading font/colour,
+cyan links, native preferred text size and plugin geometry remain separate. The
+measured source palette and original embedded font/OFL bytes are unchanged.
+The protected companion palette and default theme are tied by source-linked tests.
+Unresolved graph probes use scoped 0.8 opacity with the accepted stone base
+colour, retaining at least 3:1 composite contrast in both schemes. Native Groups
+still override node hues.
+
+The root updater manifest stays Omarchy, matching its folder/community entry.
+The explicit manual Mounty package has a Mounty manifest/folder and identical
+reviewed CSS. No native Mounty registry listing or repository move is claimed.
+Mounty Writing keeps ID/path `omarchy-writing`, commands and preference keys;
+legacy `--ow-theme-id: omarchy` and protected-palette attributes remain intact.
+The approved hook wrapper is byte-unchanged. Only the explicitly targeted policy
+vault follows its literal selected Mounty/Omarchy name; unsupported/malformed
+selection or unsafe destination fails closed before mutation. Existing legacy
+no-policy behavior remains, and path checks do not eliminate replacement races.
+
+Fresh synthetic Obsidian 1.14.5 checks cover both schemes, editing/reading,
+theme-only and protected companion over actual live-generated CSS: eight
+combinations and 80 computed-formatting checks, with unchanged note hashes.
+Native renderer data confirms first-Group-match precedence, the three-colour
+example, and unresolved alpha0.8/composite contrast in both schemes. Actual
+Geist/Space Mono faces, native menu/Exit and an OFF/ON/OFF cycle were observed;
+source-matched screenshots use only synthetic data. Publication and each
+real-vault activation remain separate from these fixture results. Main-window,
+older-SDK, physical-mobile/IME and remote-sync limitations remain; no shared
+CLI endpoint or host-hook installation is repaired by these tests.
+
+## Formatting review correction
+
+Live Preview native `<u>` under `.markdown-source-view.mod-cm6` uses the mint
+role, including when it is outside `.markdown-rendered`. Formatted links inherit
+cyan and headings inherit their existing heading role; `.cm-underline` is not
+a reason to paint a link mint. Theme and protected companion selectors match.
+
+CM flattens combined emphasis into `.cm-em.cm-strong`, so it is lilac in either
+source nesting order. Rendered `strong > em` is lilac and `em > strong` peach:
+the innermost element's role wins. Both retain native bold weight and italic
+style. CSS cannot recover nesting discarded by CM; no content parsing/rewrite
+or JS editor behavior is added.
+
+`tests/native_formatting_probe.cjs` is a read-only, identity-gated native DOM
+probe. The eight mode/scheme/layer combinations were executed in the synthetic
+fixture; an actual pre-fix stylesheet first reproduced the non-mint editor u,
+then the corrected source passed all 80 checks. See `tests/NATIVE-FORMATTING.md`.
+Unit/hosted-CI source and syntax checks do not themselves execute native Obsidian;
+fixture acceptance, publication and each actual-vault activation remain distinct.

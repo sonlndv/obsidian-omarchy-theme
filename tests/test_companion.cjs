@@ -128,7 +128,7 @@ test('native writing tools are explicit, disabled safely, exit Zen before openin
   p.setZen(true); p.menu.items[2].callback(); assert.equal(p.zen,true); assert.equal(actions.length,2);
   const owned=p.menu; p.onunload(); assert.equal(owned.hidden,true); assert.equal(p.menu,null);
   assert.equal(require('../companion/manifest.json').id,'omarchy-writing');
-  assert.equal(require('../companion/manifest.json').version,'0.3.0');
+  assert.equal(require('../companion/manifest.json').version,'0.4.0');
 });
 test('visible native/owned menus suppress pending typewriter; hidden/disconnected menus do not', async () => {
   const {p,calls,flush} = setup({typewriter:true}); await p.onload(); p.setZen(true);
