@@ -1,15 +1,19 @@
 'use strict';
 const { Plugin, PluginSettingTab, Setting, MarkdownView, Menu } = require('obsidian');
-const DEFAULTS = Object.freeze({ typewriter: false, width: 'standard', hideInlineTitle: false });
+const DEFAULTS = Object.freeze({ typewriter: false, width: 'standard', hideInlineTitle: false, followOmarchyColors: false });
 function normalize(data) {
   data = data && typeof data === 'object' ? data : {};
   return { typewriter: data.typewriter === true,
     width: ['narrow', 'standard', 'wide'].includes(data.width) ? data.width : 'standard',
-    hideInlineTitle: data.hideInlineTitle === true };
+    hideInlineTitle: data.hideInlineTitle === true,
+    followOmarchyColors: data.followOmarchyColors === true };
 }
 class WritingSettings extends PluginSettingTab {
   display() {
     this.containerEl.empty();
+    new Setting(this.containerEl).setName('Follow Omarchy colours')
+      .setDesc('Off protects the fixed palette immediately. On permits live colours on the next desktop Omarchy theme application; it does not switch the OS theme or confirm phone sync.')
+      .addToggle(c => c.setValue(this.plugin.settings.followOmarchyColors).onChange(v => this.plugin.change('followOmarchyColors', v)));
     new Setting(this.containerEl).setName('Typewriter during Zen editing')
       .setDesc('Keep the cursor near the center after typing or keyboard movement. Off by default.')
       .addToggle(c => c.setValue(this.plugin.settings.typewriter).onChange(v => this.plugin.change('typewriter', v)));
@@ -27,7 +31,8 @@ class OmarchyWriting extends Plugin {
     this.settings = normalize(await this.loadData());
     this.zen = false; this.frame = null; this.cleanups = []; this.composing = false;
     this.body = document.body;
-    this.previous = new Map(['data-ow-width', 'data-ow-hide-title', 'data-ow-zen'].map(k => [k, this.body.getAttribute(k)]));
+    this.previous = new Map(['data-ow-width', 'data-ow-hide-title', 'data-ow-zen', 'data-ow-palette'].map(k => [k, this.body.getAttribute(k)]));
+    this.cssRef = this.app.workspace.on('css-change', () => this.applyPalette());
     this.applySettings();
     this.addCommand({ id: 'toggle-zen', name: 'Toggle Zen', callback: () => this.setZen(!this.zen) });
     this.addCommand({ id: 'toggle-typewriter', name: 'Toggle typewriter', callback: () => this.change('typewriter', !this.settings.typewriter) });
@@ -80,6 +85,29 @@ class OmarchyWriting extends Plugin {
   applySettings() {
     this.body.setAttribute('data-ow-width', this.settings.width);
     this.body.setAttribute('data-ow-hide-title', String(this.settings.hideInlineTitle));
+    this.applyPalette();
+  }
+  notifyCSS() {
+    if (this.notifyingCSS) return;
+    this.notifyingCSS = true;
+    try { this.app.workspace.trigger('css-change'); }
+    finally { this.notifyingCSS = false; }
+  }
+  applyPalette() {
+    if (this.unloaded || this.notifyingCSS) return;
+    const marker = getComputedStyle(this.body).getPropertyValue('--ow-theme-id').trim();
+    const wanted = marker === 'omarchy' && !this.settings.followOmarchyColors ? 'sonwork' : null;
+    if (this.body.getAttribute('data-ow-palette') === wanted) return;
+    if (wanted === null) this.body.removeAttribute('data-ow-palette');
+    else this.body.setAttribute('data-ow-palette', wanted);
+    this.notifyCSS();
+  }
+  async onExternalSettingsChange() {
+    const settings = normalize(await this.loadData());
+    if (this.unloaded) return;
+    this.settings = settings;
+    this.applySettings();
+    this.syncEditor();
   }
   activeView() { return this.app.workspace.getActiveViewOfType(MarkdownView); }
   cancel() {
@@ -164,10 +192,14 @@ class OmarchyWriting extends Plugin {
     if (old === null) this.body.removeAttribute(key); else this.body.setAttribute(key, old);
   }
   onunload() {
+    this.unloaded = true;
+    this.app.workspace.offref(this.cssRef);
+    const paletteBefore = this.body.getAttribute('data-ow-palette');
     if (this.menu) this.menu.hide();
     this.menu = null;
     this.setZen(false); this.cancel();
     for (const key of this.previous.keys()) this.restore(key);
+    if (paletteBefore !== this.body.getAttribute('data-ow-palette')) this.notifyCSS();
   }
 }
 module.exports = OmarchyWriting;

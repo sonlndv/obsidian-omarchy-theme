@@ -18,6 +18,7 @@ import json
 import os
 import pathlib
 import re
+import stat
 import sys
 import tempfile
 
@@ -171,7 +172,7 @@ def select_theme(vault, name):
 def manifest(name):
     return json.dumps({
         "name": name,
-        "version": "1.6.1",
+        "version": "1.6.2",
         "minAppVersion": "1.0.0",
         "author": "Le Son",
     }, indent=2) + "\n"
@@ -204,6 +205,7 @@ def build(out_dir, colors_path=None):
             raise ValueError(f"unsupported colour mode: {scheme}")
         body = re.sub(r"\.theme-" + scheme + r"\s*\{[^}]*\}",
                       lambda _: css(colors, scheme), body, count=1)
+    body += "\n:root { --ow-theme-id: omarchy; }\n"
     body += "\n" + (PARTS / "plugin-compat.css").read_text()
     body += "\n" + (PARTS / "graph.css").read_text()
     body += "\n" + (PARTS / "sidebar.css").read_text()
@@ -216,13 +218,66 @@ def build(out_dir, colors_path=None):
     return colors, body
 
 
-def install(body):
+def policy_destinations_safe(vault):
+    """Validate every existing component of the three authorized write paths.
+
+    Reject even in-vault links: a linked note is not a theme/settings destination.
+    This preflight does not eliminate concurrent filesystem replacement races.
+    """
+    if vault.is_symlink():
+        return False
+    for relative in (pathlib.Path(".obsidian/themes") / THEME / "theme.css",
+                     pathlib.Path(".obsidian/themes") / THEME / "manifest.json",
+                     pathlib.Path(".obsidian/appearance.json")):
+        current = vault
+        for index, component in enumerate(relative.parts):
+            current = current / component
+            try:
+                mode = current.lstat().st_mode
+            except FileNotFoundError:
+                continue
+            is_leaf = index == len(relative.parts) - 1
+            if not (stat.S_ISREG(mode) if is_leaf else stat.S_ISDIR(mode)):
+                return False
+    return True
+
+
+def policy_allows(vault):
+    """Read only this companion's boolean opt-in; all unsafe inputs deny."""
+    try:
+        root = vault.resolve(strict=True)
+        target = vault / ".obsidian/plugins/omarchy-writing/data.json"
+        if not target.is_file() or not target.resolve(strict=True).is_relative_to(root):
+            return False
+        if not policy_destinations_safe(vault):
+            return False
+        data = json.loads(target.read_text())
+        return isinstance(data, dict) and data.get("followOmarchyColors") is True
+    except (OSError, ValueError, RuntimeError):
+        return False
+
+
+def registered_policy(vaults, policy_vault):
+    if policy_vault is None:
+        return None
+    policy = pathlib.Path(policy_vault).resolve()
+    if policy not in [v.resolve() for v in vaults]:
+        raise ValueError("policy vault must be explicitly registered")
+    return policy
+
+
+def install(body, policy_vault=None):
     vaults = vault_paths()
+    policy = registered_policy(vaults, policy_vault)
     if not vaults:
         sys.exit("no Obsidian vaults found in obsidian.json")
     for v in vaults:
         if not v.exists():
             print(f"skip (missing): {v}")
+            continue
+        # Re-read immediately before this vault's first mutation, after assembly.
+        if policy is not None and v.resolve() == policy and not policy_allows(v):
+            print("skip (policy off or unavailable)")
             continue
         d = v / ".obsidian" / "themes" / THEME
         d.mkdir(parents=True, exist_ok=True)
@@ -341,7 +396,13 @@ def main(argv=None):
                     help="read colours from the current Omarchy theme")
     ap.add_argument("--install", action="store_true",
                     help="also install into every Obsidian vault")
+    ap.add_argument("--policy-vault", type=pathlib.Path,
+                    help="require this registered vault's explicit companion live-colour opt-in")
     args = ap.parse_args(argv)
+    if args.policy_vault is not None:
+        if not (args.live and args.install and args.preset == "omarchy"):
+            ap.error("--policy-vault requires --live --install with the normal preset")
+        registered_policy(vault_paths(), args.policy_vault)
     if args.preset == "sonwork":
         if args.live or args.install:
             ap.error("Sonwork is preview-only; --live and --install are not supported")
@@ -356,7 +417,7 @@ def main(argv=None):
         print(f"wrote {ROOT / 'theme.css'} and manifest.json")
     print(f"accent {colors.get('accent')}  bg {colors.get('background')}  mode {colors.get('mode')}")
     if args.install:
-        install(body)
+        install(body, args.policy_vault)
 
 
 if __name__ == "__main__":

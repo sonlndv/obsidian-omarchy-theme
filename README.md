@@ -1,6 +1,6 @@
 # Omarchy for Obsidian
 
-**Omarchy 1.6.1** keeps the accepted cool dark/light surfaces, Geist prose and
+**Omarchy 1.6.2** keeps the accepted cool dark/light surfaces, Geist prose and
 interface text, Space Mono headings/code and soft native controls. H2/H3 have a
 restrained cyan/ink blend; other headings stay ink. Original licensed Latin and
 Vietnamese subsets are embedded for offline use. Names, repository/community
@@ -39,13 +39,53 @@ filters; enable them yourself if useful. CSS neither assigns clusters nor
 changes those settings. File explorer and Outline active/focused rows gain a
 restrained 1px cyan indicator, without changing panel layout or plugin icons.
 
-Optional **Omarchy Writing 0.2.0** adds a pen ribbon button and **Open writing
+Optional **Omarchy Writing 0.3.0** adds a pen ribbon button and **Open writing
 tools** command: toggle Zen/typewriter or explicitly open native Outline and
 Backlinks. No extra community plugins are needed for those panes. Enable the
 corresponding Obsidian core plugin yourself if its menu action is unavailable.
 The companion never enables plugins. See [companion/README.md](companion/README.md)
 for clean installation, same-folder upgrades retaining `data.json`, hotkeys,
 comfort settings and removal. Normal works without the companion.
+
+## Follow Omarchy colours — optional, initially OFF
+
+With **Omarchy Writing 0.3.0 enabled**, open Settings → Omarchy Writing →
+**Follow Omarchy colours**. Missing/older settings default to OFF. OFF immediately
+protects the fixed Sonwork colour roles, including headings and graph, even if
+the loaded Omarchy CSS was previously generated from a live desktop palette.
+The companion checks a computed Omarchy identity marker; another selected theme
+is not recoloured. Fonts, native text sizing, geometry and Graph Groups stay
+unchanged. This is presentation, not a rewrite of the installed CSS.
+
+ON permits the **next desktop Omarchy theme application** to supply live colours.
+It does not switch the OS theme, immediately rebuild CSS or promise that a phone
+has synced theme/plugin/settings files. External changes reload only this
+companion's preferences without saving them back. Native CSS-change notifications
+reconcile theme switches and refresh graph colours with a recursion guard.
+
+The optional hook policy is explicit and scoped to one registered vault:
+
+```sh
+python3 -B bin/build.py --live --install --policy-vault /path/to/chosen-vault
+```
+
+With that flag, only literal boolean `true` for `followOmarchyColors` in that
+vault's `.obsidian/plugins/omarchy-writing/data.json` permits its writes. Missing,
+invalid, non-boolean or escaping symlink targets fail closed: no theme/manifest/
+appearance writes or directory creation there. Policy is re-read after assembly
+immediately before the target's mutations. Other registered vaults keep existing
+behavior. No flag preserves the legacy bulk-install behavior; it does not enforce
+this opt-in. The companion itself does not execute this command or read vault
+paths. Use fixtures for testing, not a real registry.
+
+`hooks/50-obsidian-theme` is a reviewable host-wrapper **template only**. Admin
+owns its exact scoped installation after release/review/backups; this source does
+not modify the shared host hook. The runner executes regular files (except
+`*.sample`), so changing executable bits or adding `.disabled` is not the toggle.
+No other OS/app hook is changed. Keep owned hook/runtime/preference backups and
+stop on concurrent edits before deployment. No live deployment or activation is
+implied by these source files. Existing 0.2 runtime files may be staged without
+being enabled; Zen requires explicitly enabling the companion.
 
 ## Text and palette preferences
 
@@ -105,3 +145,11 @@ back the companion, replace its three runtime files with the retained **0.1.0**
 files in the same `omarchy-writing` folder while disabled, retaining `data.json`.
 Never reset notes, graph settings, hotkeys or other plugin settings. Publication
 and any upstream corrective patch remain separate reviewed actions.
+
+For a failed follow-colours rollout, disable the companion and have Admin restore
+only the reviewed hook backup; restore the backed-up owned theme/runtime files
+without resetting `data.json`, Graph Groups, notes or other preferences. Older
+companions ignore this new key, and an older hook does not enforce the policy:
+verify the complete rollback combination before allowing desktop theme writes.
+The native CLI's missing filesystem endpoint remains a separate capability gate;
+this update does not repair it or bypass activation/native verification.

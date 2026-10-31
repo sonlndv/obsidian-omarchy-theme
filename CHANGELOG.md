@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.6.2 / Omarchy Writing 0.3.0
+
+- Add Follow Omarchy colours, default OFF, with marker-guarded fixed-palette
+  protection for already-live CSS, including heading and graph roles.
+- Reconcile native CSS changes and external own-settings refresh without automatic
+  preference writes or recursive notifications; preserve unload state.
+- Add explicit registered-vault live/install policy, conservative preference and
+  symlink checks, and a reviewable host-hook template; no host deployment.
+- Preserve names, fonts, palette, graph, native sizing, geometry and writing tools.
+
 ## 1.6.1 / Omarchy Writing 0.2.0
 
 - Keep Omarchy / Omarchy Writing names, IDs, original fonts and palette facts.

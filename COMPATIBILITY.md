@@ -49,3 +49,19 @@ Zen/Exit, real cursor centering, menu guards and active-mode unload. Command
 menus explicitly bind the main document rather than a previously active Graph
 iframe. The third-party workflow checks above are retained 1.6.0 evidence; their
 compatibility layer is byte-unchanged, not newly recertified exhaustively here.
+
+## 1.6.2 / Writing 0.3.0 follow-colours boundary
+
+Graph CSS is part of the Omarchy theme, not a separate graph plugin. Native Graph
+Groups stay authoritative; no cluster allocation, data or physics change ships.
+The companion adds only a marker-guarded fixed-role override while follow-colours
+is OFF. It uses workspace `css-change` and `onExternalSettingsChange` for actual
+paint/settings consumers; external refresh never auto-saves. The three runtime
+files remain the complete companion runtime. Zen requires it to be enabled.
+
+The host wrapper is source only and requires Admin review/deployment. Only an
+explicitly named registered vault is policy-gated; omitted flags retain legacy
+behavior. Parent still owns native OFF/ON/OFF, theme-switch/graph checks and final
+activation/review. Source/package creation does not establish activation, phone
+sync or physical iPhone/IME support. Main-window and older-SDK limitations remain;
+the missing native CLI filesystem endpoint is unchanged.

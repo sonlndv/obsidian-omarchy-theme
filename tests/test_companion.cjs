@@ -19,7 +19,7 @@ class Plugin {
   async loadData() { return this.data; }
   async saveData(data) { this.saved = structuredClone(data); this.saves = (this.saves || 0)+1; }
   addCommand(c) { this.commands.push(c); }
-  addSettingTab() {}
+  addSettingTab(tab) { this.tab=tab; }
   addRibbonIcon(icon, label, callback) { this.ribbon = {icon, label, callback}; }
 }
 class Menu {
@@ -36,14 +36,27 @@ class Menu {
   showAtMouseEvent(event) { this.position=event; }
   showAtPosition(position, doc) { this.position=position; this.positionDocument=doc; }
 }
+class SettingTab {
+  constructor(app,plugin) { this.app=app; this.plugin=plugin; this.containerEl={empty(){}, controls:[]}; }
+}
+class Setting {
+  constructor(el) { this.el=el; }
+  setName(name) { this.name=name; return this; }
+  setDesc() { return this; }
+  addToggle(fn) {
+    const control={name:this.name,setValue(v){this.value=v;return this;},onChange(fn){this.callback=fn;return this;}};
+    fn(control); this.el.controls.push(control); return this;
+  }
+  addDropdown(fn) { return this.addToggle(c=>{c.addOptions=()=>c;fn(c);}); }
+}
 const original = Module._load;
-Module._load = function(id,...args) { return id === 'obsidian' ? {Plugin, PluginSettingTab: class {}, Setting: class {}, MarkdownView: class {}, Menu} : original.call(this,id,...args); };
+Module._load = function(id,...args) { return id === 'obsidian' ? {Plugin, PluginSettingTab: SettingTab, Setting, MarkdownView: class {}, Menu} : original.call(this,id,...args); };
 const Writing = require('../companion/main.js');
 Module._load = original;
 function setup(data) {
   global.document = new Element(); document.body = new Element(); document.createElement = () => new Element();
   document.querySelector = () => null; document.querySelectorAll = () => [];
-  global.window = {innerWidth: 800}; global.getComputedStyle = el => ({visibility: el.visibility || 'visible'});
+  global.window = {innerWidth: 800}; global.getComputedStyle = el => ({visibility: el.visibility || 'visible',getPropertyValue: () => document.marker || ''});
   let next = 0; const frames = new Map();
   global.requestAnimationFrame = f => { frames.set(++next,f); return next; };
   global.cancelAnimationFrame = id => frames.delete(id);
@@ -54,7 +67,7 @@ function setup(data) {
   const view = {containerEl: el, editor, getMode: () => mode};
   const refs = new Set();
   const p = new Writing(); p.commands=[]; p.data=data;
-  p.app={workspace:{getActiveViewOfType: () => view, on: (event,fn) => { const ref={event,fn}; refs.add(ref); return ref; }, offref: ref => refs.delete(ref)}};
+  p.app={workspace:{getActiveViewOfType: () => view, on: (event,fn) => { const ref={event,fn}; refs.add(ref); return ref; }, offref: ref => refs.delete(ref), trigger: event => { for (const ref of [...refs]) if (ref.event===event) ref.fn(); }}};
   return {p, calls, el, refs, frames, setMode: v => mode=v, setSelected: v => selected=v, setFocus: v => focus=v,
     flush: () => { for (const [id,f] of [...frames]) {frames.delete(id);f();} }};
 }
@@ -70,10 +83,10 @@ test('enter/exit/unload restore owned presentation without app/note/settings mut
   document.body.setAttribute('data-ow-width','prior');
   const untouched = JSON.stringify(p.app); await p.onload(); p.setZen(true);
   assert.equal(p.button.textContent,'Exit Zen'); assert.equal(p.button.getAttribute('aria-label'),'Exit Zen');
-  assert.ok(el.classes.has('ow-typewriter')); assert.equal(refs.size,2);
+  assert.ok(el.classes.has('ow-typewriter')); assert.equal(refs.size,3);
   document.fire('keyup',{key:'a'}); assert.equal(frames.size,1);
   p.button.fire('click'); assert.equal(p.zen,false); assert.equal(frames.size,0);
-  assert.equal(el.classes.size,0); assert.equal(refs.size,0); assert.equal(document.body.children.length,0);
+  assert.equal(el.classes.size,0); assert.equal(refs.size,1); assert.equal(document.body.children.length,0);
   assert.ok([...document.listeners.values()].every(s => s.size===0));
   assert.equal(p.saves,undefined); assert.equal(JSON.stringify(p.app),untouched);
   p.setZen(true); p.onunload(); assert.equal(document.body.getAttribute('data-ow-width'),'prior');
@@ -115,7 +128,7 @@ test('native writing tools are explicit, disabled safely, exit Zen before openin
   p.setZen(true); p.menu.items[2].callback(); assert.equal(p.zen,true); assert.equal(actions.length,2);
   const owned=p.menu; p.onunload(); assert.equal(owned.hidden,true); assert.equal(p.menu,null);
   assert.equal(require('../companion/manifest.json').id,'omarchy-writing');
-  assert.equal(require('../companion/manifest.json').version,'0.2.0');
+  assert.equal(require('../companion/manifest.json').version,'0.3.0');
 });
 test('visible native/owned menus suppress pending typewriter; hidden/disconnected menus do not', async () => {
   const {p,calls,flush} = setup({typewriter:true}); await p.onload(); p.setZen(true);
@@ -126,4 +139,31 @@ test('visible native/owned menus suppress pending typewriter; hidden/disconnecte
   native.visibility='visible'; native.isConnected=false; document.fire('keyup',{key:'a'}); flush(); assert.equal(calls.length,3);
   p.openTools(); document.fire('keyup',{key:'a'}); flush(); assert.equal(calls.length,3);
   p.menu.hide(); document.fire('keyup',{key:'a'}); flush(); assert.equal(calls.length,4); p.onunload();
+});
+
+test('follow palette defaults, native setting toggle, external sync, marker changes and recursion guard', async () => {
+  for (const input of [undefined,null,[],false,42,'yes',{}, {followOmarchyColors:'true'}, {followOmarchyColors:1}])
+    assert.equal(Writing.normalize(input).followOmarchyColors,false);
+  assert.equal(Writing.normalize({followOmarchyColors:true}).followOmarchyColors,true);
+  const {p,refs}=setup({typewriter:true,width:'wide',hideInlineTitle:true});
+  document.marker='omarchy'; document.body.setAttribute('data-ow-palette','previous');
+  let notifications=0; const trigger=p.app.workspace.trigger;
+  p.app.workspace.trigger=event=>{notifications++; trigger(event);};
+  await p.onload(); assert.equal(document.body.getAttribute('data-ow-palette'),'sonwork');
+  assert.equal(notifications,1); assert.equal(p.saves,undefined);
+  p.tab.display(); const follow=p.tab.containerEl.controls.find(c=>c.name==='Follow Omarchy colours');
+  assert.equal(follow.value,false); await follow.callback(true);
+  assert.equal(document.body.getAttribute('data-ow-palette'),null); assert.equal(p.saves,1);
+  assert.equal(p.settings.typewriter,true); assert.equal(p.settings.width,'wide'); assert.equal(p.settings.hideInlineTitle,true);
+  await follow.callback(false); assert.equal(p.saves,2); assert.equal(document.body.getAttribute('data-ow-palette'),'sonwork');
+  const before=notifications; p.applyPalette(); assert.equal(notifications,before);
+  document.marker=''; trigger('css-change'); assert.equal(document.body.getAttribute('data-ow-palette'),null);
+  document.marker='another-theme'; trigger('css-change'); assert.equal(document.body.getAttribute('data-ow-palette'),null);
+  document.marker='omarchy'; trigger('css-change'); assert.equal(document.body.getAttribute('data-ow-palette'),'sonwork');
+  p.data={typewriter:false,width:'narrow',hideInlineTitle:false,followOmarchyColors:true};
+  await p.onExternalSettingsChange(); assert.equal(p.saves,2); assert.equal(document.body.getAttribute('data-ow-palette'),null);
+  assert.deepEqual(p.settings,p.data);
+  p.data={width:'wide'}; await p.onExternalSettingsChange(); assert.equal(p.saves,2); assert.equal(document.body.getAttribute('data-ow-palette'),'sonwork');
+  p.onunload(); assert.equal(document.body.getAttribute('data-ow-palette'),'previous'); assert.equal(refs.size,0);
+  const end=notifications; trigger('css-change'); assert.equal(notifications,end);
 });

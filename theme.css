@@ -620,6 +620,8 @@ body .workspace-tabs .workspace-leaf {
 }
 
 
+:root { --ow-theme-id: omarchy; }
+
 /* Observed contracts: Maps 0.2.2, Note Toolbar 1.35.22,
    Omnisearch 1.32.0, QuickAdd 2.33.1, TaskNotes 4.14.0.
    Only colour aliases: keep plugin layouts, icons and semantic statuses. */
