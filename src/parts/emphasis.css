@@ -1,0 +1,81 @@
+/* Selected emphasis, not a syntax-highlighting palette. Native variables retain
+   user overrides; nested emphasis keeps its own weight/style and colour role. */
+.markdown-rendered :is(strong, b) { color: var(--bold-color); }
+.markdown-rendered :is(em, i) { color: var(--italic-color); }
+.markdown-rendered u,
+.markdown-source-view.mod-cm6 u,
+.markdown-source-view.mod-cm6 .cm-underline { color: var(--underline-color, var(--text-normal)); }
+.markdown-rendered :is(s, del),
+.markdown-source-view.mod-cm6 .cm-strikethrough { color: var(--strikethrough-color, var(--text-muted)); }
+.markdown-rendered :not(pre) > code,
+.markdown-source-view.mod-cm6 .cm-line:not(.HyperMD-codeblock) .cm-inline-code {
+  color: var(--inline-code-color, var(--code-normal));
+}
+/* Keep all heading descendants in their heading colour, including CM spans. */
+.markdown-rendered h1,
+.markdown-source-view.mod-cm6 .HyperMD-header-1 {
+  --bold-color: var(--h1-color);
+  --italic-color: var(--h1-color);
+  --inline-code-color: var(--h1-color);
+  --underline-color: var(--h1-color);
+  --strikethrough-color: var(--h1-color);
+}
+.markdown-rendered h2,
+.markdown-source-view.mod-cm6 .HyperMD-header-2 {
+  --bold-color: var(--h2-color);
+  --italic-color: var(--h2-color);
+  --inline-code-color: var(--h2-color);
+  --underline-color: var(--h2-color);
+  --strikethrough-color: var(--h2-color);
+}
+.markdown-rendered h3,
+.markdown-source-view.mod-cm6 .HyperMD-header-3 {
+  --bold-color: var(--h3-color);
+  --italic-color: var(--h3-color);
+  --inline-code-color: var(--h3-color);
+  --underline-color: var(--h3-color);
+  --strikethrough-color: var(--h3-color);
+}
+.markdown-rendered h4,
+.markdown-source-view.mod-cm6 .HyperMD-header-4 {
+  --bold-color: var(--h4-color);
+  --italic-color: var(--h4-color);
+  --inline-code-color: var(--h4-color);
+  --underline-color: var(--h4-color);
+  --strikethrough-color: var(--h4-color);
+}
+.markdown-rendered h5,
+.markdown-source-view.mod-cm6 .HyperMD-header-5 {
+  --bold-color: var(--h5-color);
+  --italic-color: var(--h5-color);
+  --inline-code-color: var(--h5-color);
+  --underline-color: var(--h5-color);
+  --strikethrough-color: var(--h5-color);
+}
+.markdown-rendered h6,
+.markdown-source-view.mod-cm6 .HyperMD-header-6 {
+  --bold-color: var(--h6-color);
+  --italic-color: var(--h6-color);
+  --inline-code-color: var(--h6-color);
+  --underline-color: var(--h6-color);
+  --strikethrough-color: var(--h6-color);
+}
+/* Links remain cyan even with nested formatting or combined CM classes. */
+.markdown-rendered a,
+.markdown-source-view.mod-cm6 a {
+  --bold-color: var(--link-color);
+  --italic-color: var(--link-color);
+  --inline-code-color: var(--link-color);
+  --underline-color: var(--link-color);
+  --strikethrough-color: var(--link-color);
+}
+.markdown-source-view.mod-cm6 :is(.cm-link, .cm-hmd-internal-link, .cm-url) {
+  --bold-color: var(--link-color);
+  --italic-color: var(--link-color);
+  --inline-code-color: var(--link-color);
+  --underline-color: var(--link-color);
+  --strikethrough-color: var(--link-color);
+}
+/* CM flattens either combined nesting order into one token. Rendered HTML
+   keeps nesting; the innermost role wins there. Keep native weight/style. */
+.markdown-source-view.mod-cm6 .cm-em.cm-strong { color: var(--italic-color); }
