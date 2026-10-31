@@ -15,8 +15,14 @@ manual package is **Mounty 1.7.1**.
 **New Mounty and Mounty Zen community listings are planned, not submitted or
 approved.** Until a listing/version is actually available, use the reviewed
 manual packages when released. See [optional migration](docs/MIGRATING-TO-MOUNTY.md) and the
-[listing/source-export guide](docs/COMMUNITY-LISTINGS.md). No new repository or
-listing URL is claimed here. Theme updates never auto-install the optional plugin.
+[listing/source-export guide](docs/COMMUNITY-LISTINGS.md).
+
+Product homes: **[Mounty theme](https://github.com/sonlndv/Mounty)** and
+**[Mounty Zen plugin](https://github.com/sonlndv/Mounty-Zen)**. Mounty owns CSS
+appearance; Zen adds optional commands, saved preferences and editor behaviour
+that a theme alone cannot provide. Static width/title styling is CSS; its
+interactive controls and persistence belong in Zen. The theme works alone and
+never auto-installs the plugin. GitHub publication is not official listing approval.
 
 ## See it in Obsidian
 
