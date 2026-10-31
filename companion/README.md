@@ -1,4 +1,4 @@
-# Omarchy Writing 0.2.0
+# Omarchy Writing 0.3.0
 
 Optional CommonJS Obsidian companion, ID `omarchy-writing`. Uses only Obsidian's
 provided SDK and browser APIs. No network, note-content reads/writes, editor text
@@ -91,7 +91,7 @@ Packaging from the repository root (no dependency installation):
 python3 -B bin/package_companion.py
 ```
 
-Produces `dist/omarchy-writing-0.2.0.zip` with an `omarchy-writing/` directory,
+Produces `dist/omarchy-writing-0.3.0.zip` with an `omarchy-writing/` directory,
 the three runtime files, this README and the repository MIT license. Do not add
 `data.json`, private fixture notes, logs or third-party packages to the archive.
 Test with `node --test tests/test_companion.cjs` (Node built-in runner). These
@@ -100,3 +100,36 @@ are SDK/DOM contract tests, not native-plugin or physical iPhone certification.
 For rollback, disable this companion and restore the three 0.1.0 runtime files
 in the same folder, preserving `data.json`, then re-enable it. Disable it before
 rolling back the Omarchy theme to 1.6.0; no note/layout reset is needed.
+
+## Follow Omarchy colours (0.3.0)
+
+In Settings → Omarchy Writing, **Follow Omarchy colours** starts OFF. Only an
+explicit boolean true enables it; older/missing settings preserve the existing
+normalized typewriter/width/title preferences and default this new key to false.
+The toggle uses only this plugin's `saveData`; external settings sync reloads
+without an automatic save. No notes, graph/group settings or other plugin files
+are read or written. It installs no hook and executes no shell commands.
+
+OFF immediately restores the fixed Sonwork dark/light semantic colour roles
+(including headings/graph) when computed styles identify loaded **Omarchy** CSS.
+The owned `data-ow-palette` attribute is removed for other themes. Original body
+state is restored on unload and the CSS-change listener is removed. Fonts and
+geometry are not overridden. A versioned Omarchy identity marker is required;
+older theme builds without the marker cannot be protected by this layer. Native
+CSS-change events refresh palette/graph consumers once per attribute transition.
+
+ON permits the NEXT desktop Omarchy theme application to supply live colours
+through the separately reviewed scoped hook policy. It does not switch OS theme
+or fetch/rebuild files. OFF protects already-live CSS locally; the hook gate
+additionally prevents subsequent writes to the one explicitly named registered
+vault. Other vaults retain their original hook behavior. With no companion enabled,
+there is no local protection layer; the builder policy still fails closed for a
+missing/false preference. Never claim staging runtime files enabled the plugin.
+
+Theme/plugin/settings synchronization to another device must actually occur;
+no remote-phone sync, physical mobile/IME certification or detached-window support
+is promised. Existing older-SDK/main-window limitations remain. The native CLI
+filesystem endpoint is a separate gate, not repaired here. Parent owns fresh
+native checks, review, activation and the final flow; Admin alone deploys the
+reviewed shared-hook wrapper. On rollback, preserve `data.json` and restore only
+backed-up owned files; an old hook/companion pair may not enforce this preference.

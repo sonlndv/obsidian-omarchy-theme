@@ -1,0 +1,2 @@
+#!/bin/sh
+exec python3 "$HOME/code/obsidian-omarchy-theme/bin/build.py" --live --install --policy-vault "$HOME/son_writing" >/dev/null 2>&1

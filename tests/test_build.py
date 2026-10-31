@@ -256,7 +256,7 @@ class BuildTest(unittest.TestCase):
     def test_manifest(self):
         data = json.loads((self.out / "manifest.json").read_text())
         self.assertNotIn("description", data)
-        self.assertEqual(data["version"], "1.6.1")
+        self.assertEqual(data["version"], "1.6.2")
         for key in ("name", "version", "minAppVersion", "author"):
             self.assertTrue(data.get(key), key)
 
