@@ -13,4 +13,5 @@ jobs:
       - run: node --check companion/main.js
       - run: node --test tests/test_companion.cjs
       - run: python3 -B bin/build.py
+      - run: python3 -B bin/package_submissions.py
       - run: git diff --exit-code -- theme.css manifest.json OFL-Geist.txt OFL-SpaceMono.txt

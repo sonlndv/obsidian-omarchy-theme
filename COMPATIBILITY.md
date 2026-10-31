@@ -118,3 +118,16 @@ fixture; an actual pre-fix stylesheet first reproduced the non-mint editor u,
 then the corrected source passed all 80 checks. See `tests/NATIVE-FORMATTING.md`.
 Unit/hosted-CI source and syntax checks do not themselves execute native Obsidian;
 fixture acceptance, publication and each actual-vault activation remain distinct.
+
+## 1.7.1 / Mounty Zen 0.4.1 — naming and source-export amendment
+
+Mounty and the supported community alias Omarchy have byte-identical CSS at this
+matching release; neither is a reduced or deprecated route. Switching names is
+optional. The optional plugin display name is Mounty Zen, retaining ID/folder
+`omarchy-writing`, preference keys and command IDs. Runtime main/styles, source
+layers, fonts, generated theme CSS and approved hook bytes remain unchanged.
+Earlier native 1.14.5 QA is historical evidence of those retained bytes, not new
+native execution, official listing acceptance, activation or mobile certification.
+New Mounty / Mounty Zen listings are planned, not submitted/approved. Minimum
+plugin version 1.5.0 remains inherited metadata rather than freshly tested support.
+See [migration](docs/MIGRATING-TO-MOUNTY.md) and [submission guide](docs/COMMUNITY-LISTINGS.md).

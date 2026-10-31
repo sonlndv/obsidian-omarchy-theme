@@ -82,17 +82,17 @@ class MountyTest(unittest.TestCase):
             build.build(root);(root/'LICENSE').write_bytes((ROOT/'LICENSE').read_bytes())
             (root/'private-fixture.json').write_text('must not ship')
             out=module.package(root);original=out.read_bytes()
-            self.assertEqual(out.name,'Mounty-1.7.0.zip')
+            self.assertEqual(out.name,'Mounty-1.7.1.zip')
             self.assertEqual(module.package(root).read_bytes(),original)
             self.assertEqual(json.loads((root/'manifest.json').read_text())['name'],'Omarchy')
             with zipfile.ZipFile(out) as archive:
                 self.assertEqual(set(archive.namelist()),{f'Mounty/{name}' for name in module.PUBLIC_FILES})
                 data=json.loads(archive.read('Mounty/manifest.json'))
-                self.assertEqual(data['name'],'Mounty');self.assertEqual(data['version'],'1.7.0')
+                self.assertEqual(data['name'],'Mounty');self.assertEqual(data['version'],'1.7.1')
                 self.assertEqual(archive.read('Mounty/theme.css'),(root/'theme.css').read_bytes())
                 for entry in archive.infolist(): self.assertEqual(entry.date_time,(2026,1,1,0,0,0))
         manifest=json.loads((ROOT/'companion/manifest.json').read_text())
-        self.assertEqual((manifest['id'],manifest['name'],manifest['version']),('omarchy-writing','Mounty Writing','0.4.0'))
+        self.assertEqual((manifest['id'],manifest['name'],manifest['version']),('omarchy-writing','Mounty Zen','0.4.1'))
         self.assertEqual(hashlib.sha256((ROOT/'hooks/50-obsidian-theme').read_bytes()).hexdigest(),'5ef59f05962d7ec09e12ecc707550732be917dba998c038785cd7375681fdb4c')
 
 class MountyPolicyTest(unittest.TestCase):

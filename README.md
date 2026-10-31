@@ -1,8 +1,22 @@
 # Mounty
 
-Mounty is a quiet, colourful Obsidian theme for writing and connected thinking, with dark and light palettes and Obsidian's familiar layout. Geist keeps prose readable; Space Mono gives headings and code a distinct voice.
+Mounty and the supported community alias **Omarchy** offer the same quiet, colourful Obsidian theme for writing and connected thinking. At matching releases their CSS is byte-identical, with the same dark/light palettes and capabilities. Staying on Omarchy is fully supported; changing names is optional. Geist keeps prose readable; Space Mono gives headings and code a distinct voice.
 
 Colour has a job: peach bold and inline code, lilac italic, mint underline, quiet slate strikethrough and cyan links. The graph follows a small, explicit colour system—not a different accent for every folder.
+
+## Two names, one theme — submission status
+
+**Omarchy remains a supported equal installation route**, not a frozen edition
+or a redirect. Its existing community updater keeps the name Omarchy and the
+same appearance/features as Mounty at a matching release. No migration is needed
+to get this design. Root/updater metadata is **Omarchy 1.7.1**; the explicit
+manual package is **Mounty 1.7.1**.
+
+**New Mounty and Mounty Zen community listings are planned, not submitted or
+approved.** Until a listing/version is actually available, use the reviewed
+manual packages when released. See [optional migration](docs/MIGRATING-TO-MOUNTY.md) and the
+[listing/source-export guide](docs/COMMUNITY-LISTINGS.md). No new repository or
+listing URL is claimed here. Theme updates never auto-install the optional plugin.
 
 ## See it in Obsidian
 
@@ -24,35 +38,35 @@ These are real Obsidian captures, not mockups. All notes are synthetic. The grap
 - **A meaningful graph.** Native semantic colours and an optional three-colour Group recipe. No automatic taxonomy, note rewriting or graph-physics changes.
 - **Scoped compatibility styling.** File explorer/Outline indicators and existing Maps, Note Toolbar, Omnisearch, QuickAdd and TaskNotes styling. See version-specific [compatibility notes](COMPATIBILITY.md), not a promise about every plugin or snippet.
 
-**The theme works on its own.** Mounty Writing is an optional companion, not a requirement for ordinary reading or emphasis colours.
+**The theme works on its own.** Mounty Zen is an optional companion, not a requirement for ordinary reading or emphasis colours.
 
 ## Install or update
 
 ### Existing community installation: Omarchy
 
-The community listing and updater remain **Omarchy** during the compatible transition. Find or update Omarchy in **Settings → Appearance → Themes**, check the available version, and keep Omarchy selected if using that route.
+The current community listing and updater remain **Omarchy**, an equal supported alias. Find or update Omarchy in **Settings → Appearance → Themes**, check the available version, and keep Omarchy selected if using that route.
 
-The root `manifest.json` deliberately retains `name: Omarchy`, matching the `Omarchy/` folder. Its 1.7.0 CSS is identical to the manual Mounty package. The repository URL and community entry have not been renamed; there is no separate Mounty community listing implied here.
+The root `manifest.json` deliberately retains `name: Omarchy`, matching the `Omarchy/` folder. Its 1.7.1 CSS is byte-identical to the manual Mounty package. The repository URL/community entry are unchanged; a new Mounty listing is only planned. You do not need to switch names for the design or writing tools.
 
 ### Mounty-named manual installation
 
-From the [1.7.0 release](https://github.com/sonlndv/obsidian-omarchy-theme/releases/tag/1.7.0), use **Mounty-1.7.0.zip**. Extract its **Mounty/** folder under `<vault>/.obsidian/themes/`, so `theme.css` and `manifest.json` sit directly in `.obsidian/themes/Mounty/`. Select **Mounty** in Appearance, then choose Light, Dark or Adapt to system.
+When the reviewed 1.7.1 assets are published on the [existing repository Releases page](https://github.com/sonlndv/obsidian-omarchy-theme/releases), use **Mounty-1.7.1.zip**. This source update does not claim that upload has happened. Extract its **Mounty/** folder under `<vault>/.obsidian/themes/`, so `theme.css` and `manifest.json` sit directly in `.obsidian/themes/Mounty/`. Select **Mounty** in Appearance, then choose Light, Dark or Adapt to system.
 
 The package's manifest name matches its folder. Do not copy the root Omarchy manifest into a Mounty folder or mistake a source ZIP for the manual package. Keep the old Omarchy folder/release until the new selection is verified. For later manual updates, replace only Mounty's public theme files; do not reset notes or preferences.
 
 **Already using an Omarchy desktop hook?** Review/update it before switching to Mounty. A legacy bulk hook can write/select Omarchy again. Use the deliberate policy setup below rather than assuming the old hook protects your selection.
 
-### Optional companion: Mounty Writing 0.4.0
+### Optional companion: Mounty Zen 0.4.1
 
-Use **omarchy-writing-0.4.0.zip** and the [companion guide](companion/README.md). The stable ID/folder remains **omarchy-writing**.
+Use **omarchy-writing-0.4.1.zip** and the [companion guide](companion/README.md). The stable ID/folder remains **omarchy-writing**.
 
 For an upgrade, disable the companion, replace `main.js`, `styles.css` and `manifest.json` in the same folder, retain `data.json`, then explicitly re-enable it. Do not create a second plugin ID for the new display name. The theme updater does not install, update or enable the companion.
 
 ## Writing tools, when you want them
 
-Click the pen ribbon or use **Mounty Writing: Open writing tools**. The native menu provides Zen, optional typewriter editing, Outline and Backlinks. Opening a pane is explicit and exits Zen first; no pane opens at startup. There are no default hotkeys—assign your own in Settings → Hotkeys if wanted.
+Click the pen ribbon or use **Mounty Zen: Open writing tools**. The native menu provides Zen, optional typewriter editing, Outline and Backlinks. Opening a pane is explicit and exits Zen first; no pane opens at startup. There are no default hotkeys—assign your own in Settings → Hotkeys if wanted.
 
-![Mounty Writing's native menu offers Enter Zen, Typewriter, Open Outline and Open Backlinks.](docs/images/mounty-writing-tools.png)
+![Mounty Zen's native menu offers Enter Zen, Typewriter, Open Outline and Open Backlinks.](docs/images/mounty-writing-tools.png)
 
 Zen starts OFF and hides surrounding navigation without collapsing panels or saving a new layout. A visible **Exit Zen** button remains available; menus and native dialogs keep their own Escape handling. Typewriter scrolling acts only on a focused, unselected cursor in Zen source editing, not reading mode or an idle loop.
 
@@ -62,7 +76,7 @@ Optional preferences also cover narrow/standard/wide Markdown width and hiding t
 
 ## Follow desktop Omarchy colours—optional
 
-The default is **fixed Mounty colours, Follow Omarchy colours OFF**. In **Settings → Mounty Writing**, OFF immediately protects the fixed dark/light emphasis, headings and graph roles, including when loaded CSS was generated from a live Omarchy palette. It affects only the recognized theme, not another selected theme.
+The default is **fixed Mounty colours, Follow Omarchy colours OFF**. In **Settings → Mounty Zen**, OFF immediately protects the fixed dark/light emphasis, headings and graph roles, including when loaded CSS was generated from a live Omarchy palette. It affects only the recognized theme, not another selected theme.
 
 ON permits the **next normal desktop Omarchy theme application** to supply live colours. The switch does not rebuild CSS now, execute shell, change the OS theme or guarantee phone sync. Update both the theme and companion for the new protected emphasis roles; Writing 0.3 keeps its older protected palette.
 
@@ -116,12 +130,15 @@ Native formatting was exercised in Obsidian 1.14.5 in an isolated synthetic desk
 python3 -B bin/build.py
 python3 -B bin/package_theme.py
 python3 -B bin/package_companion.py
+python3 -B bin/package_submissions.py
 python3 -B -m unittest discover -s tests -v
 node --check companion/main.js
 node --test tests/test_companion.cjs
 ```
 
-Default output remains root Omarchy 1.7.0. The deterministic packagers create `dist/Mounty-1.7.0.zip` and `dist/omarchy-writing-0.4.0.zip` using public-file allowlists. The measured source palette in `src/sonwork/palette.json` stays separate from Mounty's derived emphasis/graph roles.
+Default output remains root Omarchy 1.7.1. The deterministic packagers create `dist/Mounty-1.7.1.zip` and `dist/omarchy-writing-0.4.1.zip` using public-file allowlists. The source exporter creates two separate, root-ready
+submission archives with product-specific READMEs and correct manifests; see
+[the submission guide](docs/COMMUNITY-LISTINGS.md). The measured source palette in `src/sonwork/palette.json` stays separate from Mounty's derived emphasis/graph roles.
 
 The [native formatting probe](tests/NATIVE-FORMATTING.md) requires an explicit synthetic vault and fixed sample file, then checks actual DOM colours/styles. Native execution is separate from CI: Python discovery checks source consistency, Node syntax and identity guards; hosted CI does not launch Obsidian.
 

@@ -1,19 +1,20 @@
-# Mounty Writing 0.4.0
+# Mounty Zen 0.4.1
 
-Optional writing controls for Mounty: Zen, optional typewriter scrolling,
+Optional writing controls for **Mounty and Omarchy equally**: Zen, optional typewriter scrolling,
 Markdown width/title preferences, and a small native writing-tools menu. The
 theme works without this companion. It uses only Obsidian's provided SDK
 and browser APIs, without external dependencies, network or shell execution.
 
 ## Install or update
 
-The display name is now **Mounty Writing**. The stable plugin ID and folder
+The product/display name is **Mounty Zen**. Its new official listing is planned,
+not submitted or approved; no live listing URL or new repository is claimed. The stable plugin ID and folder
 remain **omarchy-writing**; command IDs and `data.json` preferences are preserved.
 The theme updater does not install or update this optional manual companion.
 
-- **Clean install:** extract `omarchy-writing-0.4.0.zip`, place its
+- **Clean install:** extract `omarchy-writing-0.4.1.zip`, place its
   `omarchy-writing/` folder under one chosen vault's `.obsidian/plugins/`, then
-  explicitly enable Mounty Writing in Community plugins. Runtime files must sit
+  explicitly enable Mounty Zen in Community plugins. Runtime files must sit
   directly in that folder, without another nested archive directory.
 - **Upgrade:** disable the existing Omarchy/Mounty Writing companion, replace
   only `main.js`, `styles.css`, `manifest.json` and documentation in the SAME
@@ -25,7 +26,7 @@ and verify it in the chosen vault after updating.
 
 ## Writing tools
 
-Click the pen ribbon, or use **Mounty Writing: Open writing tools** in the command
+Click the pen ribbon, or use **Mounty Zen: Open writing tools** in the command
 palette. The native menu offers Zen, typewriter, Outline and Backlinks. Opening
 a pane is explicit and exits Zen first; no pane opens at startup. Unavailable
 core commands are disabled and rechecked on invocation. Enable Obsidian's own
@@ -90,8 +91,8 @@ published package is not proof that a particular vault has loaded it.
 Disable the companion to restore presentation. For removal, delete only its
 plugin folder after disabling it; retain `data.json` if returning later. For
 rollback, restore the backed-up runtime in the same folder while disabled and
-keep preferences; restore/select the retained Omarchy theme as needed. Admin
-owns hook rollback. Older hook/companion pairs may not enforce follow-colours;
+keep preferences; restore/select the retained Omarchy theme as needed. Restore
+any owned hook backup through its normal maintainer. Older hook/companion pairs may not enforce follow-colours;
 verify before allowing desktop writes. Never reset notes, groups or other
 settings. This companion does not read/write note content, graph configuration,
 other plugin settings, hotkeys or layout.
@@ -109,3 +110,18 @@ contains exactly the three runtime files, this README and MIT LICENSE under
 `omarchy-writing/`. No `data.json`, private fixture, log or third-party package
 is included. Python aggregate discovery also runs the companion contract tests;
 these do not replace native acceptance or activation evidence.
+
+## Community submission and optional migration
+
+The runtime needs no account, network, shell, telemetry or dependency installer.
+Son needs an Obsidian account and GitHub linking to submit/claim directory entries;
+those are owner actions, not plugin-runtime requirements. The inherited minimum
+1.5.0 is declared, not freshly certified; retained native QA used Obsidian 1.14.5.
+
+Once an official entry actually exists, verify its ID **omarchy-writing** and
+available version before choosing that upgrade route. Do not enable a second
+plugin or edit a manifest to fake migration. See the [migration guide](../docs/MIGRATING-TO-MOUNTY.md)
+and [submission/source guide](../docs/COMMUNITY-LISTINGS.md). Ordinary Omarchy
+users already get the same theme and may keep their current name/selection.
+JavaScript and CSS runtime behavior are unchanged in this naming patch; the
+manifest updates the display name, description and version.

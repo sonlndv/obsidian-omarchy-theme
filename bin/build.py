@@ -172,7 +172,7 @@ def select_theme(vault, name):
 def manifest(name):
     return json.dumps({
         "name": name,
-        "version": "1.7.0",
+        "version": "1.7.1",
         "minAppVersion": "1.0.0",
         "author": "Le Son",
     }, indent=2) + "\n"
