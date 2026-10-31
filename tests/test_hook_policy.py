@@ -97,3 +97,63 @@ class HookPolicyTest(unittest.TestCase):
                 self.assertEqual((vault/'.obsidian/themes/Omarchy/theme.css').read_text(),expected)
                 self.assertEqual(json.loads((vault/'.obsidian/themes/Omarchy/manifest.json').read_text())['version'],'1.6.2')
             self.assertEqual(pref.read_bytes(),pref_before)
+
+    def destination_state(self, root):
+        # Record directories and links too, so denied cases cannot mkdir quietly.
+        return {str(p.relative_to(root)):
+                ('link', str(p.readlink())) if p.is_symlink() else
+                ('directory',) if p.is_dir() else ('file', p.read_bytes())
+                for p in root.rglob('*')}
+
+    def test_policy_rejects_destination_leaf_symlinks_before_any_write(self):
+        for leaf in ('theme.css', 'manifest.json', 'appearance.json'):
+            for inside in (False, True):
+                with self.subTest(leaf=leaf, target_inside_vault=inside), tempfile.TemporaryDirectory() as tmp:
+                    root=pathlib.Path(tmp);policy,other,registry,pref=self.fixture(root)
+                    pref.write_text('{"followOmarchyColors":true}')
+                    directory=policy/'.obsidian/themes/Omarchy';directory.mkdir(parents=True)
+                    sentinel=(policy if inside else root)/'untouched-note.json'
+                    sentinel.write_bytes(b'{"keep":"sentinel"}')
+                    destination=policy/'.obsidian/appearance.json' if leaf=='appearance.json' else directory/leaf
+                    destination.symlink_to(sentinel)
+                    before=self.destination_state(policy)
+                    with mock.patch.object(build,'VAULTS',registry):
+                        build.install('must not write policy vault',policy)
+                    self.assertEqual(sentinel.read_bytes(),b'{"keep":"sentinel"}')
+                    self.assertEqual(self.destination_state(policy),before)
+                    self.assertFalse(build.policy_allows(policy))
+                    self.assertEqual((other/'.obsidian/themes/Omarchy/theme.css').read_text(),'must not write policy vault')
+
+    def test_policy_rejects_symlinked_or_non_directory_destination_parents(self):
+        for relative in ('.obsidian', '.obsidian/themes', '.obsidian/themes/Omarchy'):
+            for kind in ('inside-link','outside-link','regular-file'):
+                with self.subTest(component=relative,kind=kind), tempfile.TemporaryDirectory() as tmp:
+                    root=pathlib.Path(tmp);policy,other,registry,pref=self.fixture(root)
+                    pref.write_text('{"followOmarchyColors":true}')
+                    component=policy/relative;component.parent.mkdir(parents=True,exist_ok=True)
+                    if kind=='regular-file':
+                        # For .obsidian, move the preference tree out of the way.
+                        if component.exists(): component.rename(root/'old-config')
+                        component.write_text('untouched parent sentinel')
+                    else:
+                        target=(policy if kind=='inside-link' else root)/'redirect'
+                        if component.exists(): component.rename(target)
+                        else: target.mkdir()
+                        component.symlink_to(target,target_is_directory=True)
+                    before=self.destination_state(root)
+                    # Limit registry to the policy vault to assert the entire fixture unchanged.
+                    with mock.patch.object(build,'vault_paths',return_value=[policy]):
+                        build.install('denied',policy)
+                    self.assertEqual(self.destination_state(root),before)
+                    self.assertFalse(build.policy_allows(policy))
+
+    def test_no_flag_retains_legacy_install_behavior(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=pathlib.Path(tmp);policy,other,registry,pref=self.fixture(root)
+            pref.write_text('{"followOmarchyColors":false}')
+            before=pref.read_bytes()
+            with mock.patch.object(build,'VAULTS',registry):
+                build.install('legacy explicit install')
+            for vault in (policy,other):
+                self.assertEqual((vault/'.obsidian/themes/Omarchy/theme.css').read_text(),'legacy explicit install')
+            self.assertEqual(pref.read_bytes(),before)

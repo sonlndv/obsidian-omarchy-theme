@@ -18,6 +18,7 @@ import json
 import os
 import pathlib
 import re
+import stat
 import sys
 import tempfile
 
@@ -217,6 +218,30 @@ def build(out_dir, colors_path=None):
     return colors, body
 
 
+def policy_destinations_safe(vault):
+    """Validate every existing component of the three authorized write paths.
+
+    Reject even in-vault links: a linked note is not a theme/settings destination.
+    This preflight does not eliminate concurrent filesystem replacement races.
+    """
+    if vault.is_symlink():
+        return False
+    for relative in (pathlib.Path(".obsidian/themes") / THEME / "theme.css",
+                     pathlib.Path(".obsidian/themes") / THEME / "manifest.json",
+                     pathlib.Path(".obsidian/appearance.json")):
+        current = vault
+        for index, component in enumerate(relative.parts):
+            current = current / component
+            try:
+                mode = current.lstat().st_mode
+            except FileNotFoundError:
+                continue
+            is_leaf = index == len(relative.parts) - 1
+            if not (stat.S_ISREG(mode) if is_leaf else stat.S_ISDIR(mode)):
+                return False
+    return True
+
+
 def policy_allows(vault):
     """Read only this companion's boolean opt-in; all unsafe inputs deny."""
     try:
@@ -224,9 +249,8 @@ def policy_allows(vault):
         target = vault / ".obsidian/plugins/omarchy-writing/data.json"
         if not target.is_file() or not target.resolve(strict=True).is_relative_to(root):
             return False
-        for destination in (vault / ".obsidian/themes" / THEME, vault / ".obsidian/appearance.json"):
-            if not destination.resolve().is_relative_to(root):
-                return False
+        if not policy_destinations_safe(vault):
+            return False
         data = json.loads(target.read_text())
         return isinstance(data, dict) and data.get("followOmarchyColors") is True
     except (OSError, ValueError, RuntimeError):
