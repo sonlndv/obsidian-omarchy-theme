@@ -2,9 +2,21 @@
 
 Mounty does not require a rainbow graph. Colour is a small vocabulary for navigating notes, not a different paint for every folder. The full palette is available; it is not a requirement to use every accent together.
 
-## The note-group system
+## User-chosen categories with Mounty-tool
 
-Use one axis: **the note's role in your workflow**. Start with no custom Groups; add a colour only when it answers a useful question.
+The optional [Mounty-tool plugin](https://github.com/sonlndv/Mounty-tool) can define meaningful categories and dark/light colours, then manually assign **one** category to an explicitly chosen note using the portable `mounty-graph` property. For example:
+
+```yaml
+mounty-graph: restaurant
+```
+
+`note` uses cyan by default; `restaurant` can use a colour you choose. Choose one useful axis (for example note kind) and keep each colour's meaning consistent. There is no hard category-count cap: start with a restrained palette and add only distinctions you use. No automatic classification, tags or bulk migration are needed.
+
+The tool previews native global Graph rules before explicit Apply, placing category rules ahead of overlapping older Groups while preserving all other rules/order and forces/zoom. Property values match whole categories, not partial words. Choose/apply the appropriate scheme after a dark/light change. Removing a category does not bulk-rewrite notes. See the tool's current README for exact UI, compatibility checks and removal behavior; the CSS theme does none of these writes.
+
+## Optional manual workflow-role example
+
+Without the tool, you may still use a simple native-Group recipe. This example uses **the note's role in your workflow**, not a mandatory taxonomy. Start with no custom Groups; add a colour only when it answers a useful question.
 
 | Meaning | Rule in the optional example | Dark | Light |
 | --- | --- | --- | --- |
@@ -12,7 +24,7 @@ Use one axis: **the note's role in your workflow**. Start with no custom Groups;
 | Active work requiring attention | Deliberate `tag:#active` Group | peach `#f5a67d` | peach `#96502a` |
 | Sources/reference material | Deliberate `tag:#reference` Group | mint `#83d5b4` | mint `#22684e` |
 
-Keep at most **three simultaneous note-group colours**, including the default. More colours need another real distinction, not another available swatch. A folder name by itself is not a reason for a new colour. Completed work does not remain peach merely because it lives in a Projects folder.
+For this small workflow example, keep **three simultaneous note-group colours**, including the default. This is a recommended starting palette, not a limit on user-defined categories. More colours need another real distinction, not another available swatch. A folder name by itself is not a reason for a new colour. Completed work does not remain peach merely because it lives in a Projects folder.
 
 ### Rules and precedence
 
@@ -31,6 +43,6 @@ Lilac and stone are **not** extra arbitrary topic colours in the three-colour no
 
 ## What Mounty never does automatically
 
-The theme and companion do not create taxonomy, classify notes, write tags, change your `graph.json`, add Groups, or alter graph physics/zoom. The screenshots use a labelled synthetic vault with manually prepared example Groups. Applying this recipe to a real vault is an explicit user choice; existing Groups and note data remain untouched.
+The CSS theme never creates taxonomy, classifies notes, writes tags/properties, changes `graph.json`, adds Groups or alters graph physics/zoom. The historical writing-only0.4.1 companion also does none of those writes. Mounty-tool is different: only explicit assign/clear changes the chosen note property, and only confirmed Apply/removal changes its managed native rules. It does not automatically classify or bulk-edit notes, and it preserves unrelated Groups/physics/zoom. The retained theme screenshots show manually prepared synthetic example Groups, not automatic classification.
 
 A smaller palette is deliberate: each additional colour must earn a clear, stable meaning.

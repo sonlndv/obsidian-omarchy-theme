@@ -1,4 +1,4 @@
-# Optional migration to Mounty / Mounty Zen
+# Optional migration to Mounty / Mounty-tool
 
 **Staying on Omarchy is fully supported.** At a matching release, Omarchy and
 Mounty have byte-identical CSS and the same appearance/capabilities. There is no
@@ -23,19 +23,19 @@ presentation choice; this guide executes no migration or install.
 not submitted or approved. Only after actual approval/publication, verify its
 name/version in the directory before using Manage themes to install it. Product
 source and manual releases are at https://github.com/sonlndv/Mounty and
-https://github.com/sonlndv/Mounty-Zen . These are not directory approval links.
+https://github.com/sonlndv/Mounty-tool . These are not directory approval links.
 
-## Plugin: Mounty Zen, the same ID and preferences
+## Plugin: Mounty-tool, the same ID and preferences
 
-The optional plugin product/display name is Mounty Zen. Keep the stable folder
+Mounty Zen was renamed to **Mounty-tool** as its general tools home; Zen is retained as a writing feature. Use the [current tool source/releases](https://github.com/sonlndv/Mounty-tool), not the original repository's historical writing-only0.4.1 snapshot. Keep the stable folder
 and ID `omarchy-writing`, existing `data.json`, settings keys and hotkeys.
 
 1. Disable the existing manual Omarchy Writing / Mounty Writing / Mounty Zen
    companion before replacing its files.
 2. Replace `main.js`, `styles.css`, `manifest.json` (and documentation) in the
    SAME `.obsidian/plugins/omarchy-writing/` folder using the reviewed package.
-   Preserve `data.json`; do not create a `mounty-zen` folder or another ID.
-3. Re-enable Mounty Zen explicitly and verify its available version. A source
+   Preserve `data.json`; do not create a `mounty-zen` / `mounty-tool` plugin folder or another ID.
+3. Re-enable Mounty-tool explicitly and verify its available version. A source
    archive, uploaded release or staged file is not activation.
 
 A future official-plugin upgrade route is available only after actual directory
@@ -46,6 +46,10 @@ The theme never auto-installs the optional plugin. Zen starts off; command IDs
 remain `omarchy-writing:toggle-zen`, `omarchy-writing:toggle-typewriter` and
 `omarchy-writing:open-writing-tools`, with the same pen ribbon and no prebound
 hotkeys. Enable native Outline/Backlinks yourself if wanted.
+
+## Graph categories are opt-in tool actions
+
+Installing/renaming the tool does not retag notes or convert the older active/reference recipe. Define your own categories and dark/light colours, manually assign one `mounty-graph` property to a chosen Markdown note, and preview/confirm native Graph colour application. The note body and other property values are preserved, but Obsidian may normalize frontmatter formatting. Existing category properties/native rules remain ordinary vault data after disabling the plugin; remove only tool-owned rules explicitly if desired. Read the current tool README for unsupported-engine, deletion, concurrency and rollback handling. This guide does not run those actions.
 
 ## Desktop Omarchy hook: review before a name switch
 

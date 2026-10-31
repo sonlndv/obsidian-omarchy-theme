@@ -12,16 +12,17 @@ same appearance/features as Mounty at a matching release. No migration is needed
 to get this design. Root/updater metadata is **Omarchy 1.7.1**; the explicit
 manual package is **Mounty 1.7.1**.
 
-**New Mounty and Mounty Zen community listings are planned, not submitted or
+**New Mounty and Mounty-tool community listings are planned, not submitted or
 approved.** Until a listing/version is actually available, use the reviewed
 manual packages when released. See [optional migration](docs/MIGRATING-TO-MOUNTY.md) and the
 [listing/source-export guide](docs/COMMUNITY-LISTINGS.md).
 
 Product homes: **[Mounty theme](https://github.com/sonlndv/Mounty)** and
-**[Mounty Zen plugin](https://github.com/sonlndv/Mounty-Zen)**. Mounty owns CSS
-appearance; Zen adds optional commands, saved preferences and editor behaviour
-that a theme alone cannot provide. Static width/title styling is CSS; its
-interactive controls and persistence belong in Zen. The theme works alone and
+**[Mounty-tool plugin](https://github.com/sonlndv/Mounty-tool)**. Mounty owns CSS
+appearance; the tool adds manual graph-category assignment, configurable colours,
+commands, saved preferences and editor behaviour a theme alone cannot provide.
+Zen is a writing feature within the tool. Static width/title styling is CSS; its
+interactive controls and persistence belong in the tool. The theme works alone and
 never auto-installs the plugin. GitHub publication is not official listing approval.
 
 ## See it in Obsidian
@@ -44,7 +45,7 @@ These are real Obsidian captures, not mockups. All notes are synthetic. The grap
 - **A meaningful graph.** Native semantic colours and an optional three-colour Group recipe. No automatic taxonomy, note rewriting or graph-physics changes.
 - **Scoped compatibility styling.** File explorer/Outline indicators and existing Maps, Note Toolbar, Omnisearch, QuickAdd and TaskNotes styling. See version-specific [compatibility notes](COMPATIBILITY.md), not a promise about every plugin or snippet.
 
-**The theme works on its own.** Mounty Zen is an optional companion, not a requirement for ordinary reading or emphasis colours.
+**The theme works on its own.** Mounty-tool is optional, not a requirement for ordinary reading, emphasis colours or the native graph.
 
 ## Install or update
 
@@ -62,15 +63,19 @@ The package's manifest name matches its folder. Do not copy the root Omarchy man
 
 **Already using an Omarchy desktop hook?** Review/update it before switching to Mounty. A legacy bulk hook can write/select Omarchy again. Use the deliberate policy setup below rather than assuming the old hook protects your selection.
 
-### Optional companion: Mounty Zen 0.4.1
+### Optional plugin: Mounty-tool
 
-Use **omarchy-writing-0.4.1.zip** and the [companion guide](companion/README.md). The stable ID/folder remains **omarchy-writing**.
+Use the independent [Mounty-tool repository and Releases](https://github.com/sonlndv/Mounty-tool). It is now the current home for graph-category and Zen/writing functions and has its own release cycle. The technical ID/folder remains **omarchy-writing**.
+
+The original **omarchy-writing-0.4.1.zip** and [companion source](companion/README.md) remain a historical writing-only Mounty Zen snapshot. They do not contain the new graph-category function. Existing tags/assets are preserved, not replaced.
 
 For an upgrade, disable the companion, replace `main.js`, `styles.css` and `manifest.json` in the same folder, retain `data.json`, then explicitly re-enable it. Do not create a second plugin ID for the new display name. The theme updater does not install, update or enable the companion.
 
 ## Writing tools, when you want them
 
-Click the pen ribbon or use **Mounty Zen: Open writing tools**. The native menu provides Zen, optional typewriter editing, Outline and Backlinks. Opening a pane is explicit and exits Zen first; no pane opens at startup. There are no default hotkeys—assign your own in Settings → Hotkeys if wanted.
+The current Mounty-tool retains Zen, typewriter and writing preferences; see its README for current commands/settings. The menu and captures below document the preserved **Mounty Zen0.4.1 writing-only snapshot**, not the new graph tool UI.
+
+In that historical snapshot, click the pen ribbon or use **Mounty Zen: Open writing tools**. The native menu provides Zen, optional typewriter editing, Outline and Backlinks. Opening a pane is explicit and exits Zen first; no pane opens at startup. There are no default hotkeys—assign your own in Settings → Hotkeys if wanted.
 
 ![Mounty Zen's native menu offers Enter Zen, Typewriter, Open Outline and Open Backlinks.](docs/images/mounty-writing-tools.png)
 
@@ -81,6 +86,8 @@ Zen starts OFF and hides surrounding navigation without collapsing panels or sav
 Optional preferences also cover narrow/standard/wide Markdown width and hiding the inline filename title. Existing preferences are preserved during an update; the companion does not read/write note content, Graph Groups, other plugin settings, hotkeys or layout.
 
 ## Follow desktop Omarchy colours—optional
+
+The same saved opt-in key is retained in Mounty-tool; use its current settings. The historical0.4.1 companion calls its section Mounty Zen.
 
 The default is **fixed Mounty colours, Follow Omarchy colours OFF**. In **Settings → Mounty Zen**, OFF immediately protects the fixed dark/light emphasis, headings and graph roles, including when loaded CSS was generated from a live Omarchy palette. It affects only the recognized theme, not another selected theme.
 
@@ -108,7 +115,9 @@ The wrapper retains `$HOME/code/obsidian-omarchy-theme/bin/build.py`; no reposit
 
 ## A small, rule-based graph palette
 
-Use one axis: **the note's role in your workflow**. Start with only three note colours:
+Pick one meaningful axis and keep its colour meanings consistent. For user-defined note kinds such as `note` or `restaurant`, use Mounty-tool to configure colours and manually assign a scalar `mounty-graph` property, then preview/apply its native Graph rules. Existing tags need not change. This is optional plugin behaviour, never CSS classification.
+
+The older manual **workflow-role** recipe remains one optional example. Start small; more categories should represent deliberate distinctions, not an arbitrary per-folder rainbow. Its three-colour example is:
 
 | Meaning | Optional native Group rule | Dark / light |
 | --- | --- | --- |
