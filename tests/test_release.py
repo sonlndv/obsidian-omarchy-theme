@@ -10,7 +10,7 @@ class ReleaseTest(unittest.TestCase):
     def test_normal_release_and_compat(self):
         with tempfile.TemporaryDirectory() as tmp:
             _, css = build.build(tmp)
-            self.assertEqual(json.loads((pathlib.Path(tmp)/'manifest.json').read_text())['version'], '1.7.0')
+            self.assertEqual(json.loads((pathlib.Path(tmp)/'manifest.json').read_text())['version'], '1.7.1')
             for scheme in ('dark', 'light'):
                 self.assertEqual(variables(css, scheme), variables(build.sonwork_css(), scheme))
             compat = (build.PARTS/'plugin-compat.css').read_text()

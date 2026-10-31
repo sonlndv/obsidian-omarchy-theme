@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.7.1 / Mounty Zen 0.4.1
+
+- Keep Omarchy as a supported equal theme alias with byte-identical Mounty CSS;
+  changing names is optional and no accepted design requires migration.
+- Rename the optional plugin display name to Mounty Zen, retaining its ID,
+  preferences, commands and JavaScript/CSS runtime bytes.
+- Prepare separate deterministic, root-ready theme/plugin source exports,
+  optional migration instructions and owner submission/listing copy.
+- New listings are planned, not submitted or approved; no runtime behavior,
+  native-test, publication or activation claim accompanies this amendment.
+
 ## Mounty 1.7.0 / Mounty Writing 0.4.0
 
 - Brand the manual theme Mounty and companion Mounty Writing, retaining the
