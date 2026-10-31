@@ -1,5 +1,7 @@
 # Mounty Zen 0.4.1
 
+> **Historical writing-only snapshot (0.4.1).** Current plugin functions and releases are maintained independently at [Mounty-tool](https://github.com/sonlndv/Mounty-tool). Zen is retained inside that broader tool. This preserved source does not include graph categories; its old name/version/bytes are not relabelled as the new build.
+
 Optional writing controls for **Mounty and Omarchy equally**: Zen, optional typewriter scrolling,
 Markdown width/title preferences, and a small native writing-tools menu. The
 theme works without this companion. It uses only Obsidian's provided SDK

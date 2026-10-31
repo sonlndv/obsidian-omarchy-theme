@@ -4,10 +4,10 @@ A calm, colourful Obsidian theme for writing and connected thinking. Dark and li
 
 ## One principle: theme first, optional behaviour second
 
-**Mounty is the theme. [Mounty Zen](https://github.com/sonlndv/Mounty-Zen) is the optional plugin.**
+**Mounty is the theme. [Mounty-tool](https://github.com/sonlndv/Mounty-tool) is the optional plugin.**
 
 - Mounty owns appearance that a CSS theme can provide: colours, typography, spacing, readable width, formatting and graph styling.
-- Mounty Zen owns additional behaviour a theme alone cannot provide: commands and toggles, saved writing preferences, and focused-cursor typewriter scrolling.
+- Mounty-tool owns additional behaviour a theme alone cannot provide: manual graph-category assignment and configurable colour rules, commands/toggles, saved writing preferences and focused-cursor typewriter scrolling. Zen is one writing feature inside the tool.
 - The plugin's supporting CSS belongs to those optional behaviours; it does not replace the theme or make basic appearance depend on a plugin.
 
 **Mounty works on its own.** Installing the theme never installs or enables a plugin. Omarchy remains a supported community alias: at matching releases its CSS is byte-identical, so switching names is optional.
@@ -25,7 +25,7 @@ These are real retained Obsidian desktop captures of the unchanged design, not m
 - **Geist prose; Space Mono headings and code.** Original Latin/Vietnamese fonts are embedded for offline use, with their OFL notices. Explicit user font overrides still apply.
 - **Selected emphasis:** peach bold and inline code, lilac italic, mint underline, slate strikethrough and cyan links. Fenced code and heading/link semantics remain separate.
 - **Comfortable reading:** neutral dark/light surfaces, preferred text-size scaling, about 68ch readable width and 1.7 leading, without replacing Obsidian's native layout.
-- **A rule-based graph:** ordinary notes cyan, optional active work peach and references mint. Follow the [graph colour principles](docs/GRAPH-COLOURS.md); no automatic tags, Groups, taxonomy or physics changes.
+- **A rule-based graph:** ordinary notes cyan; optional active/reference Groups are one example, not a fixed taxonomy. Mounty-tool can instead assign one `mounty-graph` category per chosen note and explicitly apply user-chosen colours. Follow the [graph colour principles](docs/GRAPH-COLOURS.md); the CSS theme never creates tags, properties, Groups or physics changes.
 
 ## Install Mounty 1.7.1
 
@@ -35,7 +35,7 @@ Community submissions are **planned, not submitted or approved**. Until Obsidian
 
 For a manual installation, place `theme.css`, `manifest.json`, `OFL-Geist.txt`, `OFL-SpaceMono.txt` and `LICENSE` directly under `<vault>/.obsidian/themes/Mounty/`, then select **Mounty** in Settings → Appearance. The manifest and folder names must match. Keep the existing Omarchy theme alongside as a fallback; do not rename only its manifest or reset preferences.
 
-Changing names is optional. See the [Omarchy-to-Mounty guide](docs/MIGRATING-TO-MOUNTY.md). For optional interactive writing tools, install [Mounty Zen](https://github.com/sonlndv/Mounty-Zen) separately.
+Changing names is optional. See the [Omarchy-to-Mounty guide](docs/MIGRATING-TO-MOUNTY.md). For optional graph-category and writing functions, install [Mounty-tool](https://github.com/sonlndv/Mounty-tool) separately. It has its own update/release cycle; the theme remains useful without it.
 
 ## Privacy, compatibility and rollback
 

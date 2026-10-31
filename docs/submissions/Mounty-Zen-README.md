@@ -1,5 +1,7 @@
 # Mounty Zen
 
+> **Historical writing-only snapshot (0.4.1).** Current plugin functions and releases are maintained independently at [Mounty-tool](https://github.com/sonlndv/Mounty-tool). Zen is retained inside that broader tool. This preserved source does not include graph categories; its old name/version/bytes are not relabelled as the new build.
+
 Optional writing behaviour for [Mounty](https://github.com/sonlndv/Mounty) and its supported Omarchy alias: Zen commands, typewriter cursor centering and saved writing preferences.
 
 ## One principle: behaviour, not a second theme
