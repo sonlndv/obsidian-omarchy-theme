@@ -9,6 +9,14 @@ approved. The maintainer submits and manages the entries through the community
 directory. Source archives do not create public repositories or directory entries.
 README changes do not change owner-edited directory fields.
 
+## Product repositories and responsibility
+
+- **Mounty theme:** https://github.com/sonlndv/Mounty . CSS appearance, fonts, colour, spacing, formatting and graph styling; it works without plugins.
+- **Mounty Zen plugin:** https://github.com/sonlndv/Mounty-Zen . Optional commands, toggles, saved preferences and cursor-centering behaviour a CSS theme alone cannot provide. Plugin styles support those behaviours; they are not a replacement theme.
+- **Omarchy:** the existing supported community alias, with byte-identical theme CSS at matching releases. Moving to the Mounty name remains optional.
+
+Use the corresponding product repository for each official submission, not the original generator/Omarchy root. The GitHub repositories are separate from the still-pending Obsidian directory entries.
+
 Runtime vs submission: Mounty Zen works offline with no runtime account, network,
 shell, telemetry or dependency installer. Submission requires the owner's
 Obsidian account and GitHub linking; the plugin does not request those grants.
@@ -114,9 +122,10 @@ No source path/repository rename is required for existing users or hooks.
    unobfuscated CSS/CommonJS JS; no transpiler, build or external dependency is
    required in these exported source roots. Their READMEs contain attribution,
    install/privacy/limits/release instructions and only included local assets.
-3. Son prepares the two independent publicly readable source repositories (no
-   new URL is claimed here) from the appropriate exports. Keep original author
-   attribution, MIT LICENSE, and applicable font copyright/full OFL notices.
+3. The separate product sources are at https://github.com/sonlndv/Mounty and
+   https://github.com/sonlndv/Mounty-Zen . Verify their default branches and release
+   assets before submitting. Keep original author attribution, MIT LICENSE and
+   applicable font copyright/full OFL notices.
    Theme root includes manifest.json, README.md, LICENSE, screenshot.png and CSS;
    plugin root includes manifest.json, README.md, LICENSE and runtime JS/CSS.
 4. After review, create each release tag **exactly its manifest version**: 1.7.1

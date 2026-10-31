@@ -21,8 +21,9 @@ presentation choice; this guide executes no migration or install.
 
 **Community Mounty installation is conditional:** the new listing is planned,
 not submitted or approved. Only after actual approval/publication, verify its
-name/version in the directory before using Manage themes to install it. There
-is no new listing/repository URL to follow in this source amendment.
+name/version in the directory before using Manage themes to install it. Product
+source and manual releases are at https://github.com/sonlndv/Mounty and
+https://github.com/sonlndv/Mounty-Zen . These are not directory approval links.
 
 ## Plugin: Mounty Zen, the same ID and preferences
 
