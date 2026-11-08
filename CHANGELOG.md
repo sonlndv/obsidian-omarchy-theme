@@ -1,38 +1,68 @@
 # Changelog
 
-## Unreleased
+## 1.8.0 / Mounty 1.8.0
 
 ### Opt-in Mounty · Flexoki palette
 
 - Add a colour-only "Mounty · Flexoki" variant for dark and light, using
   kepano/flexoki-obsidian values (commit 527685bc) vendored in `src/flexoki/`
-  with the upstream MIT notice retained and embedded in the CSS.
+  with the upstream MIT notice retained and embedded in the CSS (Flexoki by
+  Steph Ango, https://stephango.com/flexoki).
 - Two toggles, no file edits: a Style Settings `class-toggle` (`mounty-flexoki`,
-  with command) and a generated `snippets/mounty-flexoki.css` fallback.
-- While enabled it takes precedence over the companion's fixed-palette
-  protection and `--live` colours; the default palette is unchanged when off.
-- Mounty's role table is shared (`semantic_roles`) and the default bytes before
-  the appended layer are identical. New `tests/test_flexoki.py`; CI also checks
-  the generated snippet.
+  with command) and a generated `snippets/mounty-flexoki.css` fallback, which
+  the Mounty source export now includes.
+- The Mounty palette stays the default and its bytes before the appended layer
+  are frozen. While enabled the variant takes precedence over the companion's
+  fixed-palette protection and `--live` colours.
+- Flexoki's light cyan (4.43:1) and green (4.39:1) are kept as published, just
+  under 4.5:1 on paper; dark accents pass. Faint text uses Flexoki base-600/500.
+- Mounty's role table is shared (`semantic_roles`). New `tests/test_flexoki.py`;
+  CI also checks the generated snippet.
 
-### Emphasis, headings, quotes and graph
+### Headings and quotes
 
-- Colour Markdown emphasis from the palette in reading view and Live Preview:
-  bold and inline code peach, italic lavender, underline mint, strikethrough
-  faint grey (new `src/parts/emphasis.css`). Formatting inside headings and
-  links keeps the heading or link colour.
-- H4 mint; H4–H6 bold (700), with heading emphasis following heading weight.
-  H1–H3 colours, fonts and sizes unchanged.
+- H4 mint; H4–H6 bold (700), with emphasis inside headings following the
+  heading weight in reading view and Live Preview. H1–H3 colours, fonts and
+  sizes unchanged.
 - Blockquotes get a cyan border and faint cyan tint. Note-level H4 and quote
-  border derive locally so companion fixed-palette protection cannot pin the
-  older colours.
-- Graph nodes use the palette roles: cyan notes, peach focus, mint tags,
-  lavender attachments, warm grey unresolved.
+  border derive locally so the companion's frozen 0.4.1 fixed palette cannot
+  pin the previous colours.
 - `--live` palettes gain matching underline, inline-code, strikethrough and
-  quote-tint roles. Omarchy 1.6.2 manifest and installers unchanged; the CSS
-  header now names Mounty as a compatible Omarchy distribution.
+  quote-tint roles.
 - New `tests/test_backport.py` freezes the default build and accepted roles;
-  graph, hook-policy and Sonwork tests follow the new roles.
+  hook-policy and Mounty tests record the frozen companion delta. The companion
+  runtime is unchanged at 0.4.1.
+
+## 1.7.1 / Mounty Zen 0.4.1
+
+- Keep Omarchy as a supported equal theme alias with byte-identical Mounty CSS;
+  changing names is optional and no accepted design requires migration.
+- Rename the optional plugin display name to Mounty Zen, retaining its ID,
+  preferences, commands and JavaScript/CSS runtime bytes.
+- Prepare separate deterministic, root-ready theme/plugin source exports,
+  optional migration instructions and owner submission/listing copy.
+- New listings are planned, not submitted or approved; no runtime behavior,
+  native-test, publication or activation claim accompanies this amendment.
+
+## Mounty 1.7.0 / Mounty Writing 0.4.0
+
+- Brand the manual theme Mounty and companion Mounty Writing, retaining the
+  community Omarchy updater name, repository, hook source path, plugin ID,
+  preference schema and commands. No registry migration is implied.
+- Cover native Live Preview `<u>` and formatted-link inheritance; document CM
+  flat combined-emphasis precedence and provide a parent-callable native probe.
+- Add exact peach bold/inline-code, lilac italic, mint underline and slate
+  strikethrough roles; retain heading/link semantics, native sizing and fonts.
+- Expose cyan/mint/lilac/peach/stone graph roles with scoped 0.8 unresolved opacity and ≥3:1 composite contrast;
+  leave Groups/data/physics untouched.
+- Package a matching Mounty folder/manifest with CSS identical to the compatible
+  root Omarchy distribution, using a deterministic public-file allowlist.
+- Keep the approved hook wrapper bytes. Scoped ON installs retain a selected
+  literal Mounty or Omarchy destination; unsafe/unsupported selections deny.
+- Update installation, exact-vault hook and rollback guides; add real dark/light,
+  writing-menu and Zen pictures with synthetic content.
+- Document and test a small graph system: ordinary cyan, active peach, reference
+  mint, with first-matching-Group precedence; no automatic taxonomy or real-group writes.
 
 ## 1.6.2 / Omarchy Writing 0.3.0
 

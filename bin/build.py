@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the Omarchy Obsidian theme.
+"""Build Mounty with the compatible Omarchy updater identity.
 
 By default uses the accepted Sonwork dark/light palette and typography and
 writes both schemes to theme.css plus manifest.json in the repository root.
@@ -183,7 +183,7 @@ def select_theme(vault, name):
 def manifest(name):
     return json.dumps({
         "name": name,
-        "version": "1.6.2",
+        "version": "1.8.0",
         "minAppVersion": "1.0.0",
         "author": "Le Son",
     }, indent=2) + "\n"
@@ -233,7 +233,7 @@ def build(out_dir, colors_path=None):
     return colors, body
 
 
-def policy_destinations_safe(vault):
+def policy_paths_safe(vault, relatives):
     """Validate every existing component of the three authorized write paths.
 
     Reject even in-vault links: a linked note is not a theme/settings destination.
@@ -241,9 +241,7 @@ def policy_destinations_safe(vault):
     """
     if vault.is_symlink():
         return False
-    for relative in (pathlib.Path(".obsidian/themes") / THEME / "theme.css",
-                     pathlib.Path(".obsidian/themes") / THEME / "manifest.json",
-                     pathlib.Path(".obsidian/appearance.json")):
+    for relative in relatives:
         current = vault
         for index, component in enumerate(relative.parts):
             current = current / component
@@ -257,19 +255,43 @@ def policy_destinations_safe(vault):
     return True
 
 
-def policy_allows(vault):
-    """Read only this companion's boolean opt-in; all unsafe inputs deny."""
+def policy_destinations_safe(vault, theme=THEME):
+    if theme not in (THEME, "Mounty"):
+        return False
+    return policy_paths_safe(vault, (
+        pathlib.Path(".obsidian/themes") / theme / "theme.css",
+        pathlib.Path(".obsidian/themes") / theme / "manifest.json",
+        pathlib.Path(".obsidian/appearance.json")))
+
+
+def policy_theme(vault):
+    """Return only a recognized opted-in destination, or deny without writes."""
     try:
         root = vault.resolve(strict=True)
         target = vault / ".obsidian/plugins/omarchy-writing/data.json"
         if not target.is_file() or not target.resolve(strict=True).is_relative_to(root):
-            return False
-        if not policy_destinations_safe(vault):
-            return False
+            return None
         data = json.loads(target.read_text())
-        return isinstance(data, dict) and data.get("followOmarchyColors") is True
+        if not isinstance(data, dict) or data.get("followOmarchyColors") is not True:
+            return None
+        appearance = vault / ".obsidian/appearance.json"
+        if not policy_paths_safe(vault, (pathlib.Path(".obsidian/appearance.json"),)):
+            return None
+        selected = THEME
+        if appearance.exists():
+            cfg = json.loads(appearance.read_text())
+            if not isinstance(cfg, dict):
+                return None
+            selected = cfg.get("cssTheme", THEME)
+        if selected not in (THEME, "Mounty") or not policy_destinations_safe(vault, selected):
+            return None
+        return selected
     except (OSError, ValueError, RuntimeError):
-        return False
+        return None
+
+
+def policy_allows(vault):
+    return policy_theme(vault) is not None
 
 
 def registered_policy(vaults, policy_vault):
@@ -290,15 +312,18 @@ def install(body, policy_vault=None):
         if not v.exists():
             print(f"skip (missing): {v}")
             continue
-        # Re-read immediately before this vault's first mutation, after assembly.
-        if policy is not None and v.resolve() == policy and not policy_allows(v):
-            print("skip (policy off or unavailable)")
-            continue
-        d = v / ".obsidian" / "themes" / THEME
+        # Re-read preference, selection and actual paths after assembly.
+        name = THEME
+        if policy is not None and v.resolve() == policy:
+            name = policy_theme(v)
+            if name is None:
+                print("skip (policy off or unavailable)")
+                continue
+        d = v / ".obsidian" / "themes" / name
         d.mkdir(parents=True, exist_ok=True)
         (d / "theme.css").write_text(body)
-        (d / "manifest.json").write_text(manifest(THEME))
-        select_theme(v, THEME)
+        (d / "manifest.json").write_text(manifest(name))
+        select_theme(v, name)
         print(f"themed: {v}")
 
 

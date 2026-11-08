@@ -1,4 +1,4 @@
-# Plugin compatibility
+# Mounty compatibility
 
 The normal theme always includes `src/parts/plugin-compat.css`, independently
 of the companion. The following exact installed packages were exercised in
@@ -66,13 +66,91 @@ activation/review. Source/package creation does not establish activation, phone
 sync or physical iPhone/IME support. Main-window and older-SDK limitations remain;
 the missing native CLI filesystem endpoint is unchanged.
 
-## Mounty · Flexoki palette (unreleased)
+## Mounty 1.7.0 / Mounty Writing 0.4.0
 
-A colour-only layer is appended to `theme.css`, scoped to `body.mounty-flexoki`.
-The Style Settings contract (`class-toggle`, `addCommand`) was checked against
-obsidian-style-settings main at 8ecefa95. The `[data-ow-palette]` selector
-variants outrank the companion's fixed-palette protection, and the plain
-selectors outrank `.is-mobile.theme-dark` base overrides. The generated snippet
-uses `:root body.theme-*` with identical declarations. Plugin compatibility
-aliases consume the variant colours unchanged. This section records
-source/selector contracts, not native rendering evidence.
+The previous version sections above are historical evidence, not fresh acceptance
+of this refinement. Mounty's selected emphasis roles target native rendered
+strong/em/u/s/del/inline code and CM equivalents; fenced syntax, heading font/colour,
+cyan links, native preferred text size and plugin geometry remain separate. The
+measured source palette and original embedded font/OFL bytes are unchanged.
+The protected companion palette and default theme are tied by source-linked tests.
+Unresolved graph probes use scoped 0.8 opacity with the accepted stone base
+colour, retaining at least 3:1 composite contrast in both schemes. Native Groups
+still override node hues.
+
+The root updater manifest stays Omarchy, matching its folder/community entry.
+The explicit manual Mounty package has a Mounty manifest/folder and identical
+reviewed CSS. No native Mounty registry listing or repository move is claimed.
+Mounty Writing keeps ID/path `omarchy-writing`, commands and preference keys;
+legacy `--ow-theme-id: omarchy` and protected-palette attributes remain intact.
+The approved hook wrapper is byte-unchanged. Only the explicitly targeted policy
+vault follows its literal selected Mounty/Omarchy name; unsupported/malformed
+selection or unsafe destination fails closed before mutation. Existing legacy
+no-policy behavior remains, and path checks do not eliminate replacement races.
+
+Fresh synthetic Obsidian 1.14.5 checks cover both schemes, editing/reading,
+theme-only and protected companion over actual live-generated CSS: eight
+combinations and 80 computed-formatting checks, with unchanged note hashes.
+Native renderer data confirms first-Group-match precedence, the three-colour
+example, and unresolved alpha0.8/composite contrast in both schemes. Actual
+Geist/Space Mono faces, native menu/Exit and an OFF/ON/OFF cycle were observed;
+source-matched screenshots use only synthetic data. Publication and each
+real-vault activation remain separate from these fixture results. Main-window,
+older-SDK, physical-mobile/IME and remote-sync limitations remain; no shared
+CLI endpoint or host-hook installation is repaired by these tests.
+
+## Formatting review correction
+
+Live Preview native `<u>` under `.markdown-source-view.mod-cm6` uses the mint
+role, including when it is outside `.markdown-rendered`. Formatted links inherit
+cyan and headings inherit their existing heading role; `.cm-underline` is not
+a reason to paint a link mint. Theme and protected companion selectors match.
+
+CM flattens combined emphasis into `.cm-em.cm-strong`, so it is lilac in either
+source nesting order. Rendered `strong > em` is lilac and `em > strong` peach:
+the innermost element's role wins. Both retain native bold weight and italic
+style. CSS cannot recover nesting discarded by CM; no content parsing/rewrite
+or JS editor behavior is added.
+
+`tests/native_formatting_probe.cjs` is a read-only, identity-gated native DOM
+probe. The eight mode/scheme/layer combinations were executed in the synthetic
+fixture; an actual pre-fix stylesheet first reproduced the non-mint editor u,
+then the corrected source passed all 80 checks. See `tests/NATIVE-FORMATTING.md`.
+Unit/hosted-CI source and syntax checks do not themselves execute native Obsidian;
+fixture acceptance, publication and each actual-vault activation remain distinct.
+
+## 1.7.1 / Mounty Zen 0.4.1 — naming and source-export amendment
+
+Mounty and the supported community alias Omarchy have byte-identical CSS at this
+matching release; neither is a reduced or deprecated route. Switching names is
+optional. The optional plugin display name is Mounty Zen, retaining ID/folder
+`omarchy-writing`, preference keys and command IDs. Runtime main/styles, source
+layers, fonts, generated theme CSS and approved hook bytes remain unchanged.
+Earlier native 1.14.5 QA is historical evidence of those retained bytes, not new
+native execution, official listing acceptance, activation or mobile certification.
+New Mounty / Mounty Zen listings are planned, not submitted/approved. Minimum
+plugin version 1.5.0 remains inherited metadata rather than freshly tested support.
+See [migration](docs/MIGRATING-TO-MOUNTY.md) and [submission guide](docs/COMMUNITY-LISTINGS.md).
+
+## 1.8.0 — H4/quote roles and Mounty · Flexoki palette
+
+Mounty and Omarchy keep byte-identical CSS at 1.8.0. H4 (mint, 700), H5–H6
+(700) and the cyan quote border/tint are set on the note views
+(`.markdown-preview-view`, `.markdown-source-view.mod-cm6`) from the semantic
+underline and accent roles, so the companion's frozen 0.4.1 protection block,
+which still pins the earlier H4 and quote colours on `body`, does not reach
+notes. Tests record that exact companion delta rather than editing the
+companion runtime.
+
+A colour-only Flexoki layer is appended after the frozen default, scoped to
+`body.mounty-flexoki`. The Style Settings contract (`class-toggle`,
+`addCommand`) was checked against obsidian-style-settings main at 8ecefa95. The
+`[data-ow-palette]` selector variants outrank the companion's fixed-palette
+protection, and the plain selectors outrank `.is-mobile.theme-dark` base
+overrides. The generated snippet uses `:root body.theme-*` with identical
+declarations and also recolours other themes. Plugin compatibility aliases
+consume the variant colours unchanged. Retained native checks ran Obsidian
+1.14.4 on a synthetic vault: default pixels unchanged with the toggle off, class
+and snippet pixel-identical, and identical geometry and fonts with Flexoki on.
+They are not a per-vault activation claim; the Style Settings plugin UI, phone
+and graph canvas were not rendered.
