@@ -76,7 +76,15 @@ class HookPolicyTest(unittest.TestCase):
             block=re.search(r'body\.theme-'+scheme+r'\[data-ow-palette="sonwork"\]\s*\{([^}]+)\}',companion)
             self.assertIsNotNone(block)
             fixed=dict(re.findall(r'--([\w-]+):\s*([^;]+);',block.group(1)))
-            self.assertEqual(fixed,variables(build.sonwork_css(),scheme))
+            current = variables(build.sonwork_css(), scheme)
+            # Frozen companion palette predates the accepted semantic backport.
+            expected_delta = {
+                'dark': {'h4-color': ('#f0f4f7', '#83d5b4'), 'underline-color': (None, '#83d5b4'), 'blockquote-background-color': (None, 'rgba(57, 208, 252, 0.05)'), 'graph-node-focused': ('#f5b488', '#f5a67d'), 'inline-code-color': (None, '#f5a67d'), 'italic-color': ('#f0f4f7', '#c4b5fd'), 'graph-node-unresolved': ('#8aacc4', '#c7bca4'), 'graph-node': ('#65bff0', '#39d0fc'), 'blockquote-border-color': ('#2b2e32', '#39d0fc'), 'bold-color': ('#f0f4f7', '#f5a67d'), 'graph-node-attachment': ('#b7a1ef', '#c4b5fd'), 'strikethrough-color': (None, '#8a939e')},
+                'light': {'h4-color': ('#0b1421', '#22684e'), 'underline-color': (None, '#22684e'), 'blockquote-background-color': (None, 'rgba(0, 108, 172, 0.04)'), 'graph-node-focused': ('#9c470d', '#96502a'), 'inline-code-color': (None, '#96502a'), 'graph-node-tag': ('#20745b', '#22684e'), 'italic-color': ('#0b1421', '#6c4b99'), 'graph-node-unresolved': ('#527389', '#6e6044'), 'graph-node': ('#156da0', '#006cac'), 'blockquote-border-color': ('#b6bfc8', '#006cac'), 'bold-color': ('#0b1421', '#96502a'), 'graph-node-attachment': ('#7554aa', '#6c4b99'), 'strikethrough-color': (None, '#515c68')},
+            }
+            self.assertEqual({key: (fixed.get(key), current.get(key))
+                              for key in fixed.keys() | current.keys()
+                              if fixed.get(key) != current.get(key)}, expected_delta[scheme])
             self.assertNotIn('font-text-size',fixed)
         for source in (None,build.COLORS,build.LIGHT_COLORS):
             with tempfile.TemporaryDirectory() as tmp:

@@ -20,14 +20,20 @@ body {
   --h1-weight: 700;
   --h2-weight: 700;
   --h3-weight: 700;
-  --h4-weight: 400;
-  --h5-weight: 400;
-  --h6-weight: 400;
+  --h4-weight: 700;
+  --h5-weight: 700;
+  --h6-weight: 700;
   --inline-title-font: var(--font-monospace-theme);
   --inline-title-size: var(--h1-size);
   --inline-title-weight: 700;
   --bold-weight: 600;
   --code-size: 0.9em;
+}
+/* Note semantic roles inherit locally ahead of optional body palettes. */
+.markdown-preview-view,
+.markdown-source-view.mod-cm6 {
+  --h4-color: var(--underline-color);
+  --blockquote-border-color: var(--text-accent);
 }
 .markdown-preview-view,
 .markdown-source-view.mod-cm6 .cm-scroller {
@@ -60,4 +66,14 @@ body :focus-visible {
   padding-left: max(1rem, env(safe-area-inset-left, 0px));
   padding-right: max(1rem, env(safe-area-inset-right, 0px));
   padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+}
+
+/* Heading emphasis follows its heading weight, including native CM tokens.
+   Scope this to headings so body semantic weights remain native. */
+.markdown-rendered :is(h1, h2, h3, h4, h5, h6),
+.markdown-rendered :is(h1, h2, h3, h4, h5, h6) *,
+.markdown-source-view.mod-cm6 :is(.HyperMD-header-1, .HyperMD-header-2, .HyperMD-header-3, .HyperMD-header-4, .HyperMD-header-5, .HyperMD-header-6),
+.markdown-source-view.mod-cm6 :is(.HyperMD-header-1, .HyperMD-header-2, .HyperMD-header-3, .HyperMD-header-4, .HyperMD-header-5, .HyperMD-header-6) * {
+  --bold-weight: 700;
+  font-weight: 700;
 }

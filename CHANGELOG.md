@@ -1,5 +1,26 @@
 # Changelog
 
+## Unreleased
+
+### Emphasis, headings, quotes and graph
+
+- Colour Markdown emphasis from the palette in reading view and Live Preview:
+  bold and inline code peach, italic lavender, underline mint, strikethrough
+  faint grey (new `src/parts/emphasis.css`). Formatting inside headings and
+  links keeps the heading or link colour.
+- H4 mint; H4–H6 bold (700), with heading emphasis following heading weight.
+  H1–H3 colours, fonts and sizes unchanged.
+- Blockquotes get a cyan border and faint cyan tint. Note-level H4 and quote
+  border derive locally so companion fixed-palette protection cannot pin the
+  older colours.
+- Graph nodes use the palette roles: cyan notes, peach focus, mint tags,
+  lavender attachments, warm grey unresolved.
+- `--live` palettes gain matching underline, inline-code, strikethrough and
+  quote-tint roles. Omarchy 1.6.2 manifest and installers unchanged; the CSS
+  header now names Mounty as a compatible Omarchy distribution.
+- New `tests/test_backport.py` freezes the default build and accepted roles;
+  graph, hook-policy and Sonwork tests follow the new roles.
+
 ## 1.6.2 / Omarchy Writing 0.3.0
 
 - Add Follow Omarchy colours, default OFF, with marker-guarded fixed-palette
