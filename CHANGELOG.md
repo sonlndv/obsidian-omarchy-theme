@@ -28,7 +28,8 @@
   border derive locally so the companion's frozen 0.4.1 fixed palette cannot
   pin the previous colours.
 - `--live` palettes gain matching underline, inline-code, strikethrough and
-  quote-tint roles.
+  quote-tint roles. The live quote tint derives from the effective accent, so
+  fixed-palette protection restores it as well.
 - New `tests/test_backport.py` freezes the default build and accepted roles;
   hook-policy and Mounty tests record the frozen companion delta. The companion
   runtime is unchanged at 0.4.1.

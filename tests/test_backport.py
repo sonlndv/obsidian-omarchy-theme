@@ -69,8 +69,13 @@ class BackportTest(unittest.TestCase):
             self.assertEqual(v['inline-code-color'], palette['foreground'])
             self.assertEqual(v['strikethrough-color'], palette['dark_foreground'])
             self.assertEqual(v['blockquote-border-color'], palette['accent'])
-            for name in additions:
+            for name in additions - {'blockquote-background-color'}:
                 self.assertNotIn('var(', v[name])
+            # The quote tint follows the effective accent so fixed-palette
+            # protection also restores it; the accent itself stays literal.
+            self.assertEqual(v['blockquote-background-color'],
+                             f"color-mix(in srgb, var(--text-accent) {5 if scheme == 'dark' else 4}%, transparent)")
+            self.assertRegex(v['text-accent'], r'^#[0-9a-fA-F]{6}$')
             typography = (ROOT / 'src/sonwork/typography.css').read_text()
             local = re.search(r'\.markdown-preview-view,\s*\.markdown-source-view\.mod-cm6\s*\{([^}]+)\}', typography).group(1)
             self.assertIn('--h4-color: var(--underline-color);', local)
@@ -100,8 +105,10 @@ class BackportTest(unittest.TestCase):
                 block = lambda text: re.search(r'\.theme-' + other + r'\s*\{[^}]*\}', text).group()
                 self.assertEqual(block(first), block(normal))
                 self.assertEqual(variables(first, scheme)['text-accent'], '#123456')
-                for name in ('underline-color', 'inline-code-color', 'strikethrough-color', 'blockquote-background-color'):
+                for name in ('underline-color', 'inline-code-color', 'strikethrough-color'):
                     self.assertNotIn('var(', variables(first, scheme)[name])
+                self.assertEqual(variables(first, scheme)['blockquote-background-color'],
+                                 f"color-mix(in srgb, var(--text-accent) {5 if scheme == 'dark' else 4}%, transparent)")
                 self.assertEqual((root / 'first/manifest.json').read_bytes(), originals['manifest.json'])
                 _, restored = build.build(root / 'restored')
                 self.assertEqual(restored, normal)

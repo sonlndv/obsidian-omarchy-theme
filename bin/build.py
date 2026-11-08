@@ -129,7 +129,9 @@ def css(c, scheme):
         "background-modifier-border": alpha("muted", 0.35),
         "text-highlight-bg": c["selection"] if scheme == "light" else alpha("yellow", 0.25),
         "nav-item-background-active": mix_hex(c["selection"], c["muted"], 0.25),
-        "blockquote-background-color": alpha("accent", 0.04 if scheme == "light" else 0.05),
+        # Follow the effective accent so fixed-palette protection, which pins
+        # --text-accent but not this newer role, also restores the quote tint.
+        "blockquote-background-color": f"color-mix(in srgb, var(--text-accent) {4 if scheme == 'light' else 5}%, transparent)",
         "tag-background": alpha("accent", 0.10),
         "tag-border-color": alpha("accent", 0.35),
         "tag-border-width": "1px",

@@ -139,8 +139,10 @@ Mounty and Omarchy keep byte-identical CSS at 1.8.0. H4 (mint, 700), H5–H6
 (`.markdown-preview-view`, `.markdown-source-view.mod-cm6`) from the semantic
 underline and accent roles, so the companion's frozen 0.4.1 protection block,
 which still pins the earlier H4 and quote colours on `body`, does not reach
-notes. Tests record that exact companion delta rather than editing the
-companion runtime.
+notes. In `--live` palettes the quote tint is a `color-mix()` of the effective
+`--text-accent`, so when protection pins the accent it also restores the tint
+that the frozen block does not list. Tests record that exact companion delta
+and the restored tint rather than editing the companion runtime.
 
 A colour-only Flexoki layer is appended after the frozen default, scoped to
 `body.mounty-flexoki`. The Style Settings contract (`class-toggle`,

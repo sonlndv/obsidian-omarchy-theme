@@ -99,6 +99,28 @@ class HookPolicyTest(unittest.TestCase):
                 for scheme in ('dark','light'):
                     self.assertNotIn('ow-theme-id',variables(css,scheme))
 
+    def test_live_quote_tint_follows_protected_accent(self):
+        # The frozen companion palette does not pin the newer quote tint, so live
+        # palettes derive it from the effective accent: protection that restores
+        # --text-accent also restores the tint (Flexoki off, both schemes).
+        companion=(build.PARTS.parent.parent/'companion/styles.css').read_text()
+        for scheme,source,percent in (('dark',build.COLORS,5),('light',build.LIGHT_COLORS,4)):
+            with tempfile.TemporaryDirectory() as tmp:
+                path=pathlib.Path(tmp)/'live.toml'
+                path.write_text(source.read_text().replace(build.read_colors(source)['accent'],'#123456'))
+                _,css=build.build(pathlib.Path(tmp)/'out',path)
+            live=variables(css,scheme)
+            block=re.search(r'body\.theme-'+scheme+r'\[data-ow-palette="sonwork"\]\s*\{([^}]+)\}',companion)
+            fixed=dict(re.findall(r'--([\w-]+):\s*([^;]+);',block.group(1)))
+            default=variables(build.sonwork_css(),scheme)
+            self.assertEqual(live['blockquote-background-color'],f'color-mix(in srgb, var(--text-accent) {percent}%, transparent)')
+            self.assertEqual(live['text-accent'],'#123456')
+            self.assertNotIn('blockquote-background-color',fixed)
+            self.assertEqual(fixed['text-accent'],default['text-accent'])
+            resolve=lambda values: values['blockquote-background-color'].replace('var(--text-accent)',values['text-accent'])
+            self.assertEqual(resolve(live),f'color-mix(in srgb, #123456 {percent}%, transparent)')
+            self.assertEqual(resolve({**live,**fixed}),f"color-mix(in srgb, {default['text-accent']} {percent}%, transparent)")
+
     def test_opted_in_cli_installs_exact_live_body(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=pathlib.Path(tmp);policy,other,registry,pref=self.fixture(root)
