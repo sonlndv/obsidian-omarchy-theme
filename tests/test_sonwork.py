@@ -18,7 +18,7 @@ class SonworkTest(unittest.TestCase):
         cls.css = build.sonwork_css()
         cls.palette = json.loads((ROOT / 'src/sonwork/palette.json').read_text())
 
-    def test_semantic_palettes_and_neutral_headings(self):
+    def test_semantic_palettes_and_accepted_headings(self):
         roles = {'background-primary': 'void', 'background-secondary': 'ground',
                  'code-background': 'raise', 'text-normal': 'ink',
                  'text-muted': 'ink-2', 'text-faint': 'ink-3',
@@ -37,7 +37,9 @@ class SonworkTest(unittest.TestCase):
                 self.assertEqual(values[role], c[token], (scheme, role))
             for level in range(1, 7):
                 self.assertEqual(values[f'h{level}-color'],
-                                 build.mix_hex(c['ink'], c['lume'], .6) if level in (2, 3) else c['ink'])
+                                 build.mix_hex(c['ink'], c['lume'], .6) if level in (2, 3)
+                                 else ('#83d5b4' if scheme == 'dark' else '#22684e')
+                                 if level == 4 else c['ink'])
             self.assertIn('rgba(', values['text-selection'])
             self.assertIn('outline: 2px solid var(--interactive-accent)', self.css)
 

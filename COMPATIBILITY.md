@@ -131,3 +131,28 @@ native execution, official listing acceptance, activation or mobile certificatio
 New Mounty / Mounty Zen listings are planned, not submitted/approved. Minimum
 plugin version 1.5.0 remains inherited metadata rather than freshly tested support.
 See [migration](docs/MIGRATING-TO-MOUNTY.md) and [submission guide](docs/COMMUNITY-LISTINGS.md).
+
+## 1.8.0 — H4/quote roles and Mounty · Flexoki palette
+
+Mounty and Omarchy keep byte-identical CSS at 1.8.0. H4 (mint, 700), H5–H6
+(700) and the cyan quote border/tint are set on the note views
+(`.markdown-preview-view`, `.markdown-source-view.mod-cm6`) from the semantic
+underline and accent roles, so the companion's frozen 0.4.1 protection block,
+which still pins the earlier H4 and quote colours on `body`, does not reach
+notes. In `--live` palettes the quote tint is a `color-mix()` of the effective
+`--text-accent`, so when protection pins the accent it also restores the tint
+that the frozen block does not list. Tests record that exact companion delta
+and the restored tint rather than editing the companion runtime.
+
+A colour-only Flexoki layer is appended after the frozen default, scoped to
+`body.mounty-flexoki`. The Style Settings contract (`class-toggle`,
+`addCommand`) was checked against obsidian-style-settings main at 8ecefa95. The
+`[data-ow-palette]` selector variants outrank the companion's fixed-palette
+protection, and the plain selectors outrank `.is-mobile.theme-dark` base
+overrides. The generated snippet uses `:root body.theme-*` with identical
+declarations and also recolours other themes. Plugin compatibility aliases
+consume the variant colours unchanged. Retained native checks ran Obsidian
+1.14.4 on a synthetic vault: default pixels unchanged with the toggle off, class
+and snippet pixel-identical, and identical geometry and fonts with Flexoki on.
+They are not a per-vault activation claim; the Style Settings plugin UI, phone
+and graph canvas were not rendered.

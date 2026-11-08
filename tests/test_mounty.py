@@ -28,7 +28,9 @@ class MountyTest(unittest.TestCase):
             for name,color in roles.items():
                 self.assertEqual(v[name],color)
             fixed=re.search(r'body\.theme-'+scheme+r'\[data-ow-palette="sonwork"\]\s*\{([^}]+)\}',companion)
-            self.assertEqual(dict(re.findall(r'--([\w-]+):\s*([^;]+);',fixed.group(1))),v)
+            pinned=dict(re.findall(r'--([\w-]+):\s*([^;]+);',fixed.group(1)))
+            self.assertEqual({key:(pinned.get(key),v.get(key)) for key in pinned.keys()|v.keys()
+                              if pinned.get(key)!=v.get(key)}, test_hook_policy.FROZEN_COMPANION_DELTA[scheme])
             for color in (peach,lilac,mint,slate,cyan):
                 self.assertGreaterEqual(contrast(color,v['background-primary']),4.5)
             graph=(ROOT/'src/parts/graph.css').read_text()
@@ -82,13 +84,13 @@ class MountyTest(unittest.TestCase):
             build.build(root);(root/'LICENSE').write_bytes((ROOT/'LICENSE').read_bytes())
             (root/'private-fixture.json').write_text('must not ship')
             out=module.package(root);original=out.read_bytes()
-            self.assertEqual(out.name,'Mounty-1.7.1.zip')
+            self.assertEqual(out.name,'Mounty-1.8.0.zip')
             self.assertEqual(module.package(root).read_bytes(),original)
             self.assertEqual(json.loads((root/'manifest.json').read_text())['name'],'Omarchy')
             with zipfile.ZipFile(out) as archive:
                 self.assertEqual(set(archive.namelist()),{f'Mounty/{name}' for name in module.PUBLIC_FILES})
                 data=json.loads(archive.read('Mounty/manifest.json'))
-                self.assertEqual(data['name'],'Mounty');self.assertEqual(data['version'],'1.7.1')
+                self.assertEqual(data['name'],'Mounty');self.assertEqual(data['version'],'1.8.0')
                 self.assertEqual(archive.read('Mounty/theme.css'),(root/'theme.css').read_bytes())
                 for entry in archive.infolist(): self.assertEqual(entry.date_time,(2026,1,1,0,0,0))
         manifest=json.loads((ROOT/'companion/manifest.json').read_text())

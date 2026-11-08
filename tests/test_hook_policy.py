@@ -6,6 +6,17 @@ import unittest
 from unittest import mock
 from test_build import build, variables
 
+# The companion's frozen 0.4.1 fixed palette predates the 1.8.0 H4/quote roles,
+# which the theme derives on the note views instead (see test_backport).
+FROZEN_COMPANION_DELTA = {
+    'dark': {'h4-color': ('#f0f4f7', '#83d5b4'),
+             'blockquote-border-color': ('#2b2e32', '#39d0fc'),
+             'blockquote-background-color': (None, 'rgba(57, 208, 252, 0.05)')},
+    'light': {'h4-color': ('#0b1421', '#22684e'),
+              'blockquote-border-color': ('#b6bfc8', '#006cac'),
+              'blockquote-background-color': (None, 'rgba(0, 108, 172, 0.04)')},
+}
+
 class HookPolicyTest(unittest.TestCase):
     def fixture(self, root):
         policy=root/'policy'; other=root/'other'
@@ -76,7 +87,10 @@ class HookPolicyTest(unittest.TestCase):
             block=re.search(r'body\.theme-'+scheme+r'\[data-ow-palette="sonwork"\]\s*\{([^}]+)\}',companion)
             self.assertIsNotNone(block)
             fixed=dict(re.findall(r'--([\w-]+):\s*([^;]+);',block.group(1)))
-            self.assertEqual(fixed,variables(build.sonwork_css(),scheme))
+            current = variables(build.sonwork_css(), scheme)
+            self.assertEqual({key: (fixed.get(key), current.get(key))
+                              for key in fixed.keys() | current.keys()
+                              if fixed.get(key) != current.get(key)}, FROZEN_COMPANION_DELTA[scheme])
             self.assertNotIn('font-text-size',fixed)
         for source in (None,build.COLORS,build.LIGHT_COLORS):
             with tempfile.TemporaryDirectory() as tmp:
@@ -84,6 +98,28 @@ class HookPolicyTest(unittest.TestCase):
                 self.assertIn(':root { --ow-theme-id: omarchy; }',css)
                 for scheme in ('dark','light'):
                     self.assertNotIn('ow-theme-id',variables(css,scheme))
+
+    def test_live_quote_tint_follows_protected_accent(self):
+        # The frozen companion palette does not pin the newer quote tint, so live
+        # palettes derive it from the effective accent: protection that restores
+        # --text-accent also restores the tint (Flexoki off, both schemes).
+        companion=(build.PARTS.parent.parent/'companion/styles.css').read_text()
+        for scheme,source,percent in (('dark',build.COLORS,5),('light',build.LIGHT_COLORS,4)):
+            with tempfile.TemporaryDirectory() as tmp:
+                path=pathlib.Path(tmp)/'live.toml'
+                path.write_text(source.read_text().replace(build.read_colors(source)['accent'],'#123456'))
+                _,css=build.build(pathlib.Path(tmp)/'out',path)
+            live=variables(css,scheme)
+            block=re.search(r'body\.theme-'+scheme+r'\[data-ow-palette="sonwork"\]\s*\{([^}]+)\}',companion)
+            fixed=dict(re.findall(r'--([\w-]+):\s*([^;]+);',block.group(1)))
+            default=variables(build.sonwork_css(),scheme)
+            self.assertEqual(live['blockquote-background-color'],f'color-mix(in srgb, var(--text-accent) {percent}%, transparent)')
+            self.assertEqual(live['text-accent'],'#123456')
+            self.assertNotIn('blockquote-background-color',fixed)
+            self.assertEqual(fixed['text-accent'],default['text-accent'])
+            resolve=lambda values: values['blockquote-background-color'].replace('var(--text-accent)',values['text-accent'])
+            self.assertEqual(resolve(live),f'color-mix(in srgb, #123456 {percent}%, transparent)')
+            self.assertEqual(resolve({**live,**fixed}),f"color-mix(in srgb, {default['text-accent']} {percent}%, transparent)")
 
     def test_opted_in_cli_installs_exact_live_body(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -95,7 +131,7 @@ class HookPolicyTest(unittest.TestCase):
                 build.main(['--live','--install','--policy-vault',str(policy)])
             for vault in (policy,other):
                 self.assertEqual((vault/'.obsidian/themes/Omarchy/theme.css').read_text(),expected)
-                self.assertEqual(json.loads((vault/'.obsidian/themes/Omarchy/manifest.json').read_text())['version'],'1.7.1')
+                self.assertEqual(json.loads((vault/'.obsidian/themes/Omarchy/manifest.json').read_text())['version'],'1.8.0')
             self.assertEqual(pref.read_bytes(),pref_before)
 
     def destination_state(self, root):

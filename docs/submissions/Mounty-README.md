@@ -18,7 +18,7 @@ A calm, colourful Obsidian theme for writing and connected thinking. Dark and li
 
 ![Mounty light: the same synthetic writing note and graph.](docs/images/mounty-light.png)
 
-These are real retained Obsidian desktop captures of the unchanged design, not mockups or fresh tests of this repository publication. All notes are synthetic. Graph Groups were configured manually; CSS does not classify notes or create Groups.
+These are real retained Obsidian desktop captures from 1.7, not mockups or fresh tests of this repository publication; 1.8.0's mint H4, bold H4–H6, cyan-bordered quotes and optional Flexoki palette are not shown. All notes are synthetic. Graph Groups were configured manually; CSS does not classify notes or create Groups.
 
 ## A little colour with a purpose
 
@@ -27,9 +27,18 @@ These are real retained Obsidian desktop captures of the unchanged design, not m
 - **Comfortable reading:** neutral dark/light surfaces, preferred text-size scaling, about 68ch readable width and 1.7 leading, without replacing Obsidian's native layout.
 - **A rule-based graph:** ordinary notes cyan; optional active/reference Groups are one example, not a fixed taxonomy. Mounty-tool can instead assign one `mounty-graph` category per chosen note and explicitly apply user-chosen colours. Follow the [graph colour principles](docs/GRAPH-COLOURS.md); the CSS theme never creates tags, properties, Groups or physics changes.
 
-## Install Mounty 1.7.1
+## Optional Flexoki palette
 
-Source: https://github.com/sonlndv/Mounty . Release files: https://github.com/sonlndv/Mounty/releases/tag/1.7.1 .
+Mounty 1.8.0 adds an opt-in **Mounty · Flexoki** palette for dark and light. Only colours change; fonts, sizes and layout stay the same, and the default Mounty palette is unchanged while it is off.
+
+- **With the Style Settings plugin:** Settings → Style Settings → **Mounty** → turn on **Mounty · Flexoki palette**, or run **Style Settings: Toggle Mounty · Flexoki palette**.
+- **Without plugins:** copy [`snippets/mounty-flexoki.css`](snippets/mounty-flexoki.css) into `<vault>/.obsidian/snippets/` and enable **mounty-flexoki** in Settings → Appearance → CSS snippets. The snippet recolours whichever theme is active, so turn it off before switching themes.
+
+Colours come from [Flexoki](https://stephango.com/flexoki) by Steph Ango (kepano/flexoki-obsidian, MIT); the notice is embedded in the CSS and the snippet. Flexoki's light-mode cyan links (4.43:1) and green H4/underline (4.39:1) are kept as published and sit just under 4.5:1 on its paper background; dark mode passes.
+
+## Install Mounty 1.8.0
+
+Source: https://github.com/sonlndv/Mounty . Release files: https://github.com/sonlndv/Mounty/releases/tag/1.8.0 .
 
 Community submissions are **planned, not submitted or approved**. Until Obsidian publishes the new listing, use the manual route or keep the equal Omarchy community installation. Only use community search for Mounty after actual approval.
 
@@ -49,6 +58,6 @@ Retained native QA used Obsidian 1.14.5. Physical mobile/IME, detached windows a
 
 `theme.css` is directly loadable, unobfuscated CSS source; this repository needs no build or dependency installation. The shared generator remains in the [original repository](https://github.com/sonlndv/obsidian-omarchy-theme), keeping the Omarchy and Mounty distributions equal at matching releases.
 
-Original author: Le Son. [MIT LICENSE](LICENSE), with the full [Geist](OFL-Geist.txt) and [Space Mono](OFL-SpaceMono.txt) copyright/OFL notices retained and also embedded in CSS. Release tag **1.7.1** matches the root manifest; its raw assets are `manifest.json` and `theme.css`.
+Original author: Le Son. [MIT LICENSE](LICENSE), with the full [Geist](OFL-Geist.txt) and [Space Mono](OFL-SpaceMono.txt) copyright/OFL notices retained and also embedded in CSS. Release tag **1.8.0** matches the root manifest; its raw assets are `manifest.json`, `theme.css` and the optional `mounty-flexoki.css` snippet.
 
 See [listing copy and official-submission steps](docs/COMMUNITY-LISTINGS.md). GitHub publication is not Obsidian directory approval or proof that a particular vault has activated the theme.

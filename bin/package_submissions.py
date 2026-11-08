@@ -14,6 +14,7 @@ THEME_FILES = {
     'screenshot.png': 'docs/images/mounty-dark.png',
     'OFL-Geist.txt': 'OFL-Geist.txt',
     'OFL-SpaceMono.txt': 'OFL-SpaceMono.txt',
+    'snippets/mounty-flexoki.css': 'snippets/mounty-flexoki.css',
     'docs/images/mounty-light.png': 'docs/images/mounty-light.png',
     'docs/GRAPH-COLOURS.md': 'docs/GRAPH-COLOURS.md',
     'docs/MIGRATING-TO-MOUNTY.md': 'docs/MIGRATING-TO-MOUNTY.md',

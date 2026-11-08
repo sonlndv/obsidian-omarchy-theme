@@ -15,7 +15,7 @@ exporter = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(exporter)
 
 THEME_ALLOWLIST = {'manifest.json','README.md','LICENSE','theme.css','screenshot.png',
-    'OFL-Geist.txt','OFL-SpaceMono.txt','docs/images/mounty-light.png',
+    'OFL-Geist.txt','OFL-SpaceMono.txt','snippets/mounty-flexoki.css','docs/images/mounty-light.png',
     'docs/GRAPH-COLOURS.md','docs/MIGRATING-TO-MOUNTY.md','docs/COMMUNITY-LISTINGS.md'}
 PLUGIN_ALLOWLIST = {'manifest.json','README.md','LICENSE','main.js','styles.css',
     'docs/images/mounty-writing-tools.png','docs/images/mounty-zen.png',
@@ -54,7 +54,7 @@ class SubmissionTest(unittest.TestCase):
             root=pathlib.Path(tmp);self.prepare(root)
             before={name:(root/name).read_bytes() for name in ('manifest.json','companion/manifest.json','theme.css','companion/main.js','companion/styles.css')}
             theme,plugin=exporter.package(root)
-            self.assertEqual(theme.name,'Mounty-1.7.1-submission-source.zip')
+            self.assertEqual(theme.name,'Mounty-1.8.0-submission-source.zip')
             self.assertEqual(plugin.name,'Mounty-Zen-0.4.1-submission-source.zip')
             first=[p.read_bytes() for p in (theme,plugin)]
             self.assertEqual([p.read_bytes() for p in exporter.package(root)],first)
@@ -70,10 +70,11 @@ class SubmissionTest(unittest.TestCase):
                         self.assertNotIn('..',pathlib.PurePosixPath(entry.filename).parts)
             with zipfile.ZipFile(theme) as archive:
                 manifest=json.loads(archive.read('manifest.json'))
-                self.assertEqual((manifest['name'],manifest['version']),('Mounty','1.7.1'))
+                self.assertEqual((manifest['name'],manifest['version']),('Mounty','1.8.0'))
                 self.assertNotIn('id',manifest)
                 self.assertEqual(archive.read('theme.css'),(ROOT/'theme.css').read_bytes())
                 self.assertEqual(archive.read('screenshot.png'),(ROOT/'docs/images/mounty-dark.png').read_bytes())
+                self.assertEqual(archive.read('snippets/mounty-flexoki.css'),(ROOT/'snippets/mounty-flexoki.css').read_bytes())
                 for name in ('OFL-Geist.txt','OFL-SpaceMono.txt','LICENSE'):
                     self.assertEqual(archive.read(name),(ROOT/name).read_bytes())
             with zipfile.ZipFile(plugin) as archive:
@@ -94,7 +95,7 @@ class SubmissionTest(unittest.TestCase):
                 self.assertEqual(m.read('Mounty/theme.css'),(ROOT/'theme.css').read_bytes())
                 self.assertEqual(m.read('Mounty/manifest.json'),s.read('manifest.json'))
         updater=json.loads((ROOT/'manifest.json').read_text())
-        self.assertEqual((updater['name'],updater['version']),('Omarchy','1.7.1'))
+        self.assertEqual((updater['name'],updater['version']),('Omarchy','1.8.0'))
         plugin=json.loads((ROOT/'companion/manifest.json').read_text())
         self.assertEqual(plugin['name'],'Mounty Zen')
         self.assertEqual(plugin['id'],'omarchy-writing')
@@ -111,9 +112,10 @@ class SubmissionTest(unittest.TestCase):
 
     def test_runtime_source_hook_identity_is_unchanged(self):
         names=sorted(str(p.relative_to(ROOT)) for directory in ('src','hooks') for p in (ROOT/directory).rglob('*') if p.is_file())+['companion/main.js','companion/styles.css','theme.css']
+        # Frozen 1.8.0 runtime: src/, hooks/, companion runtime and theme.css.
         digest=hashlib.sha256()
         for name in names:digest.update(name.encode()+b'\0'+hashlib.sha256((ROOT/name).read_bytes()).digest())
-        self.assertEqual(digest.hexdigest(), '9c48e1c44be5d50314a796559468fbae22ed2fbf0f4079d4fc34a2a0f158db78')
+        self.assertEqual(digest.hexdigest(), 'e0547842ed27ba49e0eded3fa72678330d857ef669aba2642fe5e820fe47e3d3')
         # Unchanged runtime retains stable own settings and commands; no rebranding ID fork.
         source=(ROOT/'companion/main.js').read_text()
         for key in ('followOmarchyColors','typewriter','width','hideInlineTitle'):

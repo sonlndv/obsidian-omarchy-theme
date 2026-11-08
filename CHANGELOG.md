@@ -1,5 +1,39 @@
 # Changelog
 
+## 1.8.0 / Mounty 1.8.0
+
+### Opt-in Mounty · Flexoki palette
+
+- Add a colour-only "Mounty · Flexoki" variant for dark and light, using
+  kepano/flexoki-obsidian values (commit 527685bc) vendored in `src/flexoki/`
+  with the upstream MIT notice retained and embedded in the CSS (Flexoki by
+  Steph Ango, https://stephango.com/flexoki).
+- Two toggles, no file edits: a Style Settings `class-toggle` (`mounty-flexoki`,
+  with command) and a generated `snippets/mounty-flexoki.css` fallback, which
+  the Mounty source export now includes.
+- The Mounty palette stays the default and its bytes before the appended layer
+  are frozen. While enabled the variant takes precedence over the companion's
+  fixed-palette protection and `--live` colours.
+- Flexoki's light cyan (4.43:1) and green (4.39:1) are kept as published, just
+  under 4.5:1 on paper; dark accents pass. Faint text uses Flexoki base-600/500.
+- Mounty's role table is shared (`semantic_roles`). New `tests/test_flexoki.py`;
+  CI also checks the generated snippet.
+
+### Headings and quotes
+
+- H4 mint; H4–H6 bold (700), with emphasis inside headings following the
+  heading weight in reading view and Live Preview. H1–H3 colours, fonts and
+  sizes unchanged.
+- Blockquotes get a cyan border and faint cyan tint. Note-level H4 and quote
+  border derive locally so the companion's frozen 0.4.1 fixed palette cannot
+  pin the previous colours.
+- `--live` palettes gain matching underline, inline-code, strikethrough and
+  quote-tint roles. The live quote tint derives from the effective accent, so
+  fixed-palette protection restores it as well.
+- New `tests/test_backport.py` freezes the default build and accepted roles;
+  hook-policy and Mounty tests record the frozen companion delta. The companion
+  runtime is unchanged at 0.4.1.
+
 ## 1.7.1 / Mounty Zen 0.4.1
 
 - Keep Omarchy as a supported equal theme alias with byte-identical Mounty CSS;

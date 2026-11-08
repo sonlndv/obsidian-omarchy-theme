@@ -2,9 +2,9 @@
 
 ## Two products, three supported routes
 
-- **[Mounty](https://github.com/sonlndv/Mounty)** is the standalone Obsidian CSS theme. Its root manifest is named Mounty, version **1.7.1**; its release provides raw `manifest.json` and `theme.css`.
+- **[Mounty](https://github.com/sonlndv/Mounty)** is the standalone Obsidian CSS theme. Its root manifest is named Mounty, version **1.8.0**; its release provides raw `manifest.json` and `theme.css`.
 - **[Mounty-tool](https://github.com/sonlndv/Mounty-tool)** is the optional plugin for functions a CSS theme cannot provide: configurable graph-category assignment/colour rules and retained Zen/writing controls. The plugin has its own release cycle. Use [its current manifest](https://github.com/sonlndv/Mounty-tool/blob/main/manifest.json), [Releases](https://github.com/sonlndv/Mounty-tool/releases) and [plugin listing copy](https://github.com/sonlndv/Mounty-tool/blob/main/docs/COMMUNITY-LISTINGS.md), not a theme release's old companion snapshot.
-- **Omarchy** remains the existing supported community theme alias. At matching releases its CSS is byte-identical to Mounty; changing theme names is optional. Its updater root is [the original repository](https://github.com/sonlndv/obsidian-omarchy-theme), with manifest name Omarchy and version1.7.1.
+- **Omarchy** remains the existing supported community theme alias. At matching releases its CSS is byte-identical to Mounty; changing theme names is optional. Its updater root is [the original repository](https://github.com/sonlndv/obsidian-omarchy-theme), with manifest name Omarchy and version 1.8.0.
 
 **Mounty supplies appearance; Mounty-tool supplies optional interactive tools.** Zen is a writing feature inside the tool, not a second theme. Neither theme installs or enables the plugin. The plugin's technical ID/folder remains `omarchy-writing`, preserving existing preferences and command/hotkey IDs despite its display/repository rename.
 
@@ -41,7 +41,7 @@ GitHub About copy for the original theme repository:
 ## Submit through the matching repository
 
 1. At https://community.obsidian.md, sign in with the owner's Obsidian account and review the GitHub account-linking grant.
-2. **Themes → New theme:** `https://github.com/sonlndv/Mounty`, screenshot path `screenshot.png`, **Dark** and **Light**. Root README/LICENSE/screenshot/manifest and release tag exactly1.7.1 with raw manifest.json/theme.css are required.
+2. **Themes → New theme:** `https://github.com/sonlndv/Mounty`, screenshot path `screenshot.png`, **Dark** and **Light**. Root README/LICENSE/screenshot/manifest and release tag exactly 1.8.0 with raw manifest.json/theme.css are required.
 3. **Plugins → New plugin:** `https://github.com/sonlndv/Mounty-tool`. Use its current root manifest/release and plugin listing copy. Raw assets are main.js/manifest.json/styles.css; tag exactly the plugin manifest version. Keep stable ID `omarchy-writing`; check availability during submission. Source must be publicly readable.
 4. For existing Omarchy, **Your entries → Omarchy → Edit listing → Save**. Keep the supported name/update route; migration is optional.
 5. Review the developer policies/maintenance commitment and handle upstream feedback. A download, tag or upload is not official acceptance or live activation.
@@ -50,7 +50,7 @@ Do not submit the original Omarchy root as both new products or use the old Moun
 
 ## Original generator and historical packages
 
-The [original theme source](https://github.com/sonlndv/obsidian-omarchy-theme) maintains the shared theme generator and retains its historical writing-only companion **Mounty Zen0.4.1**. Its deterministic exporters still produce `Mounty-1.7.1-submission-source.zip` and **historical** `Mounty-Zen-0.4.1-submission-source.zip`. The latter does NOT contain Mounty-tool's graph feature and is not the current plugin source/release. Existing release tags/assets are not rewritten. Develop and release new tool functions from the separate Mounty-tool repository.
+The [original theme source](https://github.com/sonlndv/obsidian-omarchy-theme) maintains the shared theme generator and retains its historical writing-only companion **Mounty Zen0.4.1**. Its deterministic exporters still produce `Mounty-1.8.0-submission-source.zip` and **historical** `Mounty-Zen-0.4.1-submission-source.zip`. The latter does NOT contain Mounty-tool's graph feature and is not the current plugin source/release. Existing release tags/assets are not rewritten. Develop and release new tool functions from the separate Mounty-tool repository.
 
 ### Mounty Zen0.4.1 — historical manifest description
 

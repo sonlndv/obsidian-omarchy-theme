@@ -9,8 +9,8 @@ Colour has a job: peach bold and inline code, lilac italic, mint underline, quie
 **Omarchy remains a supported equal installation route**, not a frozen edition
 or a redirect. Its existing community updater keeps the name Omarchy and the
 same appearance/features as Mounty at a matching release. No migration is needed
-to get this design. Root/updater metadata is **Omarchy 1.7.1**; the explicit
-manual package is **Mounty 1.7.1**.
+to get this design. Root/updater metadata is **Omarchy 1.8.0**; the explicit
+manual package is **Mounty 1.8.0**.
 
 **New Mounty and Mounty-tool community listings are planned, not submitted or
 approved.** Until a listing/version is actually available, use the reviewed
@@ -35,7 +35,7 @@ never auto-installs the plugin. GitHub publication is not official listing appro
 
 *Light: the same layout with a pale canvas and darker reading accents.*
 
-These are real Obsidian captures, not mockups. All notes are synthetic. The graph's two custom Groups were configured manually: peach active work, mint references, and cyan ordinary notes. The theme does not classify notes or create Groups.
+These are real Obsidian captures from 1.7, not mockups; 1.8.0's mint H4, bold H4–H6, cyan-bordered quotes and optional Flexoki palette are not shown. All notes are synthetic. The graph's two custom Groups were configured manually: peach active work, mint references, and cyan ordinary notes. The theme does not classify notes or create Groups.
 
 ## A little colour, a familiar workspace
 
@@ -47,17 +47,50 @@ These are real Obsidian captures, not mockups. All notes are synthetic. The grap
 
 **The theme works on its own.** Mounty-tool is optional, not a requirement for ordinary reading, emphasis colours or the native graph.
 
+## Mounty · Flexoki palette — optional, initially OFF
+
+A colour-only Flexoki variant for dark and light modes, new in 1.8.0. Geist and
+Space Mono, sizes and geometry are unchanged, and the default Mounty palette is
+unchanged while it is off. Enable it without editing any file:
+
+- **With Style Settings:** install and enable the Style Settings community
+  plugin, then Settings → Style Settings → **Mounty** → turn on **Mounty ·
+  Flexoki palette**. Or run **Style Settings: Toggle Mounty · Flexoki palette**
+  from the command palette (hotkey-assignable).
+- **Without Style Settings:** copy `snippets/mounty-flexoki.css` (also attached
+  to each release as `mounty-flexoki.css`) into `<vault>/.obsidian/snippets/`,
+  then enable **mounty-flexoki** in Settings → Appearance → CSS snippets. The
+  snippet recolours whichever theme is active, so turn it off before switching
+  themes.
+
+Light, Dark and Adapt to system pick the matching Flexoki values. While enabled
+it takes precedence over the companion plugin's fixed-palette protection
+(Mounty-tool / Mounty Zen, ID `omarchy-writing`) and over `--live` desktop
+colours; turning it off returns to them. Omarchy and Mounty ship the same CSS,
+so the toggle works under either name.
+
+The colours are kepano/flexoki-obsidian values vendored in `src/flexoki/`, with
+the MIT notice retained there and embedded in the CSS. Flexoki is by Steph Ango:
+https://stephango.com/flexoki. `src/flexoki/roles.json` maps Mounty roles to
+Flexoki variables.
+
+Measured contrast: Flexoki's published light-mode cyan (links and accent,
+4.43:1) and green (H4 and underline, 4.39:1) on its paper background sit just
+under the 4.5:1 that the default palette meets; they are kept as published.
+Every dark-mode accent passes. Faint text uses Flexoki base-600 (dark) and
+base-500 (light), at least 3.5:1, instead of Flexoki's fainter tx-3.
+
 ## Install or update
 
 ### Existing community installation: Omarchy
 
 The current community listing and updater remain **Omarchy**, an equal supported alias. Find or update Omarchy in **Settings → Appearance → Themes**, check the available version, and keep Omarchy selected if using that route.
 
-The root `manifest.json` deliberately retains `name: Omarchy`, matching the `Omarchy/` folder. Its 1.7.1 CSS is byte-identical to the manual Mounty package. The repository URL/community entry are unchanged; a new Mounty listing is only planned. You do not need to switch names for the design or writing tools.
+The root `manifest.json` deliberately retains `name: Omarchy`, matching the `Omarchy/` folder. Its 1.8.0 CSS is byte-identical to the manual Mounty package. The repository URL/community entry are unchanged; a new Mounty listing is only planned. You do not need to switch names for the design or writing tools.
 
 ### Mounty-named manual installation
 
-When the reviewed 1.7.1 assets are published on the [existing repository Releases page](https://github.com/sonlndv/obsidian-omarchy-theme/releases), use **Mounty-1.7.1.zip**. This source update does not claim that upload has happened. Extract its **Mounty/** folder under `<vault>/.obsidian/themes/`, so `theme.css` and `manifest.json` sit directly in `.obsidian/themes/Mounty/`. Select **Mounty** in Appearance, then choose Light, Dark or Adapt to system.
+When the reviewed 1.8.0 assets are published on the [existing repository Releases page](https://github.com/sonlndv/obsidian-omarchy-theme/releases), use **Mounty-1.8.0.zip**. This source update does not claim that upload has happened. Extract its **Mounty/** folder under `<vault>/.obsidian/themes/`, so `theme.css` and `manifest.json` sit directly in `.obsidian/themes/Mounty/`. Select **Mounty** in Appearance, then choose Light, Dark or Adapt to system.
 
 The package's manifest name matches its folder. Do not copy the root Omarchy manifest into a Mounty folder or mistake a source ZIP for the manual package. Keep the old Omarchy folder/release until the new selection is verified. For later manual updates, replace only Mounty's public theme files; do not reset notes or preferences.
 
@@ -151,9 +184,17 @@ node --check companion/main.js
 node --test tests/test_companion.cjs
 ```
 
-Default output remains root Omarchy 1.7.1. The deterministic packagers create `dist/Mounty-1.7.1.zip` and `dist/omarchy-writing-0.4.1.zip` using public-file allowlists. The source exporter creates two separate, root-ready
-submission archives with product-specific READMEs and correct manifests; see
-[the submission guide](docs/COMMUNITY-LISTINGS.md). The measured source palette in `src/sonwork/palette.json` stays separate from Mounty's derived emphasis/graph roles.
+Default output is reproducible root `theme.css`, `manifest.json` (Omarchy
+1.8.0), OFL notices and `snippets/mounty-flexoki.css`. The deterministic
+packagers create `dist/Mounty-1.8.0.zip` and `dist/omarchy-writing-0.4.1.zip`
+using public-file allowlists. The source exporter creates two separate,
+root-ready submission archives with product-specific READMEs and correct
+manifests; the Mounty archive also carries the Flexoki snippet. See
+[the submission guide](docs/COMMUNITY-LISTINGS.md). The measured source palette
+in `src/sonwork/palette.json` stays separate from Mounty's derived
+emphasis/graph roles. Python discovery is the aggregate: it includes Node
+syntax/companion checks and package/version/allowlist tests. CI runs it,
+rebuilds and checks generated diffs.
 
 The [native formatting probe](tests/NATIVE-FORMATTING.md) requires an explicit synthetic vault and fixed sample file, then checks actual DOM colours/styles. Native execution is separate from CI: Python discovery checks source consistency, Node syntax and identity guards; hosted CI does not launch Obsidian.
 
