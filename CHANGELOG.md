@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+### Opt-in Mounty · Flexoki palette
+
+- Add a colour-only "Mounty · Flexoki" variant for dark and light, using
+  kepano/flexoki-obsidian values (commit 527685bc) vendored in `src/flexoki/`
+  with the upstream MIT notice retained and embedded in the CSS.
+- Two toggles, no file edits: a Style Settings `class-toggle` (`mounty-flexoki`,
+  with command) and a generated `snippets/mounty-flexoki.css` fallback.
+- While enabled it takes precedence over the companion's fixed-palette
+  protection and `--live` colours; the default palette is unchanged when off.
+- Mounty's role table is shared (`semantic_roles`) and the default bytes before
+  the appended layer are identical. New `tests/test_flexoki.py`; CI also checks
+  the generated snippet.
+
 ### Emphasis, headings, quotes and graph
 
 - Colour Markdown emphasis from the palette in reading view and Live Preview:

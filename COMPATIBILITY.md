@@ -65,3 +65,14 @@ behavior. Parent still owns native OFF/ON/OFF, theme-switch/graph checks and fin
 activation/review. Source/package creation does not establish activation, phone
 sync or physical iPhone/IME support. Main-window and older-SDK limitations remain;
 the missing native CLI filesystem endpoint is unchanged.
+
+## Mounty · Flexoki palette (unreleased)
+
+A colour-only layer is appended to `theme.css`, scoped to `body.mounty-flexoki`.
+The Style Settings contract (`class-toggle`, `addCommand`) was checked against
+obsidian-style-settings main at 8ecefa95. The `[data-ow-palette]` selector
+variants outrank the companion's fixed-palette protection, and the plain
+selectors outrank `.is-mobile.theme-dark` base overrides. The generated snippet
+uses `:root body.theme-*` with identical declarations. Plugin compatibility
+aliases consume the variant colours unchanged. This section records
+source/selector contracts, not native rendering evidence.

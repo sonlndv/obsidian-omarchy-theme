@@ -11,6 +11,11 @@ also copy the result into .obsidian/themes/Omarchy of every vault listed in
 
 The theme is assembled from src/parts/: the generated colour block plus the
 static font, typography and geometry layers.
+
+An opt-in "Mounty · Flexoki" colour layer (Style Settings class `mounty-flexoki`,
+from src/flexoki/) is appended after everything else, so the default palette is
+unchanged while it is off. The build also writes the same colours as the
+standalone snippet snippets/mounty-flexoki.css for vaults without Style Settings.
 """
 import argparse
 import base64
@@ -29,6 +34,8 @@ LIVE_COLORS = pathlib.Path.home() / ".local/state/omarchy/current/theme/colors.t
 VAULTS = pathlib.Path.home() / ".config/obsidian/obsidian.json"
 THEME = "Omarchy"
 PARTS = ROOT / "src" / "parts"
+FLEXOKI = ROOT / "src" / "flexoki"
+SNIPPET = pathlib.Path("snippets") / "mounty-flexoki.css"
 
 
 def read_colors(path=COLORS):
@@ -214,9 +221,12 @@ def build(out_dir, colors_path=None):
     body += "\n" + (PARTS / "graph.css").read_text()
     body += "\n" + (PARTS / "sidebar.css").read_text()
     body += "\n" + (PARTS / "emphasis.css").read_text()
+    body += "\n" + flexoki_css()
     out = pathlib.Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     (out / "theme.css").write_text(body)
+    (out / SNIPPET).parent.mkdir(parents=True, exist_ok=True)
+    (out / SNIPPET).write_text(flexoki_snippet())
     (out / "manifest.json").write_text(manifest(THEME))
     for name in ("OFL-Geist.txt", "OFL-SpaceMono.txt"):
         (out / name).write_bytes((PARTS.parent / "sonwork/fonts" / name).read_bytes())
@@ -292,6 +302,84 @@ def install(body, policy_vault=None):
         print(f"themed: {v}")
 
 
+SONWORK_DERIVED = {
+    "dark": {"emphasis": "#f5a67d", "violet": "#c4b5fd", "mint": "#83d5b4",
+             "unresolved": "#c7bca4", "graph-line": "#3c5c70"},
+    "light": {"emphasis": "#96502a", "violet": "#6c4b99", "mint": "#22684e",
+              "unresolved": "#6e6044", "graph-line": "#a1b3c2"},
+}
+
+
+def semantic_roles(c, scheme):
+    """Return the ordered Obsidian colour properties (without --) for tokens c.
+
+    c holds void, ground, raise, line, ink, ink-2, ink-3, lume, lume-ink, human,
+    emphasis, violet, mint, unresolved and graph-line as hex colours.
+    """
+    roles = {
+        "background-primary": "void", "background-primary-alt": "ground",
+        "background-secondary": "ground", "background-secondary-alt": "raise",
+        "ribbon-background": "ground", "ribbon-background-collapsed": "ground",
+        "titlebar-background": "ground", "titlebar-background-focused": "ground",
+        "background-modifier-hover": "raise", "background-modifier-border": "line",
+        "background-modifier-border-hover": "ink-3",
+        "background-modifier-border-focus": "lume",
+        "text-normal": "ink", "text-muted": "ink-2", "text-faint": "ink-3",
+        "text-accent": "lume", "text-accent-hover": "lume",
+        "interactive-normal": "ground", "interactive-hover": "raise",
+        "interactive-accent": "lume", "interactive-accent-hover": "lume",
+        "color-accent": "lume", "color-accent-1": "lume", "color-accent-2": "lume",
+        "inline-title-color": "ink",
+        "text-on-accent": "lume-ink", "text-on-accent-inverted": "lume-ink",
+        "link-color": "lume", "link-color-hover": "lume",
+        "link-external-color": "lume", "link-external-color-hover": "lume",
+        "text-warning": "human", "callout-warning": "human",
+        "text-error": "human", "callout-error": "human",
+        "callout-default": "lume", "callout-info": "lume", "callout-note": "lume",
+        "bold-color": "emphasis", "italic-color": "violet",
+        "code-background": "raise", "code-normal": "ink",
+        "code-comment": "ink-3", "code-string": "ink-2", "code-keyword": "ink",
+        "code-function": "ink", "code-property": "ink-2",
+        "code-operator": "ink-2", "code-punctuation": "ink-2",
+        "code-tag": "ink", "code-value": "ink-2", "code-important": "ink",
+        "table-header-background": "raise", "table-border-color": "line",
+        "hr-color": "line", "blockquote-border-color": "lume",
+        "nav-item-color": "ink-2", "nav-item-color-hover": "ink",
+        "nav-item-color-active": "ink", "nav-item-background-active": "raise",
+        "nav-item-background-hover": "raise", "tab-text-color": "ink-2",
+        "tab-text-color-active": "ink", "tag-color": "lume",
+        "caret-color": "lume", "checkbox-color": "lume",
+        "checkbox-color-hover": "lume", "checkbox-marker-color": "lume-ink",
+    }
+    roles.update({f"h{level}-color": "ink" for level in range(1, 7)})
+    values = {name: c[key] for name, key in roles.items()}
+    # Insert the quote fill directly after its border for frozen serialization.
+    border = list(values).index("blockquote-border-color") + 1
+    entries = list(values.items())
+    entries.insert(border, ("blockquote-background-color",
+                           f"rgba({rgb(c['lume'])}, {0.05 if scheme == 'dark' else 0.04})"))
+    values = dict(entries)
+    # Derived roles, never changes to the measured source tokens.
+    values.update({"h2-color": mix_hex(c["ink"], c["lume"], 0.6),
+                   "h3-color": mix_hex(c["ink"], c["lume"], 0.6),
+                   "h4-color": c["mint"],
+                   "inline-code-color": c["emphasis"],
+                   "underline-color": c["mint"],
+                   "strikethrough-color": c["ink-3"]})
+    graph = (c["lume"], c["emphasis"], c["mint"], c["violet"], c["unresolved"], c["graph-line"])
+    values.update(zip(("graph-node", "graph-node-focused", "graph-node-tag",
+                       "graph-node-attachment", "graph-node-unresolved", "graph-line"), graph))
+    values["graph-text"] = c["ink-2"]
+    values.update({
+        "interactive-accent-rgb": rgb(c["lume"]),
+        "text-selection": f"rgba({rgb(c['lume'])}, 0.18)",
+        "text-highlight-bg": f"rgba({rgb(c['lume'])}, 0.14)",
+        "background-modifier-active-hover": f"rgba({rgb(c['lume'])}, 0.12)",
+        "tag-background": f"rgba({rgb(c['lume'])}, 0.08)",
+    })
+    return values
+
+
 def sonwork_css():
     """Fixed, measured Sonwork colours; independent of the live Omarchy hook."""
     source = PARTS.parent / "sonwork"
@@ -300,75 +388,8 @@ def sonwork_css():
     for scheme, tokens in data["modes"].items():
         c = {name: token["hex"] for name, token in tokens.items()}
         # Accepted semantic colours are derived roles, not reference palette facts.
-        emphasis, violet, mint, unresolved = {
-            "dark": ("#f5a67d", "#c4b5fd", "#83d5b4", "#c7bca4"),
-            "light": ("#96502a", "#6c4b99", "#22684e", "#6e6044"),
-        }[scheme]
-        c.update(emphasis=emphasis, violet=violet, mint=mint)
-        roles = {
-            "background-primary": "void", "background-primary-alt": "ground",
-            "background-secondary": "ground", "background-secondary-alt": "raise",
-            "ribbon-background": "ground", "ribbon-background-collapsed": "ground",
-            "titlebar-background": "ground", "titlebar-background-focused": "ground",
-            "background-modifier-hover": "raise", "background-modifier-border": "line",
-            "background-modifier-border-hover": "ink-3",
-            "background-modifier-border-focus": "lume",
-            "text-normal": "ink", "text-muted": "ink-2", "text-faint": "ink-3",
-            "text-accent": "lume", "text-accent-hover": "lume",
-            "interactive-normal": "ground", "interactive-hover": "raise",
-            "interactive-accent": "lume", "interactive-accent-hover": "lume",
-            "color-accent": "lume", "color-accent-1": "lume", "color-accent-2": "lume",
-            "inline-title-color": "ink",
-            "text-on-accent": "lume-ink", "text-on-accent-inverted": "lume-ink",
-            "link-color": "lume", "link-color-hover": "lume",
-            "link-external-color": "lume", "link-external-color-hover": "lume",
-            "text-warning": "human", "callout-warning": "human",
-            "text-error": "human", "callout-error": "human",
-            "callout-default": "lume", "callout-info": "lume", "callout-note": "lume",
-            "bold-color": "emphasis", "italic-color": "violet",
-            "code-background": "raise", "code-normal": "ink",
-            "code-comment": "ink-3", "code-string": "ink-2", "code-keyword": "ink",
-            "code-function": "ink", "code-property": "ink-2",
-            "code-operator": "ink-2", "code-punctuation": "ink-2",
-            "code-tag": "ink", "code-value": "ink-2", "code-important": "ink",
-            "table-header-background": "raise", "table-border-color": "line",
-            "hr-color": "line", "blockquote-border-color": "lume",
-            "nav-item-color": "ink-2", "nav-item-color-hover": "ink",
-            "nav-item-color-active": "ink", "nav-item-background-active": "raise",
-            "nav-item-background-hover": "raise", "tab-text-color": "ink-2",
-            "tab-text-color-active": "ink", "tag-color": "lume",
-            "caret-color": "lume", "checkbox-color": "lume",
-            "checkbox-color-hover": "lume", "checkbox-marker-color": "lume-ink",
-        }
-        roles.update({f"h{level}-color": "ink" for level in range(1, 7)})
-        values = {name: c[key] for name, key in roles.items()}
-        # Insert the quote fill directly after its border for frozen serialization.
-        border = list(values).index("blockquote-border-color") + 1
-        entries = list(values.items())
-        entries.insert(border, ("blockquote-background-color",
-                               f"rgba({rgb(c['lume'])}, {0.05 if scheme == 'dark' else 0.04})"))
-        values = dict(entries)
-        # Derived roles, never changes to the measured source tokens.
-        values.update({"h2-color": mix_hex(c["ink"], c["lume"], 0.6),
-                       "h3-color": mix_hex(c["ink"], c["lume"], 0.6),
-                       "h4-color": mint,
-                       "inline-code-color": emphasis,
-                       "underline-color": mint,
-                       "strikethrough-color": c["ink-3"]})
-        graph = {
-            "dark": (c["lume"], emphasis, mint, violet, unresolved, "#3c5c70"),
-            "light": (c["lume"], emphasis, mint, violet, unresolved, "#a1b3c2"),
-        }
-        values.update(zip(("graph-node", "graph-node-focused", "graph-node-tag",
-                           "graph-node-attachment", "graph-node-unresolved", "graph-line"), graph[scheme]))
-        values["graph-text"] = c["ink-2"]
-        values.update({
-            "interactive-accent-rgb": rgb(c["lume"]),
-            "text-selection": f"rgba({rgb(c['lume'])}, 0.18)",
-            "text-highlight-bg": f"rgba({rgb(c['lume'])}, 0.14)",
-            "background-modifier-active-hover": f"rgba({rgb(c['lume'])}, 0.12)",
-            "tag-background": f"rgba({rgb(c['lume'])}, 0.08)",
-        })
+        c.update(SONWORK_DERIVED[scheme])
+        values = semantic_roles(c, scheme)
         chunks.append(f".theme-{scheme} {{\n" + "\n".join(
             f"  --{name}: {value};" for name, value in values.items()) + "\n}")
     # Preserve original font bytes and full notices, even when CSS is copied alone.
@@ -409,6 +430,101 @@ def build_sonwork():
     return out
 
 
+FLEXOKI_SETTINGS = """/* @settings
+
+name: Mounty
+id: mounty
+settings:
+    -
+        id: mounty-flexoki
+        title: Mounty · Flexoki palette
+        description: "Opt-in Flexoki colours for dark and light modes; layout and fonts stay Mounty. Flexoki by Steph Ango, MIT, stephango.com/flexoki"
+        type: class-toggle
+        default: false
+        addCommand: true
+
+*/"""
+
+
+def flexoki_upstream():
+    """Parse the vendored kepano/flexoki-obsidian dark and light variable blocks."""
+    text = (FLEXOKI / "flexoki-obsidian.css").read_text()
+    out = {}
+    for scheme in ("dark", "light"):
+        block = re.search(r"\.theme-" + scheme + r"\s*\{([^}]*)\}", text)
+        if block is None:
+            raise ValueError(f"missing .theme-{scheme} block in vendored Flexoki CSS")
+        out[scheme] = {name: value.strip()
+                       for name, value in re.findall(r"--([\w-]+):\s*([^;]+);", block.group(1))}
+    return out
+
+
+def flexoki_roles():
+    """Return the Mounty role -> Flexoki variable mapping from roles.json."""
+    return json.loads((FLEXOKI / "roles.json").read_text())
+
+
+def flexoki_values(scheme):
+    """Return every upstream declaration plus the shared Mounty role table."""
+    upstream = flexoki_upstream()[scheme]
+
+    def normalise(value):
+        return value.lower() if value.startswith("#") else value
+
+    values = {name: normalise(value) for name, value in upstream.items()}
+    tokens = {token: normalise(upstream[variable])
+              for token, variable in flexoki_roles()["tokens"].items()}
+    values.update(semantic_roles(tokens, scheme))
+    return values
+
+
+def flexoki_block(selectors, scheme):
+    """Serialize one scheme's Flexoki declarations under the given selectors."""
+    return (",\n".join(selectors) + " {\n"
+            + "\n".join(f"  --{name}: {value};" for name, value in flexoki_values(scheme).items())
+            + "\n}")
+
+
+def flexoki_notice():
+    """The upstream MIT licence text embedded in both generated outputs."""
+    return (FLEXOKI / "LICENSE").read_text().rstrip("\n")
+
+
+def flexoki_css():
+    """The opt-in theme layer appended to theme.css, scoped to body.mounty-flexoki."""
+    attribution_comment = (
+        "/* Mounty · Flexoki: opt-in palette. GENERATED by bin/build.py from\n"
+        "   src/flexoki/ (do not edit by hand). The Style Settings toggle above adds\n"
+        "   body.mounty-flexoki; with it off the default Mounty palette is unchanged.\n"
+        "   Only colour variables change; layout and fonts stay Mounty.\n"
+        "   Colour values: kepano/flexoki-obsidian theme.css at commit 527685bc,\n"
+        "   vendored as src/flexoki/flexoki-obsidian.css. https://stephango.com/flexoki\n"
+        "\n" + flexoki_notice() + "\n*/")
+    blocks = [flexoki_block((f"body.theme-{scheme}.mounty-flexoki",
+                             f"body.theme-{scheme}.mounty-flexoki[data-ow-palette]"), scheme)
+              for scheme in ("dark", "light")]
+    return "\n\n".join([FLEXOKI_SETTINGS, attribution_comment, *blocks]) + "\n"
+
+
+def flexoki_snippet():
+    """The same colours as a standalone CSS snippet for vaults without Style Settings."""
+    snippet_header = (
+        "/* Mounty · Flexoki: optional CSS snippet. GENERATED by bin/build.py from\n"
+        "   src/flexoki/ (do not edit by hand).\n"
+        "   For Mounty/Omarchy without the Style Settings plugin: copy this file to\n"
+        "   <vault>/.obsidian/snippets/ and enable \"mounty-flexoki\" under\n"
+        "   Settings > Appearance > CSS snippets. It applies the same colours as the\n"
+        "   theme's \"Mounty · Flexoki palette\" toggle; turn it off before switching to\n"
+        "   another theme. Only colour variables change.\n"
+        "   Colour values: kepano/flexoki-obsidian theme.css at commit 527685bc,\n"
+        "   vendored as src/flexoki/flexoki-obsidian.css. https://stephango.com/flexoki\n"
+        "\n" + flexoki_notice() + "\n*/")
+    blocks = [flexoki_block((f":root body.theme-{scheme}",
+                             f":root body.theme-{scheme}[data-ow-palette]"), scheme)
+              for scheme in ("dark", "light")]
+    return "\n\n".join([snippet_header, *blocks]) + "\n"
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--preset", choices=("omarchy", "sonwork"), default="omarchy",
@@ -435,7 +551,7 @@ def main(argv=None):
             colors, body = build(tmp, colors_path)
     else:
         colors, body = build(ROOT, colors_path)
-        print(f"wrote {ROOT / 'theme.css'} and manifest.json")
+        print(f"wrote {ROOT / 'theme.css'}, manifest.json and {SNIPPET}")
     print(f"accent {colors.get('accent')}  bg {colors.get('background')}  mode {colors.get('mode')}")
     if args.install:
         install(body, args.policy_vault)

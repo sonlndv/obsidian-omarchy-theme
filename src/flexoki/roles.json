@@ -1,0 +1,42 @@
+{
+  "name": "Mounty · Flexoki",
+  "class": "mounty-flexoki",
+  "source": {
+    "repository": "https://github.com/kepano/flexoki-obsidian",
+    "commit": "527685bcf3766d6813b20875832d8fae0d5c89d9",
+    "path": "theme.css",
+    "vendored": "src/flexoki/flexoki-obsidian.css",
+    "sha256": "63d8d6eb91125f8b079333a2991cd2cf8fd10df7332bb304a08629917be172ba",
+    "license": "src/flexoki/LICENSE",
+    "license_sha256": "b0aeda2f9ebf5e09c6bfbf9323813ebeaedeabcc8cb441323c9f47aef9b05ba3",
+    "attribution": "Flexoki by Steph Ango, MIT License, https://stephango.com/flexoki"
+  },
+  "tokens": {
+    "void": "color-base-00",
+    "ground": "color-base-10",
+    "raise": "color-base-25",
+    "line": "color-base-35",
+    "ink": "color-base-100",
+    "ink-2": "color-base-70",
+    "ink-3": "color-base-60",
+    "lume": "color-cyan",
+    "lume-ink": "color-base-00",
+    "human": "color-orange",
+    "emphasis": "color-orange",
+    "violet": "color-purple",
+    "mint": "color-green",
+    "unresolved": "color-base-70",
+    "graph-line": "color-base-50"
+  },
+  "notes": {
+    "surfaces": "void, ground and raise follow Flexoki bg, bg-2 and ui; line uses ui-2 so borders stay visible on raised surfaces.",
+    "ink-3": "Flexoki tx-3 (base-50) measures 2.0:1 (light) and 2.6:1 (dark) on bg; base-60 keeps the faint role at or above 3.5:1 while staying distinct from muted text.",
+    "lume": "Flexoki cyan is the links and active-states colour; the kepano accent hue (175) is cyan.",
+    "human": "Mounty uses one warm role for warnings and errors; Flexoki orange is the warning colour.",
+    "emphasis": "Mounty's bold, inline-code and graph-focus role maps to Flexoki orange.",
+    "violet": "Italic and graph attachments.",
+    "mint": "H4, underline and graph tags.",
+    "unresolved": "Warm grey (tx-2) for unresolved graph nodes, drawn at 0.8 opacity.",
+    "graph-line": "The tx-3 step keeps graph links restrained, close to the default palette's link contrast."
+  }
+}

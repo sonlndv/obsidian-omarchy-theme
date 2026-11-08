@@ -87,6 +87,33 @@ stop on concurrent edits before deployment. No live deployment or activation is
 implied by these source files. Existing 0.2 runtime files may be staged without
 being enabled; Zen requires explicitly enabling the companion.
 
+## Mounty · Flexoki palette — optional, initially OFF
+
+A colour-only Flexoki variant for dark and light modes. Geist and Space Mono,
+sizes and geometry are unchanged, and the default Mounty palette is unchanged
+while it is off. Enable it without editing any file:
+
+- **With Style Settings:** install and enable the Style Settings community
+  plugin, then Settings → Style Settings → **Mounty** → turn on **Mounty ·
+  Flexoki palette**. Or run **Style Settings: Toggle Mounty · Flexoki palette**
+  from the command palette (hotkey-assignable).
+- **Without Style Settings:** copy `snippets/mounty-flexoki.css` into
+  `<vault>/.obsidian/snippets/`, then enable **mounty-flexoki** in Settings →
+  Appearance → CSS snippets. Turn it off before switching themes.
+
+Light, Dark and Adapt to system pick the matching Flexoki values. While enabled
+it takes precedence over Omarchy Writing's fixed-palette protection and over
+`--live` desktop colours; turning it off returns to them.
+
+The colours are kepano/flexoki-obsidian values vendored in `src/flexoki/`, with
+the MIT notice retained there and embedded in the CSS; attribution:
+https://stephango.com/flexoki. `src/flexoki/roles.json` maps Mounty roles to
+Flexoki variables.
+
+Measured contrast: Flexoki's light cyan (4.43:1) and green (4.39:1) on paper sit
+just under the default palette's 4.5:1. Faint text uses Flexoki base-600 (dark)
+and base-500 (light), at least 3.5:1, instead of Flexoki's fainter tx-3.
+
 ## Text and palette preferences
 
 The theme follows native preferred text sizing with about 68ch readable line
@@ -121,7 +148,8 @@ node --test tests/test_companion.cjs
 python3 -B bin/package_companion.py
 ```
 
-Default output is reproducible root `theme.css`, `manifest.json` and OFL notices.
+Default output is reproducible root `theme.css`, `manifest.json`, OFL notices and
+`snippets/mounty-flexoki.css`.
 Python discovery is the aggregate: it includes Node syntax/companion checks and
 package/version/allowlist tests. CI runs it, rebuilds and checks generated diffs.
 Original font bytes/notices and plugin compatibility are retained. MIT license:

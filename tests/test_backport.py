@@ -21,11 +21,15 @@ class BackportTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             with mock.patch.object(pathlib.Path, 'read_text', source_read):
                 _, body = build.build(tmp)
-            self.assertEqual(hashlib.sha256(body.encode()).hexdigest(),
+                layer = '\n' + build.flexoki_css()
+            self.assertTrue(body.endswith(layer))
+            default = body[:-len(layer)]
+            # Accepted default bytes before the appended opt-in Flexoki layer.
+            self.assertEqual(hashlib.sha256(default.encode()).hexdigest(),
                              '1fd377383c95caf51c276da198a1f72d08870861daebb8526392007427083f88')
             part = (ROOT / 'src/parts/emphasis.css').read_text()
-            self.assertTrue(body.endswith(part))
-            self.assertEqual(body.count(part), 1)
+            self.assertTrue(default.endswith(part))
+            self.assertEqual(default.count(part), 1)
             self.assertNotIn(str(ROOT.parent), body)
             self.assertEqual((pathlib.Path(tmp) / 'manifest.json').read_text(),
                              build.manifest('Omarchy'))
